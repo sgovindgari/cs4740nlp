@@ -35,7 +35,7 @@ def parseReviews():
     data = open('raw_reviews.train', 'w')
     for c in sents:
         # adds sentence start and end marker
-        data.write(c+' <s> ')
+        data.write(c+'<s> ')
     data.close()
 
     p = open ('raw_reviews.train')
