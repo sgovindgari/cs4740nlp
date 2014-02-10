@@ -34,6 +34,12 @@ class ngram():
     def __init__(self, sourceFile, n = 1):
         with open(sourceFile) as corpus:
             self.corpus = re.split('\s+', corpus.read())
+        # This stores dictionaries for recording counts of the p previous words followed by a word
+        # i.e. for a bigram model it stores the unigram counts and bigram counts
+        # Each dictionary then holds an entry (another dict) for each tuple of previous words
+        # i.e. for unigram there is only one entry: [((), [(the,5),(a,6),(cat,2),...])]
+        # for bigram there would be [('the',[('cat', 3),('dog', 4),...]),('a',[(cow, 2),(horse, 1),...]),...]
+        # Summary: self.counts is a list of dicts of dicts where each entry in the list is a model
         self.counts = [dict()]*n
         for i in range(len(self.corpus)):
             word = self.corpus[i]
@@ -52,6 +58,8 @@ class ngram():
                     else:
                         self.counts[j][lookup] = dict()
                         self.counts[j][lookup][word] = 1
+    def randomSentence(self):
+        pass
 
 # TODO: How do we generate the first word in a bigram model. Do we use
 # the probability of a period followed by a word, or the probability of <s> followed by a word or the unigram probability?
