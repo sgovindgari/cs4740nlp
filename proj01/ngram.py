@@ -41,6 +41,8 @@ class ngram():
         # for bigram there would be [('the',[('cat', 3),('dog', 4),...]),('a',[(cow, 2),(horse, 1),...]),...]
         # Summary: self.counts is a list of dicts of dicts where each entry in the list is a model
         self.counts = [dict()]*n
+        # self.corpus = ['a', 'b', 'a', 'c']
+        self.n = n
         for i in range(len(self.corpus)):
             word = self.corpus[i]
             prevs = list()
@@ -58,8 +60,49 @@ class ngram():
                     else:
                         self.counts[j][lookup] = dict()
                         self.counts[j][lookup][word] = 1
+
+        # Generate probabilities
+        self.probs = [dict()]*n
+        for i in range(n):
+            ngram = self.counts[i]
+            for row in ngram:
+                total = self._sumDict(ngram[row])
+                self.probs[i][row] = OrderedDict()
+                for entry in ngram[row]:
+                    self.probs[i][row][entry] = ngram[row][entry] / float(total)
+
+    def _sumDict(self, d):
+        total = 0
+        for k, v in d.iteritems():
+            total += v
+        return total
+
     def randomSentence(self):
-        pass
+        prev = list()
+        if self.n != 1:
+            prev = ['<s>']
+        res = list()
+        while True:
+            word = ''
+            gram = self.probs[len(prev)]
+            if tuple(prev) in gram:
+                word = self.generateWord(gram[tuple(prev)])
+                prev.append(word)
+                res.append(word)
+                if len(prev) >= self.n:
+                    prev.pop(0)
+            else:
+                prev.pop(0)
+            if word == '<s>':
+                break
+        print ' '.join(res)
+
+    def generateWord(self, row):
+        p = random.random()
+        for word in row:
+            p -= row[word]
+            if p < 0:
+                return word
 
 # TODO: How do we generate the first word in a bigram model. Do we use
 # the probability of a period followed by a word, or the probability of <s> followed by a word or the unigram probability?
