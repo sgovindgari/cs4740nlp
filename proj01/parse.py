@@ -11,8 +11,8 @@ def parseBible():
     # then replaces start of string and double new lines with the sentence segmentation marker <s>.
     # finally adds spaces around all punctuation
     bible = re.sub('([.,!?();:])', r' \1 ', \
-                re.sub('\n\n|^', '<s> ', \
-                    re.sub('(</?(TEXT|DOC)>\n)|([0-9]+:[0-9]+\s)', '', bible)))
+                    re.sub('(</?(TEXT|DOC)>\n)|([0-9]+:[0-9]+\s)', '', bible))
+    bible = bible.strip()
     return bible
 
 def parseReviews():
