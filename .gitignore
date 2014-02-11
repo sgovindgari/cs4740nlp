@@ -8,3 +8,5 @@
 # Package Files #
 *.war
 *.ear
+
+proj01/report.pdf
