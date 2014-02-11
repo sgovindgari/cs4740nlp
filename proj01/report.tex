@@ -1,0 +1,72 @@
+%!TEX TS-program = pdflatex or xelatex
+%!TEX encoding = UTF-8 Unicode
+
+\documentclass{article}
+\usepackage[letterpaper, margin=1in, left=0.75in, right=0.75in] {geometry}
+\usepackage{microtype} % micro appearance
+\usepackage[all]{nowidow} % no lone lines
+\usepackage{changepage} % changes layout mid-page
+\usepackage{enumitem} % enum (itemize, enumerate, description)
+\usepackage{ifthen}
+\usepackage{xfrac}
+\usepackage{fancyhdr} % headers
+\usepackage{amsmath} % matrices
+\usepackage{amssymb} % symbols
+\usepackage{gensymb} % symbols
+\usepackage{tikz} % graphics?
+\usepackage{bm} % bold math
+\usepackage{multicol} % multiple columns
+
+\pagestyle{fancy}
+
+\newcommand {\classname} {CS 4740/5740 -- Intro to Natural Language Processing}
+\newcommand {\duedate} {Mon, February 24}
+\newcommand {\hwtype} {Project}
+\newcommand {\hwnum} {1: Language Modeling}
+\newcommand {\innermargin} {0.15in} % indentation amt of nested lst
+
+\let\tss\textsuperscript
+\let\oldunderline\underline
+\renewcommand\underline[1]{\oldunderline{\smash{#1}}}
+
+\fancyhead[L] {\ifthenelse {\thepage=1}
+  {bgs53, sg754, amw275\\
+   Ben Shulman, Spandana Govindgari, Andy Wang}
+  {\hwtype\ \hwnum\ (bgs53, sg754, amw275)}}
+\fancyhead[R] {\ifthenelse {\thepage=1}
+  {\classname\\\hwtype\ \hwnum\ (due \duedate)}
+  {Page \thepage}}
+
+\begin{document}
+\begin{center}\textbf{Project 1 Report on Language Modeling}\end{center}
+
+All our code is written in Python. We use several libraries, including the nltk platform's punkt.\par
+The following reports on our work in\ldots\par
+
+\section{Unsmoothed ngrams}
+Our preprocessing code for both corpuses (King James Bible and Hotel Reviews) is in \texttt{preprocessCorpus.py}.\par
+Ben Shulman was responsible for parsing the King James Bible text. [explanation to add]\par
+Spandana Govindgari used punkt, a library in the nltk platform for Python.\par
+\texttt{preprocessCorpus.py} reads in the training data for both corpuses and generates \texttt{bible.train} and \texttt{raw\_reviews.train} to be used by our n-gram model.
+
+\section{Division of work}
+\begin{itemize}[noitemsep]
+\item Ben Shulman:
+  \begin{itemize}[noitemsep,nolistsep]
+  \item pre-processing of the King James corpus (in \texttt{parse.py})
+  \item unigram, bigram, and generalized n-gram model
+  \item random sentence generation
+  \end{itemize}
+
+\item Spandana Govindgari:
+  \begin{itemize}[noitemsep,nolistsep]
+  \item parsing of Hotel Reviews corpus (in \texttt{parse.py})
+
+  \end{itemize}
+
+\item Andy Wang:
+  \begin{itemize}[noitemsep,nolistsep]
+  \item report writeup (actually everyone does this)
+  \end{itemize}
+\end{itemize}
+\end{document}
