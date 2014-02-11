@@ -126,3 +126,13 @@ class ngram():
             p -= row[word]
             if p < 0:
                 return word
+
+
+#Construction time test
+def ngram_model_test(source, maxN = 4):
+    for i in range(1,maxN+1):
+        start = time.time()
+        ngram(source, i)
+        print str(i)+'-gram: ' + str(time.time() - start)
+
+ngram_model_test('bible.train', 3)

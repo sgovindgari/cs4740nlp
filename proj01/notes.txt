@@ -36,7 +36,7 @@ Notes on the project
     Implement code that computes perplexity
     Compute and report it
 
- 5. Open ended extension
+ 5. Open ended extension (COMPLETE)
     Choose one (or more) of:
     - trigram/4-gram/n-gram (complete?)
     - smoothing
@@ -45,7 +45,7 @@ Notes on the project
     - employ the language model in the service of another NLP or speech application
     - implement a modification that makes use of the validation set
 
- 5.7 (not optional) - Hotel Review prediction (COMPLETE)
+ 5.7 (not optional) - Hotel Review prediction 
 
 ==Report (6 pages)==
   Contain every step of the programming portion
