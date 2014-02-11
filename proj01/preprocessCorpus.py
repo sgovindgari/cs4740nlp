@@ -14,7 +14,7 @@ def parseBible():
     # Removes XML and psalm/verse numbers
     # then replaces start of string and double new lines with the sentence segmentation marker <s>.
     # finally adds spaces around all punctuation
-    bible = re.sub('([.,!?();:])', r' \1 ', \
+    bible = re.sub('([.,!?();:"-&/$])', r' \1 ', \
                 re.sub('\n\n|^', '<s> ', \
                     re.sub('(</?(TEXT|DOC)>\n)|([0-9]+:[0-9]+\s)', '', bible)))
     bible = bible.strip()
@@ -47,7 +47,7 @@ def parseReviews():
     # <r> - denotes start and end of a review
     # removes the truthful & positive values, xml if any, weird punctuation like ... or . . .
     edit = re.sub('([.,!?();:"-&/$])', r' \1 ', \
-                        re.sub('\n|^', '<r> <s> ', \
+                        re.sub('\n|^', ' <s> ', \
                             re.sub('(</?(TEXT|DOC)>\n)|([0-9]+,[0-9],)|(\.{2,})|((\.+\s){2,})', '', edit)))
     return edit
 
