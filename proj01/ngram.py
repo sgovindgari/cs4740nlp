@@ -1,5 +1,9 @@
-# Began by individually creating a unigram and bigram model class, but decided the redundancy was too much so moved onto n-gram
-# For random sentence generation we chose to use backoff (reverting to n-1 gram or n-2 gram, etc. as necessary)
+#!/usr/bin/python
+
+# Began by individually creating a unigram and bigram model class,
+#   but decided the redundancy was too much so moved onto n-gram
+# For random sentence generation we chose to use backoff
+#   (reverting to n-1 gram or n-2 gram, etc. as necessary)
 
 import re, random, time
 from collections import OrderedDict
@@ -65,7 +69,7 @@ class ngram():
                     if lookup in self.counts[j]:
                         if word in self.counts[j][lookup]:
                             self.counts[j][lookup][word] += 1
-                        else: 
+                        else:
                             self.counts[j][lookup][word] = 1
                     else:
                         self.counts[j][lookup] = dict()
@@ -88,7 +92,7 @@ class ngram():
             total += v
         return total
 
-    # Generates a random sentence using this model 
+    # Generates a random sentence using this model
     def randomSentence(self):
         # Prev stores the previously generated words to consider
         prev = list()

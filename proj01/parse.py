@@ -1,5 +1,8 @@
+#!/usr/bin/python
+
 import re
-import nltk
+import nltk # http://www.nltk.org/install.html
+            # in python interpreter: nltk.download() to get punkt
 import pprint
 
 # Parses king james
@@ -26,10 +29,10 @@ def parseReviews():
     f.readline()
     # gets all text from training data
     hotel_reviews = f.read()
-    
+
     # using Punkt sentence segmentation tool -- http://www.nltk.org/api/nltk.tokenize.html
     sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
-    
+
     sents = sent_tokenizer.tokenize(hotel_reviews)
     # write to file
     data = open('raw_reviews.train', 'w')
@@ -39,10 +42,10 @@ def parseReviews():
     data.close()
 
     p = open ('raw_reviews.train')
-    edit = p.read() 
+    edit = p.read()
     # adds spaces around punctuation
     # <r> - denotes start and end of a review
-    # removes the truthful & positive values, xml if any, weird punctuation like ... or . . .   
+    # removes the truthful & positive values, xml if any, weird punctuation like ... or . . .
     edit = re.sub('([.,!?();:"-&/$])', r' \1 ', \
                         re.sub('\n|^', '<r> <s> ', \
                             re.sub('(</?(TEXT|DOC)>\n)|([0-9]+,[0-9],)|(\.{2,})|((\.+\s){2,})', '', edit)))
