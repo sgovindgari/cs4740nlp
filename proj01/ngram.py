@@ -1,3 +1,6 @@
+# Began by individually creating a unigram and bigram model class, but decided the redundancy was too much so moved onto n-gram
+# For random sentence generation we chose to use backoff (reverting to n-1 gram or n-2 gram, etc. as necessary)
+
 import re, random, time
 from collections import OrderedDict
 
