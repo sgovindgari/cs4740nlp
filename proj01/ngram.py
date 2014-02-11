@@ -40,7 +40,7 @@ class unigram():
 
 # Generalized n-gram model - O(nN) or something
 class ngram():
-    def __init__(self, sourceFile, n = 1, smooth = None):
+    def __init__(self, sourceFile, n = 1, smooth = Smooth.NONE):
         with open(sourceFile) as corpus:
             self.corpus = re.split('\s+', corpus.read())
         # This stores dictionaries for recording counts of the p previous words followed by a word
@@ -70,7 +70,7 @@ class ngram():
                     else:
                         self.counts[j][lookup] = dict()
                         self.counts[j][lookup][word] = 1
-
+        # TODO: Put smoothing here!
         # Generate probabilities
         self.probs = [dict()]*n
         for i in range(n):
