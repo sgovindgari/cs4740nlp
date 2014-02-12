@@ -60,6 +60,7 @@ class ngram():
         # self.corpus = ['a', 'b', 'a', 'c']
         self.n = n
         self.smooth = smooth
+        self.direction = direction
         for i in range(len(self.corpus)):
             word = self.corpus[i]
             prevs = list()
@@ -98,7 +99,6 @@ class ngram():
                 self.probs[i][row] = OrderedDict()
                 for entry in ngram[row]:
                     self.probs[i][row][entry] = ngram[row][entry] / float(total)
-        print self.corpus[1:5]
 
     # Sum the values of the dictionary and returns the total
     def _sumDict(self, d):
@@ -132,6 +132,8 @@ class ngram():
                 prev.pop(0)
             if word == '<s>':
                 break
+        if self.direction == Direction.RL:
+            res.reverse()
         print ' '.join(res)
 
     # Given a dictionary of (words, probability) generate a random word drawn from this distribution
