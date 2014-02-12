@@ -98,6 +98,7 @@ class ngram():
                 self.probs[i][row] = OrderedDict()
                 for entry in ngram[row]:
                     self.probs[i][row][entry] = ngram[row][entry] / float(total)
+        print self.corpus[1:5]
 
     # Sum the values of the dictionary and returns the total
     def _sumDict(self, d):
@@ -146,7 +147,6 @@ class ngram():
 def ngram_model_test(source, maxN = 4):
     for i in range(1,maxN+1):
         start = time.time()
-        ngram(source, i)
+        a = ngram(source, i)
         print str(i)+'-gram: ' + str(time.time() - start)
-
-# ngram_model_test('bible.train', 3)
+        a.randomSentence()
