@@ -13,6 +13,7 @@ def enum(*sequential, **named):
     return type('Enum', (), enums)
 
 Smooth = enum('NONE', 'GOOD_TURING', 'ADD_ONE')
+Direction = enum('RL', 'LR')
 
 class unigram():
     #Reads a text file in and converts it into an array
@@ -44,9 +45,11 @@ class unigram():
 
 # Generalized n-gram model - O(nN) or something
 class ngram():
-    def __init__(self, sourceFile, n = 1, smooth = Smooth.NONE):
+    def __init__(self, sourceFile, n = 1, smooth = Smooth.NONE, direction = Direction.LR):
         with open(sourceFile) as corpus:
             self.corpus = re.split('\s+', corpus.read())
+            if direction == Direction.RL:
+                self.corpus.reverse()
         # This stores dictionaries for recording counts of the p previous words followed by a word
         # i.e. for a bigram model it stores the unigram counts and bigram counts
         # Each dictionary then holds an entry (another dict) for each tuple of previous words
@@ -56,6 +59,7 @@ class ngram():
         self.counts = [dict()]*n
         # self.corpus = ['a', 'b', 'a', 'c']
         self.n = n
+        self.smooth = smooth
         for i in range(len(self.corpus)):
             word = self.corpus[i]
             prevs = list()
@@ -74,8 +78,18 @@ class ngram():
                     else:
                         self.counts[j][lookup] = dict()
                         self.counts[j][lookup][word] = 1
-        # TODO: Put smoothing here!
+        # TODO: Do smoothing
+        if self.smooth == Smooth.NONE:
+            pass
+        # General approach, for <unk> simply add an entry to each row for each i-gram table
+        # Give it a count of 1, for words that did not show up for that row, but do show up in the
+        # vocabulary, add to each row with a value of 1 and add 1 to each entry
+        elif self.smooth == Smooth.ADD_ONE:
+            pass
+        elif self.smooth == Smooth.GOOD_TURING:
+            pass
         # Generate probabilities
+        # self.probs stores the probability tables (dicts of dicts) for each i-gram, for i = 1...n
         self.probs = [dict()]*n
         for i in range(n):
             ngram = self.counts[i]
@@ -135,4 +149,4 @@ def ngram_model_test(source, maxN = 4):
         ngram(source, i)
         print str(i)+'-gram: ' + str(time.time() - start)
 
-ngram_model_test('bible.train', 3)
+# ngram_model_test('bible.train', 3)
