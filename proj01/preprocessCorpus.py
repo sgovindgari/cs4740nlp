@@ -46,9 +46,12 @@ def parseReviews():
     # adds spaces around punctuation
     # <r> - denotes start and end of a review
     # removes the truthful & positive values, xml if any, weird punctuation like ... or . . .
-    edit = re.sub('([.,!?();:"-&/$])', r' \1 ', \
-                        re.sub('\n|^', ' <s> ', \
-                            re.sub('(</?(TEXT|DOC)>\n)|([0-9]+,[0-9],)|(\.{2,})|((\.+\s){2,})', '', edit)))
+
+    edit = re.sub('(</?(TEXT|DOC)>\n)|([0-9]+,[0-9],)|((\.+\s){2,})', '', edit)
+    edit = re.sub('\n|^', ' <s> ', edit)
+    edit = re.sub('([,!?();:"-&/$])', r' \1 ', edit)
+    edit = re.sub('(\.{1,})',r' \1 ', edit)
+    edit = re.sub('--', ' -- ', edit)
     return edit
 
 
