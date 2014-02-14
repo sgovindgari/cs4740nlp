@@ -72,8 +72,10 @@ class ngram():
         # i.e. for unigram there is only one entry: [((), [(the,5),(a,6),(cat,2),...])]
         # for bigram there would be [('the',[('cat', 3),('dog', 4),...]),('a',[(cow, 2),(horse, 1),...]),...]
         # Summary: self.counts is a list of dicts of dicts where each entry in the list is a model
-        self.counts = [dict()]*self.n
+        self.counts = [{} for _ in range(self.n)]
         self._initializeNgram()
+        self._smoothing()
+        self._generateProbabilities()
 
     def _initializeNgram(self):
         for i in range(len(self.corpus)):
@@ -98,7 +100,6 @@ class ngram():
                         self.counts[j][lookup] = dict()
                         self.counts[j][lookup][word] = 1
         print self.counts
-        # self._smoothing()
 
     def _smoothing(self):
         # TODO: Do smoothing
@@ -120,11 +121,10 @@ class ngram():
             pass
         elif self.smooth == Smooth.GOOD_TURING:
             pass
-        self._generateProbabilities()
 
     def _generateProbabilities(self):
         # self.probs stores the probability tables (dicts of dicts) for each i-gram, for i = 1...n
-        self.probs = [dict()]*self.n
+        self.probs = [{} for _ in range(self.n)]
         for i in range(self.n):
             ngram = self.counts[i]
             for row in ngram:
