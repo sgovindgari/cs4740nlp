@@ -47,7 +47,7 @@ class unigram():
 class ngram():
     def __init__(self, sourceFile, n = 1, smooth = Smooth.NONE, direction = Direction.LR):
         with open(sourceFile) as corpus:
-            self.corpus = re.split('\s+', corpus.read())
+            self.corpus = re.split('\s+', corpus.read().lower())
             if direction == Direction.RL:
                 self.corpus.reverse()
         # This stores dictionaries for recording counts of the p previous words followed by a word
@@ -115,7 +115,7 @@ class ngram():
             #Should we start with <s>? or nothing? or something else...
             prev = ['<s>']
         # The words generated thus far are stored in res
-        res = list()
+        res = ['<s>']
         # Generate words until a sentence segmentor is created
         while True:
             word = ''
@@ -135,6 +135,7 @@ class ngram():
         if self.direction == Direction.RL:
             res.reverse()
         print ' '.join(res)
+        return ' '.join(res)
 
     # Given a dictionary of (words, probability) generate a random word drawn from this distribution
     def generateWord(self, row):
@@ -152,3 +153,24 @@ def ngram_model_test(source, maxN = 4):
         a = ngram(source, i)
         print str(i)+'-gram: ' + str(time.time() - start)
         a.randomSentence()
+
+def sentenceGeneration():
+    bug = ngram('bible.train', 1)
+    bbg = ngram('bible.train', 2)
+    rug = ngram('raw_reviews.train', 1)
+    rbg = ngram('raw_reviews.train', 2)
+    fbug = open('fbug','w')
+    fbbg = open('fbbg','w')
+    frbg = open('frbg','w')
+    frug = open('frug','w')
+    for i in range(10):
+        fbug.write(bug.randomSentence() + "\n\n")
+        fbbg.write(bbg.randomSentence() + "\n\n")
+        frug.write(rug.randomSentence() + "\n\n")
+        frbg.write(rbg.randomSentence() + "\n\n")
+    fbug.close()
+    fbbg.close()
+    frug.close()
+    frbg.close()
+
+sentenceGeneration()
