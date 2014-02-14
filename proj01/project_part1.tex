@@ -1,0 +1,113 @@
+%!TEX TS-program = pdflatex or xelatex
+%!TEX encoding = UTF-8 Unicode
+
+\documentclass{article}
+\usepackage[letterpaper, margin=1in, left=0.75in, right=0.75in] {geometry}
+\usepackage{microtype} % micro appearance
+\usepackage[all]{nowidow} % no lone lines
+\usepackage{changepage} % changes layout mid-page
+\usepackage{enumitem} % enum (itemize, enumerate, description)
+\usepackage{ifthen}
+\usepackage{xfrac}
+\usepackage{fancyhdr} % headers
+\usepackage{amsmath} % matrices
+\usepackage{amssymb} % symbols
+\usepackage{gensymb} % symbols
+\usepackage{tikz} % graphics?
+\usepackage{bm} % bold math
+\usepackage{multicol} % multiple columns
+\usepackage{listings} % listing lines of code/output
+\usepackage{setspace} % 1.5 spacing
+
+\pagestyle{fancy}
+
+\newcommand {\classname} {CS 4740/5740 -- Intro to Natural Language Processing}
+\newcommand {\duedate} {Mon, February 24}
+\newcommand {\hwtype} {Project}
+\newcommand {\hwnum} {1: Language Modeling}
+\newcommand {\innermargin} {0.15in} % indentation amt of nested lst
+
+\let\tss\textsuperscript
+\let\oldunderline\underline
+\renewcommand\underline[1]{\oldunderline{\smash{#1}}}
+
+\fancyhead[L] {\ifthenelse {\thepage=1}
+  {bgs53, sg754, amw275\\
+   Ben Shulman, Spandana Govindgari, Andy Wang}
+  {\hwtype\ \hwnum\ (bgs53, sg754, amw275)}}
+\fancyhead[R] {\ifthenelse {\thepage=1}
+  {\classname\\\hwtype\ \hwnum\ (due \duedate)}
+  {Page \thepage}}
+
+\begin{document}
+\begin{center}\textbf{Project 1 Part 1\\Progress on unigram and bigram table construction algorithms}\end{center}
+
+All our code is written in Python. We use several libraries, including the nltk platform's punkt.\par
+
+Before we inputted the training data for both corpuses into our ngram implementation, we wrote a script to preprocess them, removing extraneous xml-like tags, numbers, etc. For the bible corpus, our sentences are split on Bible verses of the format \texttt{[0-9]+:[0-9]+}. Ben and Spandana has written much of the preprocessor for the Bible and Hotel corpuses respectively.\par
+
+For our ngram model, we initially began by individually creating a unigram and bigram model class, but decided that there was already much in common between the two systems, so an abstraction was not too hard to make. Hence we went immediately to an n-gram model. Our ngram class reads in the preprocessed sources, and splits the text at spaces.\par
+
+Our storage is a list of dictionaries, each of which store unigram/bigram/trigram/etc data. The dictionaries record counts of the $p$ previous words followed by a word, i.e.\ for a bigram model, it stores the unigram counts and bigram counts. Each dictionary then holds an entry (another lookup table) for each tuple of previous words, i.e.\ for unigram there is only one entry: \texttt{[((), [(the,5),(a,6),(cat,2),...])]}. For bigram, there would be \texttt{[('the',[('cat', 3),('dog', 4),...]),('a',[(cow, 2),(horse, 1),...]),...]}\par
+
+Here is a snippet of code in our ngram class that is called by its constructor to initialize the ngram table. Essentially, we can step through the corpus word-by-word, and accumulate a list of previous words (no longer than $n$) to use as a lookup. After this has been set, an optional smoothing algorithm (like add-one, or Good-Turing) follows. Probabilities are calculated last. [explain]
+
+{\small
+\begin{verbatim}
+    def _initializeNgram(self):
+        for i in range(len(self.corpus)):
+            word = self.corpus[i]
+            prevs = list()
+            # construct all ngrams at once
+            for j in range(self.n):
+                # if i-j, handle first words (when i < n), don't look too far back
+                if i-j >= 0:
+                    # Add another word to the previous words
+                    if(j > 0):
+                        prevs.append(self.corpus[i-j])
+                    # Must convert to tuple to hash into dictionary,
+                    # reverse list to keep words in the correct order
+                    lookup = tuple(reversed(prevs))
+                    if lookup in self.counts[j]:
+                        if word in self.counts[j][lookup]:
+                            self.counts[j][lookup][word] += 1
+                        else:
+                            self.counts[j][lookup][word] = 1
+                    else:
+                        self.counts[j][lookup] = dict()
+                        self.counts[j][lookup][word] = 1
+        # Smoothing will go here...
+
+        # Generate probabilities
+        # self.probs stores the probability tables (dicts of dicts) for each i-gram, for i = 1...n
+        self.probs = [dict()]*self.n
+        for i in range(self.n):
+            ngram = self.counts[i]
+            for row in ngram:
+                total = self._sumDict(ngram[row])
+                self.probs[i][row] = OrderedDict()
+                for entry in ngram[row]:
+                    self.probs[i][row][entry] = ngram[row][entry] / float(total)
+\end{verbatim}}
+
+\newpage
+\setlength{\parindent}{0cm}
+\newcommand\npar{\par\smallskip}
+Sample unigram sentences for the bible corpus:\npar
+\texttt{<s> let sword not called by not flesh and and , gold they land and the saying , consume the redeemed and the them are even , <s>}\npar
+\texttt{<s> of neither seat , , , to after slew what against land that <s>}\npar\bigskip
+
+Sample bigram sentences for the bible corpus:\npar
+\texttt{<s> and the inhabitants thereof and ether , and the charge in the river kanah , and called his daughter , and jesse , and ahab in water of thine heart is defiled topheth , that they were conversant with the cruelty done thus speaketh benhadad , and the men of the man know how shall be a spoil which he made his parable , in the fifth year of the presence of judah . <s>}\npar
+\texttt{<s> from thence . and the lord : they may be blameless than i will make a bottle of peace . <s>}\npar\bigskip
+
+Sample unigram sentences for the hotel reviews corpus:\npar
+\texttt{<s> available we hotel that the still camera velvet i into stayed weekend use time helpful ; the i they for staying . to ; <s>}\npar
+\texttt{<s> with do have wouldn't boutique <s>}\npar\bigskip
+
+Sample bigram sentences for the hotel reviews corpus:\npar
+\texttt{<s> we opted to provide excellent award winning dining and towers . <s>}\npar
+\texttt{<s> i was bad day . <s>}\npar
+\texttt{<s> neither of good deal ; but there aren't clean . 50 ; go back to our next to phone would not work at the tv took so that was a little extra attention to be a perfect for us out by the windy city ( king-sized is first 6 : our hotel was not leave the bed had snacks for you can't go back . <s>}
+
+\end{document}

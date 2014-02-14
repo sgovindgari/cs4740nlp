@@ -9,4 +9,32 @@
 *.war
 *.ear
 
+# latex stuff
+*.aux
+*.glo
+*.idx
+*.log
+*.toc
+*.ist
+*.acn
+*.acr
+*.alg
+*.bbl
+*.blg
+*.dvi
+*.glg
+*.gls
+*.ilg
+*.ind
+*.lof
+*.lot
+*.maf
+*.mtc
+*.mtc1
+*.out
+*.synctex.gz
+
 proj01/report.pdf
+proj01/project_part1.pdf
+proj01/f*g
+

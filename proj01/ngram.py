@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 # Began by individually creating a unigram and bigram model class,
 #   but decided the redundancy was too much so moved onto n-gram
@@ -8,6 +8,7 @@
 import re, random, time
 from collections import OrderedDict
 
+# enum definition (used for Smooth and Direction)
 def enum(*sequential, **named):
     enums = dict(zip(sequential, range(len(sequential))), **named)
     return type('Enum', (), enums)
@@ -15,6 +16,8 @@ def enum(*sequential, **named):
 Smooth = enum('NONE', 'GOOD_TURING', 'ADD_ONE')
 Direction = enum('RL', 'LR')
 
+'''
+# obsolete unigram class
 class unigram():
     #Reads a text file in and converts it into an array
     def __init__(self, sourceFile, n = 1):
@@ -42,34 +45,49 @@ class unigram():
             p -= self.probs[word]
             if p < 0:
                 return word
+'''
 
 # Generalized n-gram model - O(nN) or something
 class ngram():
+    # defaults: unigram, no smoothing, left-to-right
     def __init__(self, sourceFile, n = 1, smooth = Smooth.NONE, direction = Direction.LR):
         with open(sourceFile) as corpus:
             self.corpus = re.split('\s+', corpus.read().lower())
+
+            # extension: right-to-left ngram: simply reverse the corpus
+            # note: reversed again in function randomSentence
             if direction == Direction.RL:
                 self.corpus.reverse()
+
+        # testing only
+        self.corpus = self.corpus[:46]
+
+        self.n = n
+        self.smooth = smooth
+        self.direction = direction
+
         # This stores dictionaries for recording counts of the p previous words followed by a word
         # i.e. for a bigram model it stores the unigram counts and bigram counts
         # Each dictionary then holds an entry (another dict) for each tuple of previous words
         # i.e. for unigram there is only one entry: [((), [(the,5),(a,6),(cat,2),...])]
         # for bigram there would be [('the',[('cat', 3),('dog', 4),...]),('a',[(cow, 2),(horse, 1),...]),...]
         # Summary: self.counts is a list of dicts of dicts where each entry in the list is a model
-        self.counts = [dict()]*n
-        # self.corpus = ['a', 'b', 'a', 'c']
-        self.n = n
-        self.smooth = smooth
-        self.direction = direction
+        self.counts = [dict()]*self.n
+        self._initializeNgram()
+
+    def _initializeNgram(self):
         for i in range(len(self.corpus)):
             word = self.corpus[i]
             prevs = list()
-            for j in range(n):
+            # construct all ngrams at once
+            for j in range(self.n):
+                # if i-j, handle first words (when i < n), don't look too far back
                 if i-j >= 0:
                     # Add another word to the previous words
                     if(j > 0):
                         prevs.append(self.corpus[i-j])
-                    # Must convert to tuple to hash into dictionary, reverse list to keep words in the correct order
+                    # Must convert to tuple to hash into dictionary,
+                    # reverse list to keep words in the correct order
                     lookup = tuple(reversed(prevs))
                     if lookup in self.counts[j]:
                         if word in self.counts[j][lookup]:
@@ -79,6 +97,10 @@ class ngram():
                     else:
                         self.counts[j][lookup] = dict()
                         self.counts[j][lookup][word] = 1
+        print self.counts
+        # self._smoothing()
+
+    def _smoothing(self):
         # TODO: Do smoothing
         if self.smooth == Smooth.NONE:
             pass
@@ -86,13 +108,24 @@ class ngram():
         # Give it a count of 1, for words that did not show up for that row, but do show up in the
         # vocabulary, add to each row with a value of 1 and add 1 to each entry
         elif self.smooth == Smooth.ADD_ONE:
+            # fill entire table with 0s if no entry.
+            # add 1 to all entries in table.
+            # denominator (total = self._sumDict(ngram[row])) is taken care of
+            # for i in range(self.n):
+            #     ngram = self.counts[i]
+            #     for row in ngram:
+            #         for entry in ngram[row]:
+            #             # add 1 to every entry
+            #             entry += 1
             pass
         elif self.smooth == Smooth.GOOD_TURING:
             pass
-        # Generate probabilities
+        self._generateProbabilities()
+
+    def _generateProbabilities(self):
         # self.probs stores the probability tables (dicts of dicts) for each i-gram, for i = 1...n
-        self.probs = [dict()]*n
-        for i in range(n):
+        self.probs = [dict()]*self.n
+        for i in range(self.n):
             ngram = self.counts[i]
             for row in ngram:
                 total = self._sumDict(ngram[row])
@@ -132,6 +165,8 @@ class ngram():
                 prev.pop(0)
             if word == '<s>':
                 break
+
+        # extension: right-to-left ngram: simply reverse the corpus
         if self.direction == Direction.RL:
             res.reverse()
         print ' '.join(res)
@@ -146,7 +181,7 @@ class ngram():
                 return word
 
 
-#Construction time test
+# Construction time test
 def ngram_model_test(source, maxN = 4):
     for i in range(1,maxN+1):
         start = time.time()
@@ -173,4 +208,8 @@ def sentenceGeneration():
     frug.close()
     frbg.close()
 
-sentenceGeneration()
+# MAIN
+# temp for testing
+a = ngram('bible.train', 3)
+
+# sentenceGeneration()
