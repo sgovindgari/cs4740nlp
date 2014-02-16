@@ -7,6 +7,7 @@
 
 import re, random, time
 from collections import OrderedDict
+import itertools # for cross product of 2 lists?
 
 # enum definition (used for Smooth and Direction)
 def enum(*sequential, **named):
@@ -61,10 +62,17 @@ class ngram():
 
         # testing only
         self.corpus = self.corpus[:46]
+        #self.corpus = ['<s>', 'the', 'cat', 'the', 'cat', 'the', 'cat', \
+        #    'a', 'dog', 'the', 'dog', '.']
 
         self.n = n
         self.smooth = smooth
         self.direction = direction
+
+        # unordered unique words (for use in smoothing)
+        self.uniques = list(set(self.corpus))
+        self.uniqueCount = len(self.uniques) # V
+        self.ngramFreqs = [dict() for _ in range(self.n)] # populated later during smoothing
 
         # This stores dictionaries for recording counts of the p previous words followed by a word
         # i.e. for a bigram model it stores the unigram counts and bigram counts
@@ -72,7 +80,7 @@ class ngram():
         # i.e. for unigram there is only one entry: [((), [(the,5),(a,6),(cat,2),...])]
         # for bigram there would be [('the',[('cat', 3),('dog', 4),...]),('a',[(cow, 2),(horse, 1),...]),...]
         # Summary: self.counts is a list of dicts of dicts where each entry in the list is a model
-        self.counts = [{} for _ in range(self.n)]
+        self.counts = [dict() for _ in range(self.n)]
         self._initializeNgram()
         self._smoothing()
         self._generateProbabilities()
@@ -103,11 +111,15 @@ class ngram():
     def _smoothing(self):
         # TODO: Do smoothing
         if self.smooth == Smooth.NONE:
-            pass
+            return
+
+        # the following is NOT AN OPTION: TOO MUCH MEM
+        # tuples = list(itertools.product(*[self.uniques for _ in range(self.n - 1)]))
+
         # General approach, for <unk> simply add an entry to each row for each i-gram table
         # Give it a count of 1, for words that did not show up for that row, but do show up in the
         # vocabulary, add to each row with a value of 1 and add 1 to each entry
-        elif self.smooth == Smooth.ADD_ONE:
+        if self.smooth == Smooth.ADD_ONE:
             # fill entire table with 0s if no entry.
             # add 1 to all entries in table.
             # denominator (total = self._sumDict(ngram[row])) is taken care of
@@ -119,9 +131,46 @@ class ngram():
             #             entry += 1
             pass
         elif self.smooth == Smooth.GOOD_TURING:
-            pass
+            # keep track of ngram frequencies!
+            self._populateNgramFreqs()
+            print self.ngramFreqs
+            # step through self.counts (each n-gram)
+            # for i in range(self.n):
+            #     ngram = self.counts[i]
+            #     print ngram
+
+            #print self.uniqueCount
+            #print pow(self.uniqueCount,self.n)
+
+            #currentTuple = ()
+            #for i in range(self.n):
+            #    for uidx in range(len(self.uniques)):
+            #        currentTuple.append(self.uniques)
+            #        print currentTuple
+            exit ()
+
+    # countNGrams returns a dictionary of int to int to self.ngramFreqs
+    # 2 -> 35 means there are 35 ngrams that appear 2 times
+    # self.ngramFreqs[i] --> N_i = number of ngrams appearing i times
+    def _populateNgramFreqs(self):
+        # build self.ngramFreqs
+        for i in range(self.n):
+            ngram = self.counts[i]
+            for row in ngram:
+                for entry in ngram[row]:
+                    ngramCount = ngram[row][entry]
+                    # print i, entry, ngramCount
+                    if ngramCount in self.ngramFreqs[i]:
+                        self.ngramFreqs[i][ngramCount] += 1
+                    else:
+                        self.ngramFreqs[i][ngramCount] = 1
+            # below: how many ngrams have 0 counts
+            sumrow = self._sumDict(self.ngramFreqs[i])
+            # if 6 unique words, unique trigram count is 6^3 - sumrow
+            self.ngramFreqs[i][0] = pow(self.uniqueCount,i+1) - sumrow
 
     def _generateProbabilities(self):
+        exit ()
         # self.probs stores the probability tables (dicts of dicts) for each i-gram, for i = 1...n
         self.probs = [{} for _ in range(self.n)]
         for i in range(self.n):
@@ -217,10 +266,6 @@ def sentenceGeneration():
     frug.close()
     frbg.close()
 
-# MAIN
-# temp for testing
-# a = ngram('bible.train', 3)
-
 def perplexity(train, test, n = 1, smoothing = Smooth.NONE):
     ng = ngram(train, n, smoothing)
     test_corpus = None
@@ -236,3 +281,7 @@ def perplexity(train, test, n = 1, smoothing = Smooth.NONE):
             prev.pop(0)
     res = pp**(1.0/len(test_corpus))
     return res
+
+# MAIN
+# temp for testing
+a = ngram('bible.train', 3, Smooth.GOOD_TURING)

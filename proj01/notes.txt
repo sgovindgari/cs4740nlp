@@ -30,6 +30,17 @@ Notes on the project
 ======================================================================================== (Part 1)
  3. Smoothing; unknown words (ANDY)
     Implement Good-Turing smoothing
+      NOTES:
+        self.uniques = list(set(self.corpus))
+        tuples = list(itertools.product(*[self.uniques for _ in range(self.n - 1)]))
+        # impossible. too much mem usage, paging to disk too much!
+
+      \[c^*\left(w_{n-1}w_n\right)
+        =
+        \frac {\left[C(w_{n-1}w_n) + 1\right] \times C(w_{n-1})}
+              {C(w_{n-1}) + V}\]
+      \[c^*_i
+        = (c_i + 1) \frac{N}{N+V}\]
     Handle unknown words
 
  4. Perplexity (BEN)
@@ -72,3 +83,249 @@ Grading Guide
   05% - Random sentence generation
   25% - Extension
   50% - Report
+
+================================================================================
+The first 46 words in the bible corpus, represented in self.counts
+  (24 distinct words = 24 unigrams)
+  unigram: add 1 to all (unknowns?)
+  bigram: add 1 to all (all unigrams. unknowns?)
+  ..
+[
+{
+  (): {
+    'and': 5,
+    'moved': 1,
+    'deep': 1,
+    'in': 1,
+    'earth': 2,
+    'darkness': 1,
+    '<s>': 2,
+    'god': 2,
+    ',': 1,
+    '.': 3,
+    ';': 1,
+    'was': 2,
+    'waters': 1,
+    'form': 1,
+    'void': 1,
+    'upon': 2,
+    'beginning': 1,
+    'spirit': 1,
+    'heaven': 1,
+    'created': 1,
+    'of': 3,
+    'face': 2,
+    'without': 1,
+    'the': 9
+  }
+}
+,
+
+{
+  ('face',): {
+    'of': 2
+  },
+  ('the',): {
+    'heaven': 1,
+    'waters': 1,
+    'deep': 1,
+    'face': 2,
+    'earth': 2,
+    'beginning': 1,
+    'spirit': 1
+  },
+  ('in',): {
+    'the': 1
+  },
+  ('heaven',): {
+    'and': 1
+  },
+  ('void',): {
+    ';': 1
+  },
+  ('upon',): {
+    'the': 2
+  },
+  ('created',): {
+    'the': 1
+  },
+  ('spirit',): {
+    'of': 1
+  },
+  ('god',): {
+    'moved': 1,
+    'created': 1
+  },
+  ('form',): {
+    ',': 1
+  },
+  (',',): {
+    'and': 1
+  },
+  ('.',): {
+    '<s>': 1,
+    'and': 1
+  },
+  (';',): {
+    'and': 1
+  },
+  ('was',): {
+    'without': 1,
+    'upon': 1
+  },
+  ('darkness',): {
+    'was': 1
+  },
+  ('moved',): {
+    'upon': 1
+  },
+  ('without',): {
+    'form': 1
+  },
+  ('deep',): {
+    '.': 1
+  },
+  ('earth',): {
+    'was': 1,
+    '.': 1
+  },
+  ('and',): {
+    'the': 3,
+    'void': 1,
+    'darkness': 1
+  },
+  ('beginning',): {
+    'god': 1
+  },
+  ('waters',): {
+    '.': 1
+  },
+  ('<s>',): {
+    'and': 1,
+    'in': 1
+  },
+  ('of',): {
+    'god': 1,
+    'the': 2
+  }
+}
+
+,
+
+{
+  ('of', 'the'): {
+    'waters': 1,
+    'deep': 1
+  },
+  ('and', 'the'): {
+    'earth': 2,
+    'spirit': 1
+  },
+  ('upon', 'the'): {
+    'face': 2
+  },
+  ('the', 'waters'): {
+    '.': 1
+  },
+  ('of', 'god'): {
+    'moved': 1
+  },
+  ('form', ','): {
+    'and': 1
+  },
+  ('earth', '.'): {
+    '<s>': 1
+  },
+  ('darkness', 'was'): {
+    'upon': 1
+  },
+  (',', 'and'): {
+    'void': 1
+  },
+  ('<s>', 'in'): {
+    'the': 1
+  },
+  ('<s>', 'and'): {
+    'the': 1
+  },
+  ('the', 'beginning'): {
+    'god': 1
+  },
+  ('and', 'darkness'): {
+    'was': 1
+  },
+  ('was', 'without'): {
+    'form': 1
+  },
+  ('face', 'of'): {
+    'the': 2
+  },
+  ('deep', '.'): {
+    'and': 1
+  },
+  ('earth', 'was'): {
+    'without': 1
+  },
+  ('spirit', 'of'): {
+    'god': 1
+  },
+  ('god', 'moved'): {
+    'upon': 1
+  },
+  ('.', 'and'): {
+    'the': 1
+  },
+  ('the', 'spirit'): {
+    'of': 1
+  },
+  ('moved', 'upon'): {
+    'the': 1
+  },
+  ('beginning', 'god'): {
+    'created': 1
+  },
+  ('.', '<s>'): {
+    'and': 1
+  },
+  ('and', 'void'): {
+    ';': 1
+  },
+  ('the', 'face'): {
+    'of': 2
+  },
+  ('the', 'deep'): {
+    '.': 1
+  },
+  ('created', 'the'): {
+    'heaven': 1
+  },
+  ('without', 'form'): {
+    ',': 1
+  },
+  ('heaven', 'and'): {
+    'the': 1
+  },
+  (';', 'and'): {
+    'darkness': 1
+  },
+  ('the', 'heaven'): {
+    'and': 1
+  },
+  ('in', 'the'): {
+    'beginning': 1
+  },
+  ('void', ';'): {
+    'and': 1
+  },
+  ('was', 'upon'): {
+    'the': 1
+  },
+  ('the', 'earth'): {
+    'was': 1,
+    '.': 1
+  },
+  ('god', 'created'): {
+    'the': 1
+  }
+}
+]
