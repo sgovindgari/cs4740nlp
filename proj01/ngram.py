@@ -99,7 +99,6 @@ class ngram():
                     else:
                         self.counts[j][lookup] = dict()
                         self.counts[j][lookup][word] = 1
-        print self.counts
 
     def _smoothing(self):
         # TODO: Do smoothing
@@ -180,6 +179,16 @@ class ngram():
             if p < 0:
                 return word
 
+    # Takes a word and a list of previous words and returns the probability of that word
+    def getProbability(self, word, prev):
+        tp = tuple(prev)
+        if tp in self.probs[len(prev)]:
+            if word in self.probs[len(prev)][tp]:
+                return self.probs[len(prev)][tp][word]
+            return self.probs[len(prev)][tp]['<unk>']
+        #TODO: Uh oh, what do we do if we haven't seen the previous words, must account for in smoothing somehow?
+        return 0
+
 
 # Construction time test
 def ngram_model_test(source, maxN = 4):
@@ -210,6 +219,20 @@ def sentenceGeneration():
 
 # MAIN
 # temp for testing
-a = ngram('bible.train', 3)
+# a = ngram('bible.train', 3)
 
-# sentenceGeneration()
+def perplexity(train, test, n = 1, smoothing = Smooth.NONE):
+    ng = ngram(train, n, smoothing)
+    test_corpus = None
+    with open(test) as corp:
+        test_corpus = re.split('\s+', corp.read().lower())
+    pp = 1
+    prev = []
+    for word in test_corpus:
+        print ng.getProbability(word, prev)
+        pp *= (1/ng.getProbability(word, prev))
+        prev.append(word)
+        if len(prev) >= n:
+            prev.pop(0)
+    res = pp**(1.0/len(test_corpus))
+    return res
