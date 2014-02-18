@@ -90,7 +90,10 @@ Here is a snippet of code in our ngram class that is called by its constructor t
                     self.probs[i][row][entry] = ngram[row][entry] / float(total)
 \end{verbatim}}
 
-\newpage
+\par To generate a random sentence we start with a sentence start marker. We then generate a random float (0 to 1)
+and then simply traverse the appropriate row of our probability table until we reach the appropriate accumulated probability and output that word.
+We continue to generate words until we generate another sentence segmentation marker.
+\vspace{2mm}
 \setlength{\parindent}{0cm}
 \newcommand\npar{\par\smallskip}
 Sample unigram sentences for the bible corpus:\npar
