@@ -34,7 +34,9 @@ Notes on the project
         self.uniques = list(set(self.corpus))
         tuples = list(itertools.product(*[self.uniques for _ in range(self.n - 1)]))
         # impossible. too much mem usage, paging to disk too much!
-
+        N_0 is #wordsonce / total
+        http://www.youtube.com/watch?v=XdjCCkFUBKU
+      other notes: this is add-one:
       \[c^*\left(w_{n-1}w_n\right)
         =
         \frac {\left[C(w_{n-1}w_n) + 1\right] \times C(w_{n-1})}
