@@ -34,10 +34,11 @@ def parseReviews():
     sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
 
     sents = sent_tokenizer.tokenize(hotel_reviews)
-    # write to file
+   
     data = open('raw_reviews.train', 'w')
     for c in sents:
         # adds sentence start and end marker
+         # write to file
         data.write(c+'<s> ')
     data.close()
 
