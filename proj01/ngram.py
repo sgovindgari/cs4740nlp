@@ -61,7 +61,7 @@ class ngram():
                 self.corpus.reverse()
 
         # testing only
-        self.corpus = self.corpus[:46]
+        #self.corpus = self.corpus[:46]
         #self.corpus = ['<s>', 'the', 'cat', 'the', 'cat', 'the', 'cat', \
         #    'a', 'dog', 'the', 'dog', '.']
 
@@ -170,7 +170,7 @@ class ngram():
             self.ngramFreqs[i][0] = pow(self.uniqueCount,i+1) - sumrow
 
     def _generateProbabilities(self):
-        exit ()
+        #exit ()
         # self.probs stores the probability tables (dicts of dicts) for each i-gram, for i = 1...n
         self.probs = [{} for _ in range(self.n)]
         for i in range(self.n):
@@ -256,11 +256,11 @@ def sentenceGeneration():
     fbbg = open('fbbg','w')
     frbg = open('frbg','w')
     frug = open('frug','w')
-    for i in range(10):
-        fbug.write(bug.randomSentence() + "\n\n")
-        fbbg.write(bbg.randomSentence() + "\n\n")
-        frug.write(rug.randomSentence() + "\n\n")
-        frbg.write(rbg.randomSentence() + "\n\n")
+    for i in range(5):
+        fbug.write("\\texttt{" + bug.randomSentence() + "}\\npar\n")
+        fbbg.write("\\texttt{" + bbg.randomSentence() + "}\\npar\n")
+        frug.write("\\texttt{" + rug.randomSentence() + "}\\npar\n")
+        frbg.write("\\texttt{" + rbg.randomSentence() + "}\\npar\n")
     fbug.close()
     fbbg.close()
     frug.close()
@@ -284,4 +284,5 @@ def perplexity(train, test, n = 1, smoothing = Smooth.NONE):
 
 # MAIN
 # temp for testing
-a = ngram('bible.train', 3, Smooth.GOOD_TURING)
+#a = ngram('bible.train', 3, Smooth.GOOD_TURING)
+sentenceGeneration()
