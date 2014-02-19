@@ -51,7 +51,7 @@ class unigram():
 # Generalized n-gram model - O(nN) or something
 class ngram():
     # defaults: unigram, no smoothing, left-to-right
-    def __init__(self, sourceFile, n = 1, smooth = Smooth.NONE, direction = Direction.LR):
+    def __init__(self, sourceFile, n = 1, smooth = Smooth.NONE, useUnk = False, direction = Direction.LR):
         with open(sourceFile) as corpus:
             self.corpus = re.split('\s+', corpus.read().lower())
 
@@ -71,11 +71,6 @@ class ngram():
         self.goodTuringLimit = 12
         self.direction = direction
 
-        # unordered unique words (for use in smoothing)
-        self.uniques = list(set(self.corpus))
-        self.uniqueCount = len(self.uniques) # V
-        self.ngramFreqs = [dict() for _ in range(self.n)] # populated later during smoothing
-
         # This stores dictionaries for recording counts of the p previous words followed by a word
         # i.e. for a bigram model it stores the unigram counts and bigram counts
         # Each dictionary then holds an entry (another dict) for each tuple of previous words
@@ -83,7 +78,22 @@ class ngram():
         # for bigram there would be [('the',[('cat', 3),('dog', 4),...]),('a',[(cow, 2),(horse, 1),...]),...]
         # Summary: self.counts is a list of dicts of dicts where each entry in the list is a model
         self.counts = [dict() for _ in range(self.n)]
-        self.smoothedCounts = [dict() for _ in range(self.n)]
+        self.ngramFreqs = [dict() for _ in range(self.n)] # populated later during smoothing
+        self.probs = [dict() for _ in range(self.n)]
+
+        # generate unks after if we reverse!!!
+        if useUnk:
+            self.seenWords = set()
+            for i in range(len(self.corpus)):
+                word = self.corpus[i]
+                if word not in self.seenWords and word != '<s>':
+                    self.corpus[i] = '<unk>'
+                self.seenWords.add(word)
+
+        # unordered unique words (for use in smoothing) (after unk replacement)
+        self.uniques = list(set(self.corpus))
+        self.uniqueCount = len(self.uniques) # V
+
         self._initializeNgram()
         self._populateNgramFreqs() # not really necessary if no smoothing...
         # smoothingFunction takes in i and nv (nv is count?)
@@ -150,43 +160,14 @@ class ngram():
             def goodTuringFunction(i,nv):
                 if nv == 0:
                     cstar = self.ngramFreqs[i][nv+1]
-                    print i,nv,cstar, self.ngramFreqs[i][nv]
                     return cstar
                 elif nv < self.goodTuringLimit:
                     cstar = (nv + 1.0) * self.ngramFreqs[i][nv+1] / self.ngramFreqs[i][nv]
-                    print i,nv,cstar, self.ngramFreqs[i][nv]
                     return cstar
                 else:
                     return nv
 
             return goodTuringFunction
-
-            #for i in range(self.n):
-            #    for nv in range(self.goodTuringLimit): # 12 at the moment
-            #        if nv == 0:
-            #            cstar = self.ngramFreqs[i][nv+1] # cstar = N_1
-            #            gtCounts[i][nv] = 1.0 * cstar
-            #        else:
-            #            cstar = (nv + 1.0) * self.ngramFreqs[i][nv+1] / self.ngramFreqs[i][nv]
-            #            gtCounts[i][nv] = 1.0 * cstar
-                #     if nv == 0:
-                #         cstar = self.ngramFreqs[i]
-                #         print i, nv
-                #         print self.ngramFreqs[i][nv]
-
-            # step through self.counts (each n-gram)
-            # for i in range(self.n):
-            #     ngram = self.counts[i]
-            #     print ngram
-
-            #print self.uniqueCount
-            #print pow(self.uniqueCount,self.n)
-
-            #currentTuple = ()
-            #for i in range(self.n):
-            #    for uidx in range(len(self.uniques)):
-            #        currentTuple.append(self.uniques)
-            #        print currentTuple
 
     # countNGrams returns a dictionary of int to int to self.ngramFreqs
     # 2 -> 35 means there are 35 ngrams that appear 2 times
@@ -212,7 +193,6 @@ class ngram():
 
     def _generateProbabilities(self):
         # self.probs stores the probability tables (dicts of dicts) for each i-gram, for i = 1...n
-        self.probs = [{} for _ in range(self.n)]
         for i in range(self.n):
             ngram = self.counts[i]
             for row in ngram:
