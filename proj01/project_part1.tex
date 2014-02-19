@@ -90,6 +90,36 @@ Here is a snippet of code in our ngram class that is called by its constructor t
                     self.probs[i][row][entry] = ngram[row][entry] / float(total)
 \end{verbatim}}
 
+\newpage
+For Hotel reviews we used the Punkt sentence segmentation tool provided by nltk library. Punkt has a tokenizer that divides a text into a list of sentences, by using an unsupervised algorithm to build a model for abbreviation words, collocations, and words that start sentences. We trained it on a large collection of plaintext in the target language before we used it. Punkt knows that the periods in Mr. Smith and Johann S. Bach do not mark sentence boundaries. And sometimes sentences can start with non-capitalized words. We made use of this sentence segmentation tool to recognize sentence boundaries. 
+
+{\small
+\begin{verbatim}
+sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
+
+data = open('raw_reviews.train', 'w')
+    for c in sents:
+        # adds sentence start and end marker
+         # write to file
+        data.write(c+'<s> ')
+    data.close()
+\end{verbatim}
+}
+
+After we performed sentence segmentation, we further added spaces around punctuation marks, floating dots like \texttt{...}, and dashes like \texttt{-{}-} which were all treated as separate words. We also removed any XML and numbers IsTruthful and IsPositive.
+
+{\small
+\begin{verbatim}
+edit = re.sub('(</?(TEXT|DOC)>\n)|([0-9]+,[0-9],)|((\.+\s){2,})', '', edit)
+    edit = re.sub('\n|^', ' <s> ', edit)
+    edit = re.sub('([,!?();:"-&/$])', r' \1 ', edit)
+    edit = re.sub('(\.{1,})',r' \1 ', edit)
+    edit = re.sub('--', ' -- ', edit)
+\end{verbatim}
+}
+
+\newpage
+
 \par To generate a random sentence we start with a sentence start marker. We then generate a random float (0 to 1)
 and then simply traverse the appropriate row of our probability table until we reach the appropriate accumulated probability and output that word.
 We continue to generate words until we generate another sentence segmentation marker.
