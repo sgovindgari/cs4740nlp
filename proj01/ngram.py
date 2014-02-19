@@ -87,7 +87,7 @@ class ngram():
         self._populateNgramFreqs() # not really necessary if no smoothing...
         # smoothingFunction takes in i and nv (nv is count?)
         smoothingFunction = self._smoothing()
-        self._generateProbabilities()
+        self._generateProbabilities(smoothingFunction)
 
     def _initializeNgram(self):
         for i in range(len(self.corpus)):
@@ -226,7 +226,7 @@ class ngram():
             # let's put an index that sums up the row (without 0 counts)
             self.ngramFreqs[i][-1] = sumrow
 
-    def _generateProbabilities(self):
+    def _generateProbabilities(self, smoothingFunction):
         #exit ()
         # self.probs stores the probability tables (dicts of dicts) for each i-gram, for i = 1...n
         self.probs = [{} for _ in range(self.n)]
@@ -236,9 +236,8 @@ class ngram():
                 total = self._sumDict(ngram[row])
                 self.probs[i][row] = OrderedDict()
                 for entry in ngram[row]:
-                    self.probs[i][row][entry] = ngram[row][entry] / float(total)
-                    if self.smooth == Smooth.GOOD_TURING:
-                        print self.probs[i][row][entry]
+                    newNumerator = smoothingFunction(i,ngram[row][entry])
+                    self.probs[i][row][entry] = 1.0 * newNumerator / float(total)
 
     # Sum the values of the dictionary and returns the total
     def _sumDict(self, d):
