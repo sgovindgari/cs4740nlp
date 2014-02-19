@@ -94,4 +94,4 @@ How ngram works:
   * We then create a table for all necessary counts for each i-gram, i = 1,...,n
     * It does not create an entry for words that have no count (i.e. if cow never follows brown, but cow is in the vocab, it won't have an entry in the bigram row for brown)
   * We then generate the appropriate smoothing algorithm for generating probabilities
-  * Probabilities for seen i-grams i=1,...,n
+  * Probabilities for seen i-grams i=1,...,n are then calculated using the appropriate smoothing method
