@@ -8,8 +8,8 @@ import pprint
 # Parses king james
 # Tried parsing using XML parsers but input doesn't seem to be valid XML
 # Returns a string of tokens separated by whitespace
-def parseBible():
-    f = open('bible_corpus/kjbible.train')
+def parseBible(fileName):
+    f = open(fileName)
     bible = f.read()
     # Removes XML and psalm/verse numbers
     # then replaces start of string and double new lines with the sentence segmentation marker <s>.
@@ -23,8 +23,8 @@ def parseBible():
 # need to download - punkt
 # Parses the Hotel reviews from Amazon
 # Format IsTruthful, IsPositive, Text - for now ignoring the truthful and positive values
-def parseReviews():
-    f = open('HotelReviews/reviews.train')
+def parseReviews(fileName):
+    f = open(fileName)
     # ignores the first line
     f.readline()
     # gets all text from training data
@@ -58,8 +58,15 @@ def parseReviews():
 
 def saveFiles():
     with open('bible.train','w') as bible:
-        with open ('raw_reviews.train', 'w') as edit:
-            bible.write(parseBible())
-            edit.write(parseReviews())
+        bible.write(parseBible('bible_corpus/kjbible.train'))
+    with open ('raw_reviews.train', 'w') as edit:
+        edit.write(parseReviews('HotelReviews/reviews.train'))
+    with open ('raw_reviews.train', 'w') as edit:
+        edit.write(parseReviews('HotelReviews/reviews.train'))
+    with open ('raw_reviews.test', 'w') as edit:
+        edit.write(parseReviews('HotelReviews/reviews.test'))
+    with open ('bible.test', 'w') as edit:
+        edit.write(parseReviews('bible_corpus/kjbible.test'))
+
 
 saveFiles()

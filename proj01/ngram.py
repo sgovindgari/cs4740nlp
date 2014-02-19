@@ -83,11 +83,12 @@ class ngram():
         # for bigram there would be [('the',[('cat', 3),('dog', 4),...]),('a',[(cow, 2),(horse, 1),...]),...]
         # Summary: self.counts is a list of dicts of dicts where each entry in the list is a model
         self.counts = [dict() for _ in range(self.n)]
+        self.smoothedCounts = [dict() for _ in range(self.n)]
         self._initializeNgram()
         self._populateNgramFreqs() # not really necessary if no smoothing...
         # smoothingFunction takes in i and nv (nv is count?)
-        smoothingFunction = self._smoothing()
-        self._generateProbabilities(smoothingFunction)
+        self.smoothingFunction = self._smoothing()
+        self._generateProbabilities()
 
     def _initializeNgram(self):
         for i in range(len(self.corpus)):
@@ -145,35 +146,18 @@ class ngram():
             #   replace empirical N_k with best-fit power law
             #   once count counts get unreliable
 
-            # i, nv are args
-            # print 2, self.ngramFreqs[2][-1]
-            # print 2, 0, self.ngramFreqs[2][0]
-            # print 2, 1, self.ngramFreqs[2][1]
-            # print 2, 2, self.ngramFreqs[2][2]
-            # print 'e', 0, self.ngramFreqs[2][1]
-            # print 'e', 1, (1 + 1.0) * self.ngramFreqs[2][1+1] / self.ngramFreqs[2][1]
-            # print 'e', 2, (2 + 1.0) * self.ngramFreqs[2][2+1] / self.ngramFreqs[2][2]
-            # print 'e', 3, (3 + 1.0) * self.ngramFreqs[2][3+1] / self.ngramFreqs[2][3]
-            # print 'e', 4, (4 + 1.0) * self.ngramFreqs[2][4+1] / self.ngramFreqs[2][4]
-            # print 'e', 5, (5 + 1.0) * self.ngramFreqs[2][5+1] / self.ngramFreqs[2][5]
-            # print 'e', 6, (6 + 1.0) * self.ngramFreqs[2][6+1] / self.ngramFreqs[2][6]
-            # print 'e', 7, (7 + 1.0) * self.ngramFreqs[2][7+1] / self.ngramFreqs[2][7]
-            # print 'e', 8, (8 + 1.0) * self.ngramFreqs[2][8+1] / self.ngramFreqs[2][8]
-            # print 'e', 9, (9 + 1.0) * self.ngramFreqs[2][9+1] / self.ngramFreqs[2][9]
-            # print 'e', 10, (10 + 1.0) * self.ngramFreqs[2][10+1] / self.ngramFreqs[2][10]
-            # print 'e', 11, (11 + 1.0) * self.ngramFreqs[2][11+1] / self.ngramFreqs[2][11]
-            # print 'e', 12, (12 + 1.0) * self.ngramFreqs[2][12+1] / self.ngramFreqs[2][12]
-
             # function taking in ngram val (i), count nv, returns new cstar count
             def goodTuringFunction(i,nv):
                 if nv == 0:
                     cstar = self.ngramFreqs[i][nv+1]
                     print i,nv,cstar, self.ngramFreqs[i][nv]
                     return cstar
-                elif nv < 12:
+                elif nv < self.goodTuringLimit:
                     cstar = (nv + 1.0) * self.ngramFreqs[i][nv+1] / self.ngramFreqs[i][nv]
                     print i,nv,cstar, self.ngramFreqs[i][nv]
                     return cstar
+                else:
+                    return nv
 
             return goodTuringFunction
 
@@ -226,18 +210,19 @@ class ngram():
             # let's put an index that sums up the row (without 0 counts)
             self.ngramFreqs[i][-1] = sumrow
 
-    def _generateProbabilities(self, smoothingFunction):
-        #exit ()
+    def _generateProbabilities(self):
         # self.probs stores the probability tables (dicts of dicts) for each i-gram, for i = 1...n
         self.probs = [{} for _ in range(self.n)]
         for i in range(self.n):
             ngram = self.counts[i]
             for row in ngram:
                 total = self._sumDict(ngram[row])
+                if self.smooth == Smooth.ADD_ONE:
+                    total += self.uniqueCount
                 self.probs[i][row] = OrderedDict()
                 for entry in ngram[row]:
-                    newNumerator = smoothingFunction(i,ngram[row][entry])
-                    self.probs[i][row][entry] = 1.0 * newNumerator / float(total)
+                    newNumerator = self.smoothingFunction(i,ngram[row][entry])
+                    self.probs[i][row][entry] = newNumerator / float(total)
 
     # Sum the values of the dictionary and returns the total
     def _sumDict(self, d):
@@ -289,12 +274,20 @@ class ngram():
     # Takes a word and a list of previous words and returns the probability of that word
     def getProbability(self, word, prev):
         tp = tuple(prev)
+        #tuple has been seen
         if tp in self.probs[len(prev)]:
             if word in self.probs[len(prev)][tp]:
                 return self.probs[len(prev)][tp][word]
-            return self.probs[len(prev)][tp]['<unk>']
-        #TODO: Uh oh, what do we do if we haven't seen the previous words, must account for in smoothing somehow?
-        return 0
+            elif word in self.uniques:
+                return self.smoothingFunction(len(prev),0)
+            elif '<unk>' in self.probs[len(prev)][tp]:
+                return self.probs[len(prev)][tp]['<unk>']
+            else:
+                return self.smoothingFunction(len(prev),0)
+        #Must backoff
+        else:
+            newPrev = prev[1:]
+            return getProbability(word,newPrev)
 
 
 # Construction time test
@@ -324,6 +317,7 @@ def sentenceGeneration():
     frug.close()
     frbg.close()
 
+# Use backoff for missing tables
 def perplexity(train, test, n = 1, smoothing = Smooth.NONE):
     ng = ngram(train, n, smoothing)
     test_corpus = None

@@ -37,4 +37,6 @@
 proj01/report.pdf
 proj01/project_part1.pdf
 proj01/f*g
+*.train
+*.test
 
