@@ -61,12 +61,14 @@ class ngram():
                 self.corpus.reverse()
 
         # testing only
-        #self.corpus = self.corpus[:46]
+        #self.corpus = self.corpus[:12029]
+        #print self.corpus
         #self.corpus = ['<s>', 'the', 'cat', 'the', 'cat', 'the', 'cat', \
         #    'a', 'dog', 'the', 'dog', '.']
 
         self.n = n
         self.smooth = smooth
+        self.goodTuringLimit = 12
         self.direction = direction
 
         # unordered unique words (for use in smoothing)
@@ -82,7 +84,9 @@ class ngram():
         # Summary: self.counts is a list of dicts of dicts where each entry in the list is a model
         self.counts = [dict() for _ in range(self.n)]
         self._initializeNgram()
-        self._smoothing()
+        self._populateNgramFreqs() # not really necessary if no smoothing...
+        # smoothingFunction takes in i and nv (nv is count?)
+        smoothingFunction = self._smoothing()
         self._generateProbabilities()
 
     def _initializeNgram(self):
@@ -108,10 +112,12 @@ class ngram():
                         self.counts[j][lookup] = dict()
                         self.counts[j][lookup][word] = 1
 
+    # returns a function?? self.ngramFreqs
     def _smoothing(self):
         # TODO: Do smoothing
         if self.smooth == Smooth.NONE:
-            return
+            iden = lambda i,nv: nv
+            return iden
 
         # the following is NOT AN OPTION: TOO MUCH MEM
         # tuples = list(itertools.product(*[self.uniques for _ in range(self.n - 1)]))
@@ -120,6 +126,9 @@ class ngram():
         # Give it a count of 1, for words that did not show up for that row, but do show up in the
         # vocabulary, add to each row with a value of 1 and add 1 to each entry
         if self.smooth == Smooth.ADD_ONE:
+            addonefun = lambda i,nv: 1 + nv
+            # fix. what if entry not found? and update denom
+
             # fill entire table with 0s if no entry.
             # add 1 to all entries in table.
             # denominator (total = self._sumDict(ngram[row])) is taken care of
@@ -129,11 +138,58 @@ class ngram():
             #         for entry in ngram[row]:
             #             # add 1 to every entry
             #             entry += 1
-            pass
+            return addonefun # INCORRECT
         elif self.smooth == Smooth.GOOD_TURING:
-            # keep track of ngram frequencies!
-            self._populateNgramFreqs()
-            print self.ngramFreqs
+            # NOTE: we will do Good-Turing smoothing up to self.goodTuringLimit (12).
+            # We can also implement simple Good-Turing smoothing:
+            #   replace empirical N_k with best-fit power law
+            #   once count counts get unreliable
+
+            # i, nv are args
+            # print 2, self.ngramFreqs[2][-1]
+            # print 2, 0, self.ngramFreqs[2][0]
+            # print 2, 1, self.ngramFreqs[2][1]
+            # print 2, 2, self.ngramFreqs[2][2]
+            # print 'e', 0, self.ngramFreqs[2][1]
+            # print 'e', 1, (1 + 1.0) * self.ngramFreqs[2][1+1] / self.ngramFreqs[2][1]
+            # print 'e', 2, (2 + 1.0) * self.ngramFreqs[2][2+1] / self.ngramFreqs[2][2]
+            # print 'e', 3, (3 + 1.0) * self.ngramFreqs[2][3+1] / self.ngramFreqs[2][3]
+            # print 'e', 4, (4 + 1.0) * self.ngramFreqs[2][4+1] / self.ngramFreqs[2][4]
+            # print 'e', 5, (5 + 1.0) * self.ngramFreqs[2][5+1] / self.ngramFreqs[2][5]
+            # print 'e', 6, (6 + 1.0) * self.ngramFreqs[2][6+1] / self.ngramFreqs[2][6]
+            # print 'e', 7, (7 + 1.0) * self.ngramFreqs[2][7+1] / self.ngramFreqs[2][7]
+            # print 'e', 8, (8 + 1.0) * self.ngramFreqs[2][8+1] / self.ngramFreqs[2][8]
+            # print 'e', 9, (9 + 1.0) * self.ngramFreqs[2][9+1] / self.ngramFreqs[2][9]
+            # print 'e', 10, (10 + 1.0) * self.ngramFreqs[2][10+1] / self.ngramFreqs[2][10]
+            # print 'e', 11, (11 + 1.0) * self.ngramFreqs[2][11+1] / self.ngramFreqs[2][11]
+            # print 'e', 12, (12 + 1.0) * self.ngramFreqs[2][12+1] / self.ngramFreqs[2][12]
+
+            # function taking in ngram val (i), count nv, returns new cstar count
+            def goodTuringFunction(i,nv):
+                if nv == 0:
+                    cstar = self.ngramFreqs[i][nv+1]
+                    print i,nv,cstar, self.ngramFreqs[i][nv]
+                    return cstar
+                elif nv < 12:
+                    cstar = (nv + 1.0) * self.ngramFreqs[i][nv+1] / self.ngramFreqs[i][nv]
+                    print i,nv,cstar, self.ngramFreqs[i][nv]
+                    return cstar
+
+            return goodTuringFunction
+
+            #for i in range(self.n):
+            #    for nv in range(self.goodTuringLimit): # 12 at the moment
+            #        if nv == 0:
+            #            cstar = self.ngramFreqs[i][nv+1] # cstar = N_1
+            #            gtCounts[i][nv] = 1.0 * cstar
+            #        else:
+            #            cstar = (nv + 1.0) * self.ngramFreqs[i][nv+1] / self.ngramFreqs[i][nv]
+            #            gtCounts[i][nv] = 1.0 * cstar
+                #     if nv == 0:
+                #         cstar = self.ngramFreqs[i]
+                #         print i, nv
+                #         print self.ngramFreqs[i][nv]
+
             # step through self.counts (each n-gram)
             # for i in range(self.n):
             #     ngram = self.counts[i]
@@ -147,7 +203,6 @@ class ngram():
             #    for uidx in range(len(self.uniques)):
             #        currentTuple.append(self.uniques)
             #        print currentTuple
-            exit ()
 
     # countNGrams returns a dictionary of int to int to self.ngramFreqs
     # 2 -> 35 means there are 35 ngrams that appear 2 times
@@ -168,6 +223,8 @@ class ngram():
             sumrow = self._sumDict(self.ngramFreqs[i])
             # if 6 unique words, unique trigram count is 6^3 - sumrow
             self.ngramFreqs[i][0] = pow(self.uniqueCount,i+1) - sumrow
+            # let's put an index that sums up the row (without 0 counts)
+            self.ngramFreqs[i][-1] = sumrow
 
     def _generateProbabilities(self):
         #exit ()
@@ -180,6 +237,8 @@ class ngram():
                 self.probs[i][row] = OrderedDict()
                 for entry in ngram[row]:
                     self.probs[i][row][entry] = ngram[row][entry] / float(total)
+                    if self.smooth == Smooth.GOOD_TURING:
+                        print self.probs[i][row][entry]
 
     # Sum the values of the dictionary and returns the total
     def _sumDict(self, d):
@@ -284,5 +343,5 @@ def perplexity(train, test, n = 1, smoothing = Smooth.NONE):
 
 # MAIN
 # temp for testing
-#a = ngram('bible.train', 3, Smooth.GOOD_TURING)
-sentenceGeneration()
+a = ngram('bible.train', 3, Smooth.GOOD_TURING)
+#sentenceGeneration()
