@@ -8,7 +8,7 @@
 import re, random, time
 from collections import OrderedDict
 import itertools # for cross product of 2 lists?
-from repoze.lru import lru_cache
+#from repoze.lru import lru_cache
 import math
 
 
@@ -305,9 +305,9 @@ class ngram():
             prev.append(word)
             if len(prev) >= self.n:
                 prev.pop(0)
-            if i % 1000 == 0:
-                print time.time() - start
-                print total - i
+            #if i % 1000 == 0:
+                #print time.time() - start
+                #print total - i
         pp *= (1.0/len(test_corpus))
         pp = math.exp(pp)
         return pp

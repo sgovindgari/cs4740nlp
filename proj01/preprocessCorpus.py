@@ -4,6 +4,7 @@ import re
 import nltk # http://www.nltk.org/install.html
             # in python interpreter: nltk.download() to get punkt
 import pprint
+import ngram
 
 # Parses king james
 # Tried parsing using XML parsers but input doesn't seem to be valid XML
@@ -55,7 +56,7 @@ def parseReviews(fileName, destination):
     edit = re.sub('--', ' -- ', edit)
     return edit
 
-def parseForPrediction(filename):
+def parseForPrediction(filename, destination):
     f = open (filename)
     f.readline()
     predictions = f.read()
@@ -65,7 +66,7 @@ def parseForPrediction(filename):
 
     sents = sent_tokenizer.tokenize(predictions)
    
-    data = open('parsed_predictions.train', 'w')
+    data = open(destination, 'w')
 
     for c in sents:
         # adds sentence start and end marker
@@ -73,7 +74,7 @@ def parseForPrediction(filename):
         data.write(c+'<s> ')
     data.close()
 
-    p = open ('parsed_predictions.train')
+    p = open (destination)
     raw_predict = p.read()
     # adds spaces around punctuation
     # <r> - denotes start and end of a review
@@ -84,29 +85,59 @@ def parseForPrediction(filename):
     raw_predict = re.sub('--', ' -- ', raw_predict)
     return raw_predict
 
-def makeTruePos(filename):
+def diffReviews(filename, extension):
     f = open(filename)
     tru = f.read()
-    tru_post = open('true_and_positive.train', 'w')
-    tru_neg = open ('true_and_negative.train', 'w')
-    fal_pos = open('false_and_positive.train', 'w')
-    fal_neg = open('false_and_negative.train', 'w')
+
+    tru_reviews = open('true' + extension, 'w')
+    fal_reviews = open('false' + extension, 'w')
+    
+    # using validation data as well
     true_pos_list = tru.split('<r> <s> ')
     for i in range(1, len(true_pos_list)):
         c = true_pos_list[i]
         # true and positive
         if c[0:8] == '1 , 1 , ':
-            tru_post.write('<s> ' + c[8:])
+            tru_reviews.write('<s> ' + c[8:])
         elif c[0:8] == '0 , 0 , ':
-            fal_neg.write('<s> ' + c[8:])
+            fal_reviews.write('<s> ' + c[8:])
         elif c[0:8] == '0 , 1 , ':
-            fal_pos.write('<s> ' + c[8:])
+            fal_reviews.write('<s> ' + c[8:])
         elif c[0:8] == '1 , 0 , ':
-            tru_neg.write('<s> ' + c[8:])
-    tru_post.close()
-    tru_neg.close()
-    fal_pos.close()
-    fal_neg.close()
+            tru_reviews.write('<s> ' + c[8:])
+    tru_reviews.close()
+    fal_reviews.close()
+
+def predictReview():
+    with open('predictions.test', 'w') as raw_predict:
+        raw_predict.write(parseForPrediction('HotelReviews/reviews.test', 'predictions.test'))
+        f = open('predictions.test')
+        replace_text = f.read()
+        lst = replace_text.split('<r> <s> ')
+        result = open('result_pred.test', 'w')
+        final_predictions = open('final_predictions.test', 'w')
+        for i in range(1, len(lst)):
+            c = lst[i].strip()
+
+            if c[0:11] == '?  ,  ?  , ':
+                result.write('<s> ' + c[11:])
+                tru_uningram = ngram.ngram('true.train', 1)
+                tru_bigram = ngram.ngram('true.train', 2)
+                fal_unigram = ngram.ngram('true.train', 1)
+                fal_bigram = ngram.ngram('false.train', 2)
+
+                tru_uni_pp = tru_uningram.perplexity('result_pred.test')
+                fal_uni_pp = fal_unigram.perplexity('result_pred.test')
+                tru_bi_pp = tru_bigram.perplexity('result_pred.test')
+                fal_bi_pp = fal_bigram.perplexity('result_pred.test')
+
+                smallest_num = min(tru_bi_pp, tru_uni_pp, fal_bi_pp, fal_uni_pp)
+                if smallest_num == tru_uni_pp or smallest_num == tru_bi_pp:
+                    final_predictions.write('<s> 1 , ? , ' + c[11:])
+                else:
+                    final_predictions.write('<s> 0 , ? , ' + c[11:])
+        final_predictions.close()
+
 
 def saveFiles():
     with open('bible.train','w') as bible:
@@ -118,8 +149,9 @@ def saveFiles():
     with open ('bible.test', 'w') as edit:
         edit.write(parseBible('bible_corpus/kjbible.test'))
     with open ('parsed_predictions.train', 'w') as raw_predict:
-        raw_predict.write(parseForPrediction('HotelReviews/reviews.train'))
+        raw_predict.write(parseForPrediction('HotelReviews/reviews.train', 'parsed_predictions.train'))
 
 
 saveFiles()
-makeTruePos('parsed_predictions.train')
+diffReviews('parsed_predictions.train', '.train')
+predictReview()
