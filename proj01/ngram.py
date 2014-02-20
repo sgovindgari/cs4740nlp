@@ -8,6 +8,7 @@
 import re, random, time
 from collections import OrderedDict
 import itertools # for cross product of 2 lists?
+from copy import deepcopy
 
 # enum definition (used for Smooth and Direction)
 def enum(*sequential, **named):
@@ -242,6 +243,16 @@ class ngram():
             res.reverse()
         print ' '.join(res)
         return ' '.join(res)
+
+    #Lazily calculates probability rows only when requested. Only the unigram is calculated and stored.
+    def _getProbabilityRow(self, prev):
+        tp = tuple(prev)
+        if tp in self.counts[len(prev)]:
+            #calculate row
+        #Backoff to n-1 gram
+        else:
+            return self._getProbabilityRow(prev[1:])
+
 
     # Given a dictionary of (words, probability) generate a random word drawn from this distribution
     def generateWord(self, row):
