@@ -8,8 +8,9 @@
 import re, random, time
 from collections import OrderedDict
 import itertools # for cross product of 2 lists?
-from copy import deepcopy
+from repoze.lru import lru_cache
 import math
+
 
 # enum definition (used for Smooth and Direction)
 def enum(*sequential, **named):
@@ -194,10 +195,10 @@ class ngram():
             self.ngramFreqs[i][-1] = sumrow + self.ngramFreqs[i][0]
 
     def _generateProbabilities(self):
-        # self.probs stores the probability tables (dicts of dicts) for each i-gram, for i = 1...n
         self.unigramProbs = OrderedDict()
         unigramCounts = self.counts[0][()]
         total = 0.0
+        self.cache = dict()
         for entry in unigramCounts:
             self.unigramProbs[entry] = self.smoothingFunction(0,unigramCounts[entry])
             total += self.unigramProbs[entry]
@@ -244,6 +245,8 @@ class ngram():
         n = len(prev)
         if tp == ():
             return self.unigramProbs
+        elif tp in self.cache:
+            return self.cache[tp]
         elif tp in self.counts[n]:
             #calculate row
             row = OrderedDict()
@@ -257,10 +260,12 @@ class ngram():
                 total += row[entry]
             for entry in row:
                 row[entry] = row[entry] / total
+            if len(self.cache) < 3000:
+                self.cache[tp] = row
             return row
         #Backoff to n-1 gram
         else:
-            return self._getProbabilityRow(prev[1:])
+            return None
 
 
     # Given a dictionary of (words, probability) generate a random word drawn from this distribution
@@ -275,10 +280,38 @@ class ngram():
     def getProbability(self, word, prev):
         tp = tuple(prev)
         row = self._getProbabilityRow(prev)
-        if word in row:
-            return row[word]
+        if row:
+            if word in row:
+                return row[word]
+            elif '<unk>' in row:
+                return row['<unk>']
+            else:
+                return self.getProbability(word, prev[1:])
         else:
-            return row['<unk>']
+            return self.getProbability(word, prev[1:])
+
+    # Use backoff for missing tables
+    def perplexity(self, test):
+        test_corpus = None
+        with open(test) as corp:
+            test_corpus = re.split('\s+', corp.read().lower())
+        pp = 1
+        prev = []
+        total = len(test_corpus)
+        start = time.time()
+        for i in xrange(len(test_corpus)):
+            word = test_corpus[i]
+            pp += math.log(1/self.getProbability(word, prev))
+            prev.append(word)
+            if len(prev) >= self.n:
+                prev.pop(0)
+            if i % 1000 == 0:
+                print time.time() - start
+                print total - i
+        pp *= (1.0/len(test_corpus))
+        pp = math.exp(pp)
+        return pp
+
 
 
 # Construction time test
@@ -307,24 +340,6 @@ def sentenceGeneration():
     fbbg.close()
     frug.close()
     frbg.close()
-
-# Use backoff for missing tables
-def perplexity(train, test, n = 1, smoothing = Smooth.NONE):
-    ng = ngram(train, n, smoothing)
-    test_corpus = None
-    with open(test) as corp:
-        test_corpus = re.split('\s+', corp.read().lower())
-    pp = 1
-    prev = []
-    for word in test_corpus:
-        print ng.getProbability(word, prev)
-        pp += math.log(1/ng.getProbability(word, prev))
-        prev.append(word)
-        if len(prev) >= n:
-            prev.pop(0)
-    pp = math.exp(pp)
-    res = pp**(1/len(test_corpus))
-    return res
 
 # MAIN
 # temp for testing
