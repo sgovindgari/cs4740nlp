@@ -8,6 +8,8 @@
 import re, random, time
 from collections import OrderedDict
 import itertools # for cross product of 2 lists?
+from copy import deepcopy
+import math
 
 # enum definition (used for Smooth and Direction)
 def enum(*sequential, **named):
@@ -68,7 +70,7 @@ class ngram():
 
         self.n = n
         self.smooth = smooth
-        self.goodTuringLimit = 12
+        self.goodTuringLimit = 2
         self.direction = direction
 
         # This stores dictionaries for recording counts of the p previous words followed by a word
@@ -159,7 +161,7 @@ class ngram():
             # function taking in ngram val (i), count nv, returns new cstar count
             def goodTuringFunction(i,nv):
                 if nv == 0:
-                    cstar = self.ngramFreqs[i][nv+1]
+                    cstar = self.ngramFreqs[i][nv+1] / float(self.ngramFreqs[i][-1])
                     return cstar
                 elif nv < self.goodTuringLimit:
                     cstar = (nv + 1.0) * self.ngramFreqs[i][nv+1] / self.ngramFreqs[i][nv]
@@ -189,20 +191,18 @@ class ngram():
             # if 6 unique words, unique trigram count is 6^3 - sumrow
             self.ngramFreqs[i][0] = pow(self.uniqueCount,i+1) - sumrow
             # let's put an index that sums up the row (without 0 counts)
-            self.ngramFreqs[i][-1] = sumrow
+            self.ngramFreqs[i][-1] = sumrow + self.ngramFreqs[i][0]
 
     def _generateProbabilities(self):
         # self.probs stores the probability tables (dicts of dicts) for each i-gram, for i = 1...n
-        for i in range(self.n):
-            ngram = self.counts[i]
-            for row in ngram:
-                total = self._sumDict(ngram[row])
-                if self.smooth == Smooth.ADD_ONE:
-                    total += self.uniqueCount
-                self.probs[i][row] = OrderedDict()
-                for entry in ngram[row]:
-                    newNumerator = self.smoothingFunction(i,ngram[row][entry])
-                    self.probs[i][row][entry] = newNumerator / float(total)
+        self.unigramProbs = OrderedDict()
+        unigramCounts = self.counts[0][()]
+        total = 0.0
+        for entry in unigramCounts:
+            self.unigramProbs[entry] = self.smoothingFunction(0,unigramCounts[entry])
+            total += self.unigramProbs[entry]
+        for entry in self.unigramProbs:
+            self.unigramProbs[entry] = self.unigramProbs[entry]/total
 
     # Sum the values of the dictionary and returns the total
     def _sumDict(self, d):
@@ -216,23 +216,18 @@ class ngram():
         # Prev stores the previously generated words to consider
         prev = list()
         if self.n != 1:
-            #Should we start with <s>? or nothing? or something else...
             prev = ['<s>']
         # The words generated thus far are stored in res
         res = ['<s>']
         # Generate words until a sentence segmentor is created
         while True:
             word = ''
-            gram = self.probs[len(prev)]
-            if tuple(prev) in gram:
-                word = self.generateWord(gram[tuple(prev)])
-                prev.append(word)
-                res.append(word)
-                # Maintain only as many previous words as the model allows
-                if len(prev) >= self.n:
-                    prev.pop(0)
-            # if the entry doesn't exist, try using the previous t-1 words instead
-            else:
+            row = self._getProbabilityRow(prev)
+            word = self.generateWord(row)
+            prev.append(word)
+            res.append(word)
+            # Maintain only as many previous words as the model allows
+            if len(prev) >= self.n:
                 prev.pop(0)
             if word == '<s>':
                 break
@@ -242,6 +237,31 @@ class ngram():
             res.reverse()
         print ' '.join(res)
         return ' '.join(res)
+
+    #Lazily calculates probability rows only when requested. Only the unigram is calculated and stored.
+    def _getProbabilityRow(self, prev):
+        tp = tuple(prev)
+        n = len(prev)
+        if tp == ():
+            return self.unigramProbs
+        elif tp in self.counts[n]:
+            #calculate row
+            row = OrderedDict()
+            countsRow = self.counts[n][tp]
+            total = 0.0
+            for entry in self.unigramProbs:
+                if entry in countsRow:
+                    row[entry] = self.smoothingFunction(n,countsRow[entry])
+                else:
+                    row[entry] = self.smoothingFunction(n,0)
+                total += row[entry]
+            for entry in row:
+                row[entry] = row[entry] / total
+            return row
+        #Backoff to n-1 gram
+        else:
+            return self._getProbabilityRow(prev[1:])
+
 
     # Given a dictionary of (words, probability) generate a random word drawn from this distribution
     def generateWord(self, row):
@@ -254,20 +274,11 @@ class ngram():
     # Takes a word and a list of previous words and returns the probability of that word
     def getProbability(self, word, prev):
         tp = tuple(prev)
-        #tuple has been seen
-        if tp in self.probs[len(prev)]:
-            if word in self.probs[len(prev)][tp]:
-                return self.probs[len(prev)][tp][word]
-            elif word in self.uniques:
-                return self.smoothingFunction(len(prev),0)
-            elif '<unk>' in self.probs[len(prev)][tp]:
-                return self.probs[len(prev)][tp]['<unk>']
-            else:
-                return self.smoothingFunction(len(prev),0)
-        #Must backoff
+        row = self._getProbabilityRow(prev)
+        if word in row:
+            return row[word]
         else:
-            newPrev = prev[1:]
-            return getProbability(word,newPrev)
+            return row['<unk>']
 
 
 # Construction time test
@@ -307,14 +318,15 @@ def perplexity(train, test, n = 1, smoothing = Smooth.NONE):
     prev = []
     for word in test_corpus:
         print ng.getProbability(word, prev)
-        pp *= (1/ng.getProbability(word, prev))
+        pp += math.log(1/ng.getProbability(word, prev))
         prev.append(word)
         if len(prev) >= n:
             prev.pop(0)
-    res = pp**(1.0/len(test_corpus))
+    pp = math.exp(pp)
+    res = pp**(1/len(test_corpus))
     return res
 
 # MAIN
 # temp for testing
-a = ngram('bible.train', 3, Smooth.GOOD_TURING)
+#a = ngram('bible.train', 3, Smooth.GOOD_TURING)
 #sentenceGeneration()
