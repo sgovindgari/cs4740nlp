@@ -5,6 +5,7 @@ import nltk # http://www.nltk.org/install.html
             # in python interpreter: nltk.download() to get punkt
 import pprint
 import ngram
+import time
 
 # Parses king james
 # Tried parsing using XML parsers but input doesn't seem to be valid XML
@@ -111,33 +112,34 @@ def diffReviews(filename, extension):
 def predictReview():
     with open('predictions.test', 'w') as raw_predict:
         raw_predict.write(parseForPrediction('HotelReviews/reviews.test', 'predictions.test'))
-        f = open('predictions.test')
-        replace_text = f.read()
+        replace_text = None
+        with open('predictions.test') as f:
+            replace_text = f.read()
         lst = replace_text.split('<r> <s> ')
-        result = open('result_pred.test', 'w')
         final_predictions = open('final_predictions.test', 'w')
 
         tru_uningram = ngram.ngram('true.train', 1, ngram.Smooth.GOOD_TURING, True)
         tru_bigram = ngram.ngram('true.train', 2, ngram.Smooth.GOOD_TURING, True)
         fal_unigram = ngram.ngram('true.train', 1, ngram.Smooth.GOOD_TURING, True)
         fal_bigram = ngram.ngram('false.train', 2, ngram.Smooth.GOOD_TURING, True)
-
+        start = time.time()
         for i in range(1, len(lst)):
             c = lst[i].strip()
              
             if c[0:11] == '?  ,  ?  , ':
-                result.write('<s> ' + c[11:])
+                with open('result_pred.test', 'w') as result:
+                    result.write('<s> ' + c[11:])
                 tru_uni_pp = tru_uningram.perplexity('result_pred.test')
                 fal_uni_pp = fal_unigram.perplexity('result_pred.test')
                 tru_bi_pp = tru_bigram.perplexity('result_pred.test')
                 fal_bi_pp = fal_bigram.perplexity('result_pred.test')
                 smallest_num = min(tru_bi_pp, tru_uni_pp, fal_bi_pp, fal_uni_pp)
                 if smallest_num == tru_uni_pp or smallest_num == tru_bi_pp:
-                    final_predictions.write('<s> 1 , ? , ' + c[11:])
+                    final_predictions.write('<s> 1 , ? , ' + c[11:] + "\n\n")
                 else:
-                    final_predictions.write('<s> 0 , ? , ' + c[11:])
+                    final_predictions.write('<s> 0 , ? , ' + c[11:] + "\n\n")
         final_predictions.close()
-
+        print str(time.time() - start)
 
 def saveFiles():
     with open('bible.train','w') as bible:

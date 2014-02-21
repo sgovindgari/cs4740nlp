@@ -260,7 +260,7 @@ class ngram():
             for entry in row:
                 row[entry] = row[entry] / total
             #Max size of cache
-            if len(self.cache) < 2500:
+            if len(self.cache) < 1000:
                 self.cache[tp] = row
             return row
         #Backoff to n-1 gram
