@@ -8,7 +8,6 @@
 import re, random, time
 from collections import OrderedDict
 import itertools # for cross product of 2 lists?
-#from repoze.lru import lru_cache
 import math
 
 
@@ -260,7 +259,8 @@ class ngram():
                 total += row[entry]
             for entry in row:
                 row[entry] = row[entry] / total
-            if len(self.cache) < 3000:
+            #Max size of cache
+            if len(self.cache) < 1000:
                 self.cache[tp] = row
             return row
         #Backoff to n-1 gram
@@ -305,9 +305,6 @@ class ngram():
             prev.append(word)
             if len(prev) >= self.n:
                 prev.pop(0)
-            #if i % 1000 == 0:
-                #print time.time() - start
-                #print total - i
         pp *= (1.0/len(test_corpus))
         pp = math.exp(pp)
         return pp
