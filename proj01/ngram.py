@@ -34,7 +34,7 @@ class ngram():
 
         self.n = n
         self.smooth = smooth
-        self.goodTuringLimit = 2
+        self.goodTuringLimit = 12
         self.direction = direction
 
         # This stores dictionaries for recording counts of the p previous words followed by a word

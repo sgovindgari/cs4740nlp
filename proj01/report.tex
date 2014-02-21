@@ -63,9 +63,8 @@ Our storage is a list of dictionaries, each of which store unigram/bigram/trigra
 
 Our ngram steps through the corpus word-by-word, and accumulate a list of previous words (no longer than $n$) to use as a lookup. After this has been set, an optional smoothing algorithm (like add-one, or Good-Turing) follows. Probabilities are calculated last by going over every row of counts and calculating the conditional probabilities for each row.\par
 
-[talk about responsibilities and files here]
-
-[examples]
+[talk about responsibilities and files here]\par
+[talk about the order in which unk, smoothing, right-to-left is done, etc]
 
 \subsection{Hotel reviews}
 For Hotel reviews we used the Punkt sentence segmentation tool provided by nltk library. Punkt has a tokenizer that divides a text into a list of sentences, by using an unsupervised algorithm to build a model for abbreviation words, collocations, and words that start sentences. We trained it on a large collection of plaintext in the target language before we used it. Punkt knows that the periods in Mr. Smith and Johann S. Bach do not mark sentence boundaries. And sometimes sentences can start with non-capitalized words. We made use of this sentence segmentation tool to recognize sentence boundaries. 
@@ -76,7 +75,7 @@ and then simply traverse the appropriate row of our probability table until we r
 
 We continue to generate words until we generate another sentence segmentation marker.
 
-[Include examples of generator in action!]
+[Include examples of generator in action! Possibly put the following code (below) as an appendix?]
 
 \iffalse
 \vspace{2mm}
@@ -116,9 +115,53 @@ Sample bigram sentences for the hotel reviews corpus:\npar
 \fi
 
 \section{Smoothing and unknown word handling}
-\lipsum[4]
+
+Our n-gram model can perform Good-Turing smoothing. As mentioned in our ngram implementation, we are also able to specify the type of smoothing when the ngram class itself is constructed. Smoothing is defined as an ``enum'':
+
+{\small\begin{verbatim}
+    Smooth = enum('NONE', 'GOOD_TURING', 'ADD_ONE')
+\end{verbatim}}
+
+Smoothing is then specified when the ngram is constructed. (Smoothing is defaulted to \texttt{Smooth.NONE} when unspecified.) For example, the following code will generate an trigram representation for the text in \texttt{sourcefile}, and use Good-Turing smoothing:
+{\small\begin{verbatim}
+    ngram = ngram('sourcefile', 3, Smooth.GOOD_TURING)
+\end{verbatim}}
+
+Initially, we planned to generate new counts for each row depending on the smoothing method, but realized that this would use up an incredible amount of more memory\ldots something perhaps undesirable. Our motivation to find a more memory-efficient solution led us to consider a functional approach.\par
+For our n-gram model, our smoothing is implemented functionally: smoothing can simply be a function that takes in a count (of some n-gram and some $n$), and maps it to some other count depending on the smoothing method specified earlier in the constructor. (No-smoothing would an identity function. For add-one smoothing (one of our small extensions), the function simply spits out a count of 1 more than what's inputted.) For Good-Turing smoothing, we needed references to the frequency of frequencies (the $N_c$s) mentioned in lecture and the textbook before we can apply smoothing.\par
+
+The following code computes these frequencies of frequencies, and selects the \emph{correct two-place smoothing function (that takes in the \emph{n} of the n-gram and an n-gram count)}.
+
+{\small\begin{verbatim}
+    self._populateNgramFreqs()
+    self.smoothingFunction = self._smoothing()
+\end{verbatim}}
+
+\texttt{\_populateNgramFreqs} populates the $N$ table, a dictionary of count, and the number of n-grams that appear with a frequency of that count. The Good-Turing function (which references the frequency of frequency table) is defined as follows:
+
+{\small\begin{verbatim}
+    # function taking in ngram val (i), count nv, returns new cstar count
+    def goodTuringFunction(i,nv):
+        if nv < self.goodTuringLimit:
+            cstar = (nv + 1.0) * self.ngramFreqs[i][nv+1] / self.ngramFreqs[i][nv]
+            return cstar
+        else:
+            return nv
+\end{verbatim}}
+
+For example, if we wanted to find the Good-Turing smoothing value for a trigram of count 6: \texttt{goodTuringFunction(3,6)} would produce the correct new count.
+
+We're not doing regression to substitute values for those without counts. For example, if we had positive counts for $N_1$, $N_2$, $N_3$, and $N_5$, but not $N_4$, we would want to do Good-Turing smoothing up to about 3 and stop. We did notice, however, that both corpuses have positive counts of unigrams, bigrams, and trigrams up to about 20, so it was reasonable to assume that Good-Turing smoothing can be done for n-gram frequencies less than 12. This threshold , 12, is in variable \texttt{self.goodTuringLimit}.
+
+\subsection{Handling unknown words}
+The n-gram constructor accepts a boolean \texttt{useUnk} (defaulted to False) that conditionally handles unknown words.\par
+We are handling unknown words trivially, taking a suggestion from the Jurafsky textbook, where we replace the first instance of some word we see with the unknown token ``\texttt{<unk>}''. Hence, probabilities for unknowns are calculated as always, and the counts of every n-gram is reduced by 1.
 
 \section{Perplexity}
+\lipsum[4]
+
+\section{Hotel review truthfulness predictions}
+Our code for this part of the project is in \texttt{predictReview.py}.
 \lipsum[4]
 
 \section{Extensions}
@@ -137,6 +180,37 @@ What experiments to show whether or not your extension has desired effect?\par
 \lipsum[4]
 
 \section{Division of work}
+We divided up our tasks as follows. While we did split up responsibilities, each of us contributed well to all other aspects of the programming and writeup.
+
+\begin{itemize}[noitemsep]
+\item Ben Shulman:
+  \begin{itemize}[noitemsep,nolistsep]
+  \item Generalized n-gram model and random sentence generation
+  \item Perplexity
+  \end{itemize}
+\item Spandana Govindgari:
+  \begin{itemize}[noitemsep,nolistsep]
+  \item Parsing Hotel Reviews
+  \item Hotel Reviews truthfulness prediction
+  \end{itemize}
+\item Andy Wang:
+  \begin{itemize}[noitemsep,nolistsep]
+  \item Good-Turing smoothing and add-one smoothing
+  \item Handling unknown words
+  \end{itemize}
+\end{itemize}
+
+\section{How to run the code}
+Our three python scripts are \texttt{preprocessCorpus.py}, \texttt{ngram.py}, and \texttt{predictReview.py}.\par
+Running \texttt{preprocessCorpus} will\ldots\par
+Running \texttt{ngram} will\ldots\par
+Running \texttt{predictReview} will\ldots\par
+
+Our output files\ldots
+
 \lipsum[4]
+
+\section{Other comments}
+Thanks!
 
 \end{document}
