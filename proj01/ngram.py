@@ -9,6 +9,7 @@ import re, random, time
 from collections import OrderedDict
 import itertools # for cross product of 2 lists?
 import math
+from copy import copy
 
 
 # enum definition (used for Smooth and Direction)
@@ -18,37 +19,6 @@ def enum(*sequential, **named):
 
 Smooth = enum('NONE', 'GOOD_TURING', 'ADD_ONE')
 Direction = enum('RL', 'LR')
-
-'''
-# obsolete unigram class
-class unigram():
-    #Reads a text file in and converts it into an array
-    def __init__(self, sourceFile, n = 1):
-        with open(sourceFile) as corpus:
-            self.corpus = re.split('\s+', corpus.read())
-        self.counts = OrderedDict()
-        self.probs = OrderedDict()
-        self.total = 0
-        self.bigram_counts = OrderedDict()
-        for i in range(len(self.corpus)):
-            self.total += 1
-            entry = self.corpus[i]
-            if entry in self.counts:
-                self.counts[entry] += 1
-            else:
-                self.counts[entry] = 1
-        #Can calculate probability here if we want
-        for word in self.counts:
-            self.probs[word] = self.counts[word]/float(self.total)
-
-    #Very naive, takes O(V)
-    def randomWord(self):
-        p = random.random()
-        for word in self.probs:
-            p -= self.probs[word]
-            if p < 0:
-                return word
-'''
 
 # Generalized n-gram model - O(nN) or something
 class ngram():
@@ -61,12 +31,6 @@ class ngram():
             # note: reversed again in function randomSentence
             if direction == Direction.RL:
                 self.corpus.reverse()
-
-        # testing only
-        #self.corpus = self.corpus[:12029]
-        #print self.corpus
-        #self.corpus = ['<s>', 'the', 'cat', 'the', 'cat', 'the', 'cat', \
-        #    'a', 'dog', 'the', 'dog', '.']
 
         self.n = n
         self.smooth = smooth
@@ -127,13 +91,9 @@ class ngram():
 
     # returns a function?? self.ngramFreqs
     def _smoothing(self):
-        # TODO: Do smoothing
         if self.smooth == Smooth.NONE:
             iden = lambda i,nv: nv
             return iden
-
-        # the following is NOT AN OPTION: TOO MUCH MEM
-        # tuples = list(itertools.product(*[self.uniques for _ in range(self.n - 1)]))
 
         # General approach, for <unk> simply add an entry to each row for each i-gram table
         # Give it a count of 1, for words that did not show up for that row, but do show up in the
@@ -160,10 +120,7 @@ class ngram():
 
             # function taking in ngram val (i), count nv, returns new cstar count
             def goodTuringFunction(i,nv):
-                if nv == 0:
-                    cstar = self.ngramFreqs[i][nv+1] / float(self.ngramFreqs[i][-1])
-                    return cstar
-                elif nv < self.goodTuringLimit:
+                if nv < self.goodTuringLimit:
                     cstar = (nv + 1.0) * self.ngramFreqs[i][nv+1] / self.ngramFreqs[i][nv]
                     return cstar
                 else:
@@ -235,13 +192,16 @@ class ngram():
         # extension: right-to-left ngram: simply reverse the corpus
         if self.direction == Direction.RL:
             res.reverse()
-        print ' '.join(res)
         return ' '.join(res)
 
     #Lazily calculates probability rows only when requested. Only the unigram is calculated and stored.
     def _getProbabilityRow(self, prev):
-        tp = tuple(prev)
         n = len(prev)
+        p = copy(prev)
+        for i in range(len(p)):
+            if p[i] not in self.unigramProbs:
+                p[i] = '<unk>'
+        tp = tuple(p)
         if tp == ():
             return self.unigramProbs
         elif tp in self.cache:
@@ -260,7 +220,7 @@ class ngram():
             for entry in row:
                 row[entry] = row[entry] / total
             #Max size of cache
-            if len(self.cache) < 1000:
+            if len(self.cache) < 2500:
                 self.cache[tp] = row
             return row
         #Backoff to n-1 gram
@@ -338,7 +298,3 @@ def sentenceGeneration():
     frug.close()
     frbg.close()
 
-# MAIN
-# temp for testing
-#a = ngram('bible.train', 3, Smooth.GOOD_TURING)
-#sentenceGeneration()
