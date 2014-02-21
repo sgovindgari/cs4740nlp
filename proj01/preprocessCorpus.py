@@ -121,10 +121,10 @@ def predictReview():
 
             if c[0:11] == '?  ,  ?  , ':
                 result.write('<s> ' + c[11:])
-                tru_uningram = ngram.ngram('true.train', 1)
-                tru_bigram = ngram.ngram('true.train', 2)
-                fal_unigram = ngram.ngram('true.train', 1)
-                fal_bigram = ngram.ngram('false.train', 2)
+                tru_uningram = ngram.ngram('true.train', 1, ngram.Smooth.GOOD_TURING, True)
+                tru_bigram = ngram.ngram('true.train', 2, ngram.Smooth.GOOD_TURING, True)
+                fal_unigram = ngram.ngram('true.train', 1, ngram.Smooth.GOOD_TURING, True)
+                fal_bigram = ngram.ngram('false.train', 2, ngram.Smooth.GOOD_TURING, True)
 
                 tru_uni_pp = tru_uningram.perplexity('result_pred.test')
                 fal_uni_pp = fal_unigram.perplexity('result_pred.test')
