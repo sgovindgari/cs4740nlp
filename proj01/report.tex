@@ -54,7 +54,8 @@ Our storage is a list of dictionaries, each of which store unigram/bigram/trigra
 
 Our ngram steps through the corpus word-by-word, and accumulate a list of previous words (no longer than $n$) to use as a lookup. After this has been set, an optional smoothing algorithm (like add-one, or Good-Turing) follows. Probabilities are calculated last by going over every row of counts and calculating the conditional probabilities for each row.\par
 
-[talk about responsibilities and files here]
+[talk about responsibilities and files here]\par
+[talk about the order in which unk, smoothing, right-to-left is done, etc]
 
 \subsection{Hotel reviews}
 For Hotel reviews we used the Punkt sentence segmentation tool provided by nltk library. Punkt has a tokenizer that divides a text into a list of sentences, by using an unsupervised algorithm to build a model for abbreviation words, collocations, and words that start sentences. We trained it on a large collection of plaintext in the target language before we used it. Punkt knows that the periods in Mr. Smith and Johann S. Bach do not mark sentence boundaries. And sometimes sentences can start with non-capitalized words. We made use of this sentence segmentation tool to recognize sentence boundaries. 
@@ -154,8 +155,9 @@ We are handling unknown words trivially, taking a suggestion from the Jurafsky t
 Our code for this part of the project is in \texttt{predictReview.py}.
 \lipsum[4]
 
-\section{Extensions}
-As a three-person group, we decided to implement some additional extensions (not just one) for our n-gram system.
+\section{Extensions (25 points)}
+As a three-person group, we decided to implement some additional extensions (not just one) for our n-gram system.\par
+[talk about the order in which unk, smoothing, right-to-left is done, etc]
 
 \lipsum[4]
 
@@ -184,6 +186,16 @@ We divided up our tasks as follows. While we did split up responsibilities, each
   \item Handling unknown words
   \end{itemize}
 \end{itemize}
+
+\section{How to run the code}
+Our three python scripts are \texttt{preprocessCorpus.py}, \texttt{ngram.py}, and \texttt{predictReview.py}.\par
+Running \texttt{preprocessCorpus} will\ldots\par
+Running \texttt{ngram} will\ldots\par
+Running \texttt{predictReview} will\ldots\par
+
+Our output files\ldots
+
+\lipsum[4]
 
 \section{Other comments}
 Thanks!
