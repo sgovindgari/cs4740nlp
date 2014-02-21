@@ -56,6 +56,8 @@ Our ngram steps through the corpus word-by-word, and accumulate a list of previo
 
 [talk about responsibilities and files here]
 
+[examples]
+
 \subsection{Hotel reviews}
 For Hotel reviews we used the Punkt sentence segmentation tool provided by nltk library. Punkt has a tokenizer that divides a text into a list of sentences, by using an unsupervised algorithm to build a model for abbreviation words, collocations, and words that start sentences. We trained it on a large collection of plaintext in the target language before we used it. Punkt knows that the periods in Mr. Smith and Johann S. Bach do not mark sentence boundaries. And sometimes sentences can start with non-capitalized words. We made use of this sentence segmentation tool to recognize sentence boundaries. 
 
@@ -64,6 +66,8 @@ To generate a random sentence we start with a sentence start marker. We then gen
 and then simply traverse the appropriate row of our probability table until we reach the appropriate accumulated probability and output that word.\par
 
 We continue to generate words until we generate another sentence segmentation marker.
+
+[Include examples of generator in action!]
 
 \iffalse
 \vspace{2mm}
@@ -109,6 +113,11 @@ Sample bigram sentences for the hotel reviews corpus:\npar
 \lipsum[4]
 
 \section{Extensions}
+\lipsum[4]
+
+\section{Further extensions and possibilities}
+Can you perform any experiments that support the need for extension of change? (trigram backing off?)\par
+What experiments to show whether or not your extension has desired effect?\par
 \lipsum[4]
 
 \section{Division of work}
