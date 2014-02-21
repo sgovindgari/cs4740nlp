@@ -66,11 +66,13 @@ def predictReview():
         with open('predictions.test') as f:
             replace_text = f.read()
         lst = replace_text.split('<r> <s> ')
+        raw_predict.close()
+        f.close()
         final_predictions = open('final_predictions.test', 'w')
 
         tru_unigram = ngram.ngram('true.train', 1, ngram.Smooth.GOOD_TURING, True)
-        tru_bigram = ngram.ngram('true.train', 2, ngram.Smooth.GOOD_TURING, True)
-        fal_unigram = ngram.ngram('true.train', 1, ngram.Smooth.GOOD_TURING, True)
+        fal_unigram = ngram.ngram('false.train', 1, ngram.Smooth.GOOD_TURING, True)
+        tru_bigram = ngram.ngram('true.train', 2, ngram.Smooth.GOOD_TURING, True)       
         fal_bigram = ngram.ngram('false.train', 2, ngram.Smooth.GOOD_TURING, True)
         start = time.time()
         for i in range(1, len(lst)):
@@ -78,17 +80,18 @@ def predictReview():
             if c[0:11] == '?  ,  ?  , ':
                 with open('result_pred.test', 'w') as result:
                     result.write('<s> ' + c[11:])
-                start = time.time()
+                result.close()
+                #start = time.time()
                 tru_uni_pp = tru_unigram.perplexity('result_pred.test')
                 fal_uni_pp = fal_unigram.perplexity('result_pred.test')
                 tru_bi_pp = tru_bigram.perplexity('result_pred.test')
                 fal_bi_pp = fal_bigram.perplexity('result_pred.test')
-                print time.time() - start
+                #print time.time() - start
                 smallest_num = min(tru_bi_pp, tru_uni_pp, fal_bi_pp, fal_uni_pp)
                 if smallest_num == tru_uni_pp or smallest_num == tru_bi_pp:
-                    final_predictions.write('<s> 1 , ? , ' + c[11:] + "\n\n")
+                    final_predictions.write('<s> 1 , ? , ' + c[11:] + "\n")
                 else:
-                    final_predictions.write('<s> 0 , ? , ' + c[11:] + "\n\n")
+                    final_predictions.write('<s> 0 , ? , ' + c[11:] + "\n")
         final_predictions.close()
         print str(time.time() - start)
 
