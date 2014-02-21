@@ -44,7 +44,7 @@ Notes on the project
 
  5. Open ended extension (COMPLETE)
     Choose one (or more) of:
-    - trigram/4-gram/n-gram (complete?)
+    - trigram/4-gram/n-gram (complete? Katz's backoff?)
     - smoothing (ANDY: linear interp)
     - interpolation
     - nontrivial unknown word handling
@@ -94,3 +94,15 @@ The first 46 words in the bible corpus, represented in self.counts
   unigram: add 1 to all (unknowns?)
   bigram: add 1 to all (all unigrams. unknowns?)
   ..
+
+====
+  extensions: #7 Programming Project is not optional!!
+  import nltk # http://www.nltk.org/install.html
+              # in python interpreter: nltk.download() to get punkt
+  extension: make an n-gram model going right-to-left, and note differences in output?
+
+  ben's ngram implementation:
+                | "cow" | "horse" | ..
+    (the,brown) |  30   |   20    | ..
+    (a, dark)   |  20   |   100   |
+    for probabilities: generate 0..1. traverse sorted dict, subtract amt, if <0.
