@@ -117,25 +117,24 @@ def predictReview():
         result = open('result_pred.test', 'w')
         final_predictions = open('final_predictions.test', 'w')
 
-        tru_uningram = ngram.ngram('true.train', 1, ngram.Smooth.GOOD_TURING, True)
+        tru_unigram = ngram.ngram('true.train', 1, ngram.Smooth.GOOD_TURING, True)
         tru_bigram = ngram.ngram('true.train', 2, ngram.Smooth.GOOD_TURING, True)
         fal_unigram = ngram.ngram('true.train', 1, ngram.Smooth.GOOD_TURING, True)
         fal_bigram = ngram.ngram('false.train', 2, ngram.Smooth.GOOD_TURING, True)
 
         for i in range(1, len(lst)):
             c = lst[i].strip()
-             
             if c[0:11] == '?  ,  ?  , ':
-                result.write('<s> ' + c[11:])
-                tru_uni_pp = tru_uningram.perplexity('result_pred.test')
+                result.write('<s> ' + c[11:] + '\n')
+                tru_uni_pp = tru_unigram.perplexity('result_pred.test')
                 fal_uni_pp = fal_unigram.perplexity('result_pred.test')
                 tru_bi_pp = tru_bigram.perplexity('result_pred.test')
                 fal_bi_pp = fal_bigram.perplexity('result_pred.test')
                 smallest_num = min(tru_bi_pp, tru_uni_pp, fal_bi_pp, fal_uni_pp)
                 if smallest_num == tru_uni_pp or smallest_num == tru_bi_pp:
-                    final_predictions.write('<s> 1 , ? , ' + c[11:])
+                    final_predictions.write('<s> 1 , ? , ' + c[11:] + '\n')
                 else:
-                    final_predictions.write('<s> 0 , ? , ' + c[11:])
+                    final_predictions.write('<s> 0 , ? , ' + c[11:] + '\n')
         final_predictions.close()
 
 
