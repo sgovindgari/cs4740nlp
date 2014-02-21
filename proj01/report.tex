@@ -44,6 +44,15 @@
 All our code is written in Python. We use several libraries, including the nltk platform's punkt for preprocessing.\par
 
 \section{Unsmoothed ngrams}
+
+\subsection{Bible Parsing}
+
+We began by writing a parser for 
+
+\subsection{Hotel Review Parsing}
+
+\subsection{unsmoothed ngram}
+
 Our preprocessing code for both corpuses (King James Bible and Hotel Reviews) is in \texttt{preprocessCorpus.py}.\par
 
 Before we inputted the training data for both corpuses into our ngram implementation, we wrote a script to preprocess them, removing extraneous xml-like tags, numbers, etc. For the bible corpus, our sentences are split on Bible verses of the format \texttt{[0-9]+:[0-9]+}. Ben and Spandana has written much of the preprocessor for the Bible and Hotel corpuses respectively.\par
@@ -113,7 +122,14 @@ Sample bigram sentences for the hotel reviews corpus:\npar
 \lipsum[4]
 
 \section{Extensions}
-\lipsum[4]
+
+\subsection{Generalized n-gram}
+
+\subsection{Backoff}
+
+\subsection{Add-One Smoothing}
+
+\subsection{Right-to-Left n-grams}
 
 \section{Further extensions and possibilities}
 Can you perform any experiments that support the need for extension of change? (trigram backing off?)\par
