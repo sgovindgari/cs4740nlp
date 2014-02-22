@@ -218,7 +218,7 @@ To implement perplexity we added a function \texttt{perplexity(test)} that takes
 
 We use log rules to avoid overflow during the perplexity computation. Perplexity is defined as:\linebreak $PP=\left(\mathlarger{\prod}_{i=0}^N\frac{1}{P(w_i|w_{i-1},...,w_{i-n+1})}\right)^{1/N}$. By using log rules we can re-write this as: \linebreak $log(PP) = \log\left(\mathlarger{\prod}_{i=0}^N\frac{1}{P(w_i|w_{i-1},...,w_{i-n+1})}\right)^{1/N} = \frac{1}{N}\mathlarger{\sum}_{i=0}^N log\left(\frac{1}{P(w_i|w_{i-1},...,w_{i-n+1})}\right)$. We can then simply recover $PP$ by doing $e^{log(PP)}$. This is exactly what we perform in our perplexity function as explained in the preceding paragraph.
 
-\section{Hotel review truthfulness predictions}
+\section{Hotel review truthfulness predictions} %TODO: COMPLETE
 Our code for this part of the project is in \texttt{predictReview.py}.
 \lipsum[4]
 
@@ -229,7 +229,7 @@ Our code for this part of the project is in \texttt{predictReview.py}.
 The description of our generalized n-gram model is in Section 1, while necessary changes for n-grams where $n\geq3$ that caused a need for backoff are described in the following section.
 
 
-\subsection{Backoff)
+\subsection{Backoff}
 
 Backoff is necessary when one gets to $n \geq 3$ because at that point trigrams (or any n-gram where $n \geq 3$) may appear for which we do not have a row in our lazily generated probability table. By this I mean that the 'a green cow' may be passed to our \texttt{getProbability()} function, e.g. we may be asked the probability of 'cow' given 'a green'. In this case we have seen 'a' and 'green' and 'cow' in our corpus and thus are in our vocabulary, but we have never seen 'a green', thus there is no row in our trigram table for 'a green'. In this case backoff is appropriate. 
 
@@ -242,7 +242,7 @@ To implement backoff we made \texttt{getProbability()} recursive. If the row for
 In order to implement n-grams that used the right-to-left ordering of words instead of left-to-right we had to change a few things. First to clarify: right-to-left means if the trigram 'a cow moos' was in the training corpus, 'a' would be stored with a count in the row for 'moos cow' instead of 'moos' being stored in the row for 'a cow'. The first thing to do was after pulling the training corpus into the list, we completely reversed the list. After that processing to generate the model could occur as before. We also had to change our perplexity and randomSentence functions slightly. Our perplexity function has an added conditional that reverses the test corpus if the model is right-to-left. Our randomSentence function runs the same way as before, but if the model is right-to-left the final output of the sentence has to be reversed.
 
 \section{Experimentation}
-%TODO: COMPLETE%
+%TODO: COMPLETE
 
 Bible.train and bible.test perplexity scores 
 Good Turing: 159.791135281 (bigram)
@@ -272,15 +272,13 @@ We divided up our tasks as follows. While we did split up responsibilities, each
   \end{itemize}
 \end{itemize}
 
-\section{How to run the code}
+\section{How to run the code} %TODO: COMPLETE
 Our three python scripts are \texttt{preprocessCorpus.py}, \texttt{ngram.py}, and \texttt{predictReview.py}.\par
 Running \texttt{preprocessCorpus} will\ldots\par
 Running \texttt{ngram} will\ldots\par
 Running \texttt{predictReview} will\ldots\par
 
 Our output files\ldots
-
-\lipsum[4]
 
 \section{Other comments}
 Thanks!
