@@ -12,6 +12,7 @@
 \usepackage{fancyhdr} % headers
 \usepackage{amsmath} % matrices
 \usepackage{amssymb} % symbols
+\usepackage{relsize}
 \usepackage{gensymb} % symbols
 \usepackage{tikz} % graphics?
 \usepackage{bm} % bold math
@@ -209,8 +210,13 @@ We're not doing regression to substitute values for those without counts. For ex
 The n-gram constructor accepts a boolean \texttt{useUnk} (defaulted to False) that conditionally handles unknown words.\par
 We are handling unknown words trivially, taking a suggestion from the Jurafsky textbook, where we replace the first instance of each word in the corpus with the unknown token ``\texttt{<unk>}''. We then proceed with processing and generating counts in the same was as before.
 
+When finding the probability of a given word, and previous words to consider. If the word was not in the vocabulary of the test set, or words in the previous words were not in the test set they were converted to \texttt{<unk>} so that the appropriate probability could be found.
+
 \section{Perplexity}
-\lipsum[4]
+
+To implement perplexity we added a function \texttt{perplexity(test)} that takes in the file name of the test corpus (must be made up of tokens separated by whitespace). The function then reads the test corpus into a list and iterates over each "window" of the corpus, where a window is each set of $n$ words in a sequence. For example for a bigram model with a test corpus of "a cow went moo" it would iterate over "a cow", "cow went" and "went moo". Then for each window it finds the probability of the last word of the window, given the previous words. It then adds $log\left(\frac{1}{P(w_i|w_{i-1},...,w_{i-n+1})}\right)$ to a running total by doing: \texttt{pp += math.log(1/self.getProbability(word, prev))}. After going over the entire corpus the function then multiplies \texttt{pp} by $\frac{1}{N}$, e.g. \texttt{pp *= (1.0/len(test\_corpus))}. Finally the perplexity is obtained by raising $e$ to the power \texttt{pp}, e.g. \texttt{pp = math.exp(pp)}.
+
+We use log rules to avoid overflow during the perplexity computation. Perplexity is defined as:\linebreak $PP=\left(\mathlarger{\prod}_{i=0}^N\frac{1}{P(w_i|w_{i-1},...,w_{i-n+1})}\right)^{1/N}$. By using log rules we can re-write this as: \linebreak $log(PP) = \log\left(\mathlarger{\prod}_{i=0}^N\frac{1}{P(w_i|w_{i-1},...,w_{i-n+1})}\right)^{1/N} = \frac{1}{N}\mathlarger{\sum}_{i=0}^N log\left(\frac{1}{P(w_i|w_{i-1},...,w_{i-n+1})}\right)$. We can then simply recover $PP$ by doing $e^{log(PP)}$. This is exactly what we perform in our perplexity function as explained in the preceding paragraph.
 
 \section{Hotel review truthfulness predictions}
 Our code for this part of the project is in \texttt{predictReview.py}.
@@ -220,18 +226,30 @@ Our code for this part of the project is in \texttt{predictReview.py}.
 
 \subsection{Generalized n-gram}
 
-The description of our generalized n-gram model is in section 1, while necessary changes for n-grams where $n\geq3$ that caused a need for backoff are described in the following section.
+The description of our generalized n-gram model is in Section 1, while necessary changes for n-grams where $n\geq3$ that caused a need for backoff are described in the following section.
 
-\subsection{Backoff}
 
-\subsection{Add-One Smoothing}
+\subsection{Backoff)
+
+Backoff is necessary when one gets to $n \geq 3$ because at that point trigrams (or any n-gram where $n \geq 3$) may appear for which we do not have a row in our lazily generated probability table. By this I mean that the 'a green cow' may be passed to our \texttt{getProbability()} function, e.g. we may be asked the probability of 'cow' given 'a green'. In this case we have seen 'a' and 'green' and 'cow' in our corpus and thus are in our vocabulary, but we have never seen 'a green', thus there is no row in our trigram table for 'a green'. In this case backoff is appropriate. 
+
+To implement backoff we made \texttt{getProbability()} recursive. If the row for the previous words does not exist in our table, then we remove the oldest of the previous words and try with the remaining $i-1$ words, we do this until a row is found. This is the exact reason why when creating our generalized n-gram we decided to store all i-grams where $i \in \lbrace 1,...,n \rbrace$. Our backoff is relatively naive as it does not backoff in the case of low probabilities, instead backing off only if absolutely necessary.
+
+\subsection{Add-One Smoothing} %TODO: COMPLETE%
 
 \subsection{Right-to-Left n-grams}
 
-\section{Further extensions and possibilities}
-Can you perform any experiments that support the need for extension of change? (trigram backing off?)\par
-What experiments to show whether or not your extension has desired effect?\par
-\lipsum[4]
+In order to implement n-grams that used the right-to-left ordering of words instead of left-to-right we had to change a few things. First to clarify: right-to-left means if the trigram 'a cow moos' was in the training corpus, 'a' would be stored with a count in the row for 'moos cow' instead of 'moos' being stored in the row for 'a cow'. The first thing to do was after pulling the training corpus into the list, we completely reversed the list. After that processing to generate the model could occur as before. We also had to change our perplexity and randomSentence functions slightly. Our perplexity function has an added conditional that reverses the test corpus if the model is right-to-left. Our randomSentence function runs the same way as before, but if the model is right-to-left the final output of the sentence has to be reversed.
+
+\section{Experimentation}
+%TODO: COMPLETE%
+
+Bible.train and bible.test perplexity scores 
+Good Turing: 159.791135281 (bigram)
+Good Turing: 158.595972171 (bigram, RL)
+Add One: 280.215776754 (bigram)
+Good Turing smoothing: 243.432299431 (unigram)
+Good Turing smoothing: 243.433400061 (trigram)
 
 \section{Division of work}
 We divided up our tasks as follows. While we did split up responsibilities, each of us contributed well to all other aspects of the programming and writeup.

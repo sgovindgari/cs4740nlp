@@ -69,10 +69,9 @@ def predictReview():
 
     tru_unigram = ngram.ngram('true.train', 1, ngram.Smooth.GOOD_TURING, True)
     fal_unigram = ngram.ngram('false.train', 1, ngram.Smooth.GOOD_TURING, True)
-    tru_bigram = ngram.ngram('true.train', 2, ngram.Smooth.GOOD_TURING, True)       
-    fal_bigram = ngram.ngram('false.train', 2, ngram.Smooth.GOOD_TURING, True)
+    tru_bigram = ngram.ngram('true.train', 3, ngram.Smooth.GOOD_TURING, True)       
+    fal_bigram = ngram.ngram('false.train', 3, ngram.Smooth.GOOD_TURING, True)
     start = time.time()
-    print len(lst)
     for i in range(1, len(lst)):
         c = lst[i].strip()
         if c[0:11] == '?  ,  ?  , ':

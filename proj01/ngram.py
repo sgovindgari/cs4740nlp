@@ -227,7 +227,6 @@ class ngram():
         else:
             return None
 
-
     # Given a dictionary of (words, probability) generate a random word drawn from this distribution
     def generateWord(self, row):
         p = random.random()
@@ -255,9 +254,10 @@ class ngram():
         test_corpus = None
         with open(test) as corp:
             test_corpus = re.split('\s+', corp.read().lower())
-        pp = 1
+        if self.direction == Direction.RL:
+                test_corpus.reverse()
+        pp = 0
         prev = test_corpus[0:self.n-1]
-        total = len(test_corpus)
         start = time.time()
         for i in xrange(self.n-1, len(test_corpus)):
             word = test_corpus[i]
@@ -265,6 +265,9 @@ class ngram():
             prev.append(word)
             if len(prev) >= self.n:
                 prev.pop(0)
+            if i % 1000 == 0:
+                #print time.time() - start
+                start = time.time()
         pp *= (1.0/len(test_corpus))
         pp = math.exp(pp)
         return pp
@@ -287,3 +290,7 @@ def sentenceGeneration():
     fbbg.close()
     frug.close()
     frbg.close()
+
+# a = ngram('bible.train',2,Smooth.GOOD_TURING,True,Direction.RL)
+# print a.perplexity('bible.test')
+# del a
