@@ -72,6 +72,7 @@ def predictReview():
     tru_bigram = ngram.ngram('true.train', 3, ngram.Smooth.GOOD_TURING, True)       
     fal_bigram = ngram.ngram('false.train', 3, ngram.Smooth.GOOD_TURING, True)
     start = time.time()
+    
     for i in range(1, len(lst)):
         c = lst[i].strip()
         if c[0:11] == '?  ,  ?  , ':
@@ -80,15 +81,18 @@ def predictReview():
             result.close()
             start = time.time()
             tru_uni_pp = tru_unigram.perplexity('result_pred.test')
+            
             fal_uni_pp = fal_unigram.perplexity('result_pred.test')
             tru_bi_pp = tru_bigram.perplexity('result_pred.test')
             fal_bi_pp = fal_bigram.perplexity('result_pred.test')
+            
             print time.time() - start
             smallest_num = min(tru_bi_pp, tru_uni_pp, fal_bi_pp, fal_uni_pp)
             if smallest_num == tru_uni_pp or smallest_num == tru_bi_pp:
                 final_predictions.write('<s> 1 , ? , ' + c[11:] + "\n")
             else:
                 final_predictions.write('<s> 0 , ? , ' + c[11:] + "\n")
+            break
     final_predictions.close()
     print str(time.time() - start)
 
