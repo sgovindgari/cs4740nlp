@@ -39,19 +39,69 @@
   {Page \thepage}}
 
 \begin{document}
-\begin{center}\textbf{Project 1 Report on Language Modeling}\end{center}
+\begin{center}\textbf{Project 1}\end{center}
+\begin{center}\textbf{Report on Language Modeling}\end{center}
 
 All our code is written in Python. We use several libraries, including the nltk platform's punkt for preprocessing.\par
 
-\section{Unsmoothed ngrams}
+\section{Parsing text}
+Our preprocessing code for both corpuses (King James Bible and Hotel Reviews) is in \texttt{preprocessCorpus.py}.\par
+
+Before we inputted the training data for both corpuses into our ngram implementation, we wrote a script to preprocess them, removing extraneous xml-like tags, numbers, etc. Ben and Spandana have contributed to the preprocessor for the Bible and Hotel corpuses respectively.\par
 
 \subsection{Bible Parsing}
 
 We began by writing a parser for the bible data to turn it into a standardized format for our ngram model. The parser applied a few regular expressions: one to strip out the XML-like tags, one to replace psalm/verse numbers with the sentence deliminator (\texttt{<s>}), and one to add spaces around all punctuation. This resulted in a file with space around each token that could be used in our ngram model. 
 
-\subsection{Hotel Review Parsing} %TODO: Complete%
+\subsection{Hotel Review Parsing}
 
-For Hotel reviews we used the Punkt sentence segmentation tool provided by nltk library. Punkt has a tokenizer that divides a text into a list of sentences, by using an unsupervised algorithm to build a model for abbreviation words, collocations, and words that start sentences. We trained it on a large collection of plain text English before we used it. Punkt knows that the periods in Mr. Smith and Johann S. Bach do not mark sentence boundaries. And sometimes sentences can start with non-capitalized words. We made use of this sentence segmentation tool to recognize sentence boundaries. 
+Hotel Reviews needed additional parsing unlike the Bible. For generating Random Sentences, our parse code removed the given numbers like IsTruthful and IsPositive. We used the Punkt sentence segmentation tool provided by nltk library. Punkt has a tokenizer that divides a text into a list of sentences, by using an unsupervised algorithm to build a model for abbreviation words, collocations, and words that start sentences. We trained it on a large collection of plaintext in the target language before we used it. Punkt knows that the periods in Mr. Smith and Johann S. Bach do not mark sentence boundaries. And sometimes sentences can start with non-capitalized words. We made use of this sentence segmentation tool to recognize sentence boundaries.
+
+{\small
+\begin{verbatim}
+sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
+
+data = open('raw_reviews.train', 'w')
+    for c in sents:
+        # adds sentence start and end marker
+         # write to file
+        data.write(c+'<s> ')
+    data.close()
+\end{verbatim}
+}
+
+After tokenizing with Punkt we wrote the text to another file by adding sentence markers denoted by $\langle$s$\rangle$ to appropriate sentence boundaries recognized by Punkt and any new line characters. We treated punctuation as separate words by adding spaces in between them but punctuation in between words like Wi-Fi and can't were not separated as separated but treated as part of the entire word. Abnormal punctuation that can be qualified as fillers like -- or ... were treated as separate words as well.
+
+{\small
+\begin{verbatim}
+edit = re.sub('(</?(TEXT|DOC)>\n)|([0-9]+,[0-9],)|((\.+\s){2,})', '', edit)
+edit = re.sub('\n|^', ' <s> ', edit)
+edit = re.sub('([,!?();:"-&/$])', r' \1 ', edit)
+edit = re.sub('(\.{1,})',r' \1 ', edit)
+edit = re.sub('--', ' -- ', edit)
+\end{verbatim}
+}
+
+For Hotel Review prediction another parser was implemented along the same lines. The code for this parsing is in \texttt{predictReview.py}. There are three steps to parsing the values: marking start and end of sentences using sentence segmentation tool like we did before, marking start and end of reviews, and separating true reviews from false ones. Firstly, the reviews were parsed through the sentence segmentation tool identifying the respective sentence boundaries. In addition, the beginning and end of a review was marked with $\langle$r$\rangle$ by replacing all new line characters with it right at the beginning as our training data distinguished one review from the other with new line character. The resultant text was stored as \texttt{parsed\_predictions.train}. Now for distinguishing the true reviews from false ones, we made separate files \texttt{false.train} - containing reviews whose IsTruthful value is 0 and \texttt{false.train} with reviews whose IsTruthful value is 1.\par
+
+Using the start and end of review $\langle$r$\rangle$ token we split the entire text into a list. Each element of the list contains the text of one full review. 
+
+{\small
+\begin{verbatim}
+# list of reviews
+true_pos_list = tru.split('<r> <s> ')
+
+For example, 
+print true_pos_list[1]
+
+0 , 0 , Swissotelchicago – I could go on and on about the food here .  <s> Their steak was cooked just the 
+way I like it and I ............ outlet to charge it at night .  <s> It made using an alarm the next day a
+little annoying… I’m not sure why my company recommended this place ;  but maybe I just got a bad room ?  <s>
+\end{verbatim}
+}
+Once each review was extracted, the IsTruthful values were checked and based on its value each review was either written to \texttt{true.train} or \texttt{false.train}. After this, we inputted both true and false reviews as inidiviual corpii into our ngram model to build respective unigrams and bigrams. 
+
+\section{Unsmoothed ngrams}
 
 \subsection{unsmoothed ngram}
 
