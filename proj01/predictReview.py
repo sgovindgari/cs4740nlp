@@ -11,7 +11,7 @@ def parseForPrediction(filename, destination):
     f = open (filename)
     f.readline()
     predictions = f.read()
-    predictions = re.sub('\n|^', '<r> <s> ', predictions)
+    predictions = re.sub('\n|^', ' <r> <s> ', predictions)
      # using Punkt sentence segmentation tool -- http://www.nltk.org/api/nltk.tokenize.html
     sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
 
@@ -22,7 +22,7 @@ def parseForPrediction(filename, destination):
     for c in sents:
         # adds sentence start and end marker
          # write to file
-        data.write(c+'<s> ')
+        data.write(c+' <s> ')
     data.close()
 
     p = open (destination)
@@ -75,7 +75,7 @@ def predictReview():
         tru_bigram = ngram.ngram('true.train', 2, ngram.Smooth.GOOD_TURING, True)       
         fal_bigram = ngram.ngram('false.train', 2, ngram.Smooth.GOOD_TURING, True)
         start = time.time()
-        for i in range(1, len(lst)):
+        for i in range(len(lst)):
             c = lst[i].strip()
             if c[0:11] == '?  ,  ?  , ':
                 with open('result_pred.test', 'w') as result:

@@ -220,7 +220,7 @@ class ngram():
             for entry in row:
                 row[entry] = row[entry] / total
             #Max size of cache
-            if len(self.cache) < 2500:
+            if len(self.cache) < 1000:
                 self.cache[tp] = row
             return row
         #Backoff to n-1 gram
@@ -256,10 +256,10 @@ class ngram():
         with open(test) as corp:
             test_corpus = re.split('\s+', corp.read().lower())
         pp = 1
-        prev = []
+        prev = test_corpus[0:self.n-1]
         total = len(test_corpus)
         start = time.time()
-        for i in xrange(len(test_corpus)):
+        for i in xrange(self.n-1, len(test_corpus)):
             word = test_corpus[i]
             pp += math.log(1/self.getProbability(word, prev))
             prev.append(word)
@@ -297,4 +297,3 @@ def sentenceGeneration():
     fbbg.close()
     frug.close()
     frbg.close()
-
