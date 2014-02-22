@@ -269,16 +269,6 @@ class ngram():
         pp = math.exp(pp)
         return pp
 
-
-
-# Construction time test
-def ngram_model_test(source, maxN = 4):
-    for i in range(1,maxN+1):
-        start = time.time()
-        a = ngram(source, i)
-        print str(i)+'-gram: ' + str(time.time() - start)
-        a.randomSentence()
-
 def sentenceGeneration():
     bug = ngram('bible.train', 1)
     bbg = ngram('bible.train', 2)

@@ -47,38 +47,40 @@ All our code is written in Python. We use several libraries, including the nltk 
 
 \subsection{Bible Parsing}
 
-We began by writing a parser for 
+We began by writing a parser for the bible data to turn it into a standardized format for our ngram model. The parser applied a few regular expressions: one to strip out the XML-like tags, one to replace psalm/verse numbers with the sentence deliminator (\texttt{<s>}), and one to add spaces around all punctuation. This resulted in a file with space around each token that could be used in our ngram model. 
 
-\subsection{Hotel Review Parsing}
+\subsection{Hotel Review Parsing} %TODO: Complete%
+
+For Hotel reviews we used the Punkt sentence segmentation tool provided by nltk library. Punkt has a tokenizer that divides a text into a list of sentences, by using an unsupervised algorithm to build a model for abbreviation words, collocations, and words that start sentences. We trained it on a large collection of plain text English before we used it. Punkt knows that the periods in Mr. Smith and Johann S. Bach do not mark sentence boundaries. And sometimes sentences can start with non-capitalized words. We made use of this sentence segmentation tool to recognize sentence boundaries. 
 
 \subsection{unsmoothed ngram}
 
-Our preprocessing code for both corpuses (King James Bible and Hotel Reviews) is in \texttt{preprocessCorpus.py}.\par
+For our ngram model, we initially began by individually creating unigram and bigram classes, but decided that there was already much in common between the two systems, so an abstraction was not too hard to make. Hence we went immediately to an n-gram model. 
 
-Before we inputted the training data for both corpuses into our ngram implementation, we wrote a script to preprocess them, removing extraneous xml-like tags, numbers, etc. For the bible corpus, our sentences are split on Bible verses of the format \texttt{[0-9]+:[0-9]+}. Ben and Spandana has written much of the preprocessor for the Bible and Hotel corpuses respectively.\par
+Our n-gram model is implemented as a class with a constructor that constructs the model. The constructor takes \texttt{sourceFile}, the source file for training the model, which must be made up of tokens separated by whitespace; n, the n-gram to create; \texttt{smooth} the type of smoothing to apply; \texttt{useUnk}, whether to create \texttt{<unk>} tokens in the corpus; and \texttt{direction}, the direction of ngram to create.
 
-For our ngram model, we initially began by individually creating unigram and bigram classes, but decided that there was already much in common between the two systems, so an abstraction was not too hard to make. Hence we went immediately to an n-gram model. Our ngram class reads in the preprocessed sources, ignores case, and splits the text at spaces.\par
+{\small\begin{verbatim}
+    def __init__(self, sourceFile, n = 1, smooth = Smooth.NONE, useUnk = False, direction = Direction.LR):
+\end{verbatim}}
 
-Our storage is a list of dictionaries, each of which store unigram/bigram/trigram/etc data. The dictionaries record counts of the $p$ previous words followed by a word, i.e.\ for a bigram model, it stores the unigram counts and bigram counts. Each dictionary then holds an entry (another lookup table) for each tuple of previous words, i.e.\ for unigram there is only one entry: \texttt{[((), [(the,5),(a,6),(cat,2),...])]}. For bigram, there would be \texttt{[('the',[('cat', 3),('dog', 4),...]),('a',[(cow, 2),(horse, 1),...]),...]}\par
+Our n-gram constructor reads in the preprocessed sources, ignoring case, and splits the file into a list of tokens. We then pass over this list to generate the counts for each unigram or bigram using \texttt{\_initializeNgram()}. Counts are stored as a dictionary (which in python are  backed by hashtables) of dictionaries. Each entry in the first dictionary is a "row" of the table. The key in the outer dictionary is a tuple of the previous words. Thus for unigram there is only one entry in this dictionary, (), the value stored is another dictionary. This dictionary stores each word as the key and the value is its count in the corpus. For a bigram model, the outer dictionary stores the word that came first, for instance a key might be: ('the'). The corresponding dictionary value stores all the words that followed 'the' and the count for that specific bigram. It is important to note that each "row" (inner dictionary) of the table does not store counts of zero, so for instance if 'cow' never followed 'the' in the corpus, but 'cow' was in the corpus somewhere, there would be no entry for 'cow' in ('the')'s dictionary. We did this to save space as storing the entire count table would take up far too much memory. 
 
-Our ngram steps through the corpus word-by-word, and accumulate a list of previous words (no longer than $n$) to use as a lookup. After this has been set, an optional smoothing algorithm (like add-one, or Good-Turing) follows. Probabilities are calculated last by going over every row of counts and calculating the conditional probabilities for each row.\par
+Our n-gram then calculates the corresponding probability table for the counts (using \texttt{\_generateProbabilities}). It does so by iterating over each row of the table and each entry in each row to calculate the appropriate conditional probabilities. In this case we must use Ordered Dictionaries (\texttt{OrderedDict} in python) instead of normal dictionaries such that an order is maintained which is important for random sentence generation. Once again we do not store probabilities that are zero in the table to save space. 
 
-[talk about responsibilities and files here]\par
-[talk about the order in which unk, smoothing, right-to-left is done, etc]
+\subsubsection{Changes to support backoff}
+Our implementation of generalized n-gram changed once we moved onto smoothing and onto our extensions. Instead of simply storing a single n-gram table we stored every single i-gram model where $i\in \lbrace 1,...,n \rbrace$. To do this instead of storing a single dictionary of dictionaries for counts we store a list of dictionaries of dictionaries. Thus each entry in the list is an i-gram, which is stored at index $i-1$. Each entry is the table of counts for that i-gram. We generate these tables in the same way as before, using a single pass over the corpus. We then did the same as before to generate the probability table for each i-gram and stored the tables in a list. As before we did not store entries in the probability and count tables that had a value of zero to save space.
 
-\subsection{Hotel reviews}
-For Hotel reviews we used the Punkt sentence segmentation tool provided by nltk library. Punkt has a tokenizer that divides a text into a list of sentences, by using an unsupervised algorithm to build a model for abbreviation words, collocations, and words that start sentences. We trained it on a large collection of plaintext in the target language before we used it. Punkt knows that the periods in Mr. Smith and Johann S. Bach do not mark sentence boundaries. And sometimes sentences can start with non-capitalized words. We made use of this sentence segmentation tool to recognize sentence boundaries. 
+\subsubsection{Changes to support smoothing}
+Because smoothing by definition is meant to remove zeros that exist in the probability table, we could not implement smoothing while still storing entire probability tables due to the memory requirements of having every row be full in the table. Because of this we implemented a lazy probability row generator to replace the original system.
+
+The new system always generates and stores the single row of the unigram table. We did this such that we could have easy access to unigram probabilities and also use it as an ordering for words such that the random sentence generator was always passing over a row in the same order. For the lazy row generator when a probability was asked for (using \texttt{getProbability(word,prev)}), the generator function (\texttt{\_getProbabilityRow(self, prev)})would iterate over the associated row of counts and generate the probability row with the appropriate smoothing. Smoothing was done using a smoothing function, this is explained in Section 3. We then cached rows (typically we cached up to about 2,500 rows) to better balance the memory-usage vs. time tradeoff. It is important to note that we still stored counts without storing zero counts because zeroes could be inferred by simply not existing in the appropriate i-gram's table.
 
 \section{Random sentence generation}
-To generate a random sentence we start with a sentence start marker. We then generate a random float (0 to 1)
-and then simply traverse the appropriate row of our probability table until we reach the appropriate accumulated probability and output that word.\par
+To generate a random sentence from the ngram model, one calls \texttt{randomSentence()} from the model object. The function starts with a sentence segmentation marker.Using the appropriate number of previously generated words (based off what n-gram the model is, i.e. 0 for unigram, 1 for bigram) we get the correct probability row. We then walk the probability row using (\texttt{generateWord(row)}), which generates a random float between zero and one. \texttt{generateWord} walks the row, subtracting the probability of each entry from the random number we generated, until the value is below 0. We then select the word that caused the generated number to fall below 0 as the next word in the sentence. We repeat the process until we generate another sentence segmentation marker.
 
-We continue to generate words until we generate another sentence segmentation marker.
-
-[Include examples of generator in action! Possibly put the following code (below) as an appendix?]
-
+%TODO: Include examples here?%
 \iffalse
-\vspace{2mm}
+\subsection{Examples}
 \setlength{\parindent}{0cm}
 \newcommand\npar{\par\smallskip}
 Sample unigram sentences for the bible corpus:\npar
@@ -127,7 +129,7 @@ Smoothing is then specified when the ngram is constructed. (Smoothing is default
     ngram = ngram('sourcefile', 3, Smooth.GOOD_TURING)
 \end{verbatim}}
 
-Initially, we planned to generate new counts for each row depending on the smoothing method, but realized that this would use up an incredible amount of more memory\ldots something perhaps undesirable. Our motivation to find a more memory-efficient solution led us to consider a functional approach.\par
+Initially, we planned to generate new counts for each row depending on the smoothing method, but realized that this would use up an incredible amount of memory\ldots something which is undesirable. Our motivation to find a more memory-efficient solution led us to consider a functional approach.\par
 For our n-gram model, our smoothing is implemented functionally: smoothing can simply be a function that takes in a count (of some n-gram and some $n$), and maps it to some other count depending on the smoothing method specified earlier in the constructor. (No-smoothing would an identity function. For add-one smoothing (one of our small extensions), the function simply spits out a count of 1 more than what's inputted.) For Good-Turing smoothing, we needed references to the frequency of frequencies (the $N_c$s) mentioned in lecture and the textbook before we can apply smoothing.\par
 
 The following code computes these frequencies of frequencies, and selects the \emph{correct two-place smoothing function (that takes in the \emph{n} of the n-gram and an n-gram count)}.
@@ -155,7 +157,7 @@ We're not doing regression to substitute values for those without counts. For ex
 
 \subsection{Handling unknown words}
 The n-gram constructor accepts a boolean \texttt{useUnk} (defaulted to False) that conditionally handles unknown words.\par
-We are handling unknown words trivially, taking a suggestion from the Jurafsky textbook, where we replace the first instance of some word we see with the unknown token ``\texttt{<unk>}''. Hence, probabilities for unknowns are calculated as always, and the counts of every n-gram is reduced by 1.
+We are handling unknown words trivially, taking a suggestion from the Jurafsky textbook, where we replace the first instance of each word in the corpus with the unknown token ``\texttt{<unk>}''. We then proceed with processing and generating counts in the same was as before.
 
 \section{Perplexity}
 \lipsum[4]
@@ -167,6 +169,8 @@ Our code for this part of the project is in \texttt{predictReview.py}.
 \section{Extensions}
 
 \subsection{Generalized n-gram}
+
+The description of our generalized n-gram model is in section 1, while necessary changes for n-grams where $n\geq3$ that caused a need for backoff are described in the following section.
 
 \subsection{Backoff}
 
@@ -185,7 +189,7 @@ We divided up our tasks as follows. While we did split up responsibilities, each
 \begin{itemize}[noitemsep]
 \item Ben Shulman:
   \begin{itemize}[noitemsep,nolistsep]
-  \item Generalized n-gram model and random sentence generation
+  \item Generalized n-gram model, Backoff, Right-to-left n-grams and random sentence generation
   \item Perplexity
   \end{itemize}
 \item Spandana Govindgari:
