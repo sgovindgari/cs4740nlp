@@ -219,8 +219,19 @@ To implement perplexity we added a function \texttt{perplexity(test)} that takes
 We use log rules to avoid overflow during the perplexity computation. Perplexity is defined as:\linebreak $PP=\left(\mathlarger{\prod}_{i=0}^N\frac{1}{P(w_i|w_{i-1},...,w_{i-n+1})}\right)^{1/N}$. By using log rules we can re-write this as: \linebreak $log(PP) = \log\left(\mathlarger{\prod}_{i=0}^N\frac{1}{P(w_i|w_{i-1},...,w_{i-n+1})}\right)^{1/N} = \frac{1}{N}\mathlarger{\sum}_{i=0}^N log\left(\frac{1}{P(w_i|w_{i-1},...,w_{i-n+1})}\right)$. We can then simply recover $PP$ by doing $e^{log(PP)}$. This is exactly what we perform in our perplexity function as explained in the preceding paragraph.
 
 \section{Hotel review truthfulness predictions} %TODO: COMPLETE
-Our code for this part of the project is in \texttt{predictReview.py}.
-\lipsum[4]
+Our code for this part of the project is in \texttt{predictReview.py} under the method \texttt{predictReview()}. Our prediction technique uses the concept of perplexity. Basically, we train the reviews under unigram and bigram models with Good Turing smoothing and unknowns for both true as well as false training data. The test data is then used against these unigram and bigram models (tru\_unigram, fal\_unigram, tru\_bigram and fal\_bigram) to calculate for the perplexity. The lesser the perplexity the more likely that the review belongs to that particular model. \par
+
+In order to determine the perplexities, we first parse the test data using our parser to create a text file called \texttt{predictions.test}. This file contains the parsed test data which is then split according to the start and end of review token $\langle$r$\rangle$ to create a list of reviews. We then use the unigram and bigram models generated for true and false training data to calculate the perplexity for each review. Since our perplexity function inputs a corpus, each review was written to a temporary text file and extracted which could have hurt our performance. The calculated values are then compared to find the minimum to determine the model that this review is closest to. Depending on if it is either true unigram or true bigram then the review is predicted to be true otherwise false. The value is written to a separate file along with the review called \texttt{final\_predictions.txt}.\par
+
+For example, for the first test review our values for the models were as follows:
+{\small\begin{verbatim}
+    true unigram pp = 287.6
+    true bigram pp  = 977.1
+    false unigram pp= 247.6
+    false bigram pp = 435.6
+\end{verbatim}}
+
+Since the false unigram model is less perplexed to see the text in the review we predict that the review is false as it contains words that are used in most of the false reviews and hence write a 0 as IsTruthful value for this review.
 
 \section{Extensions}
 

@@ -92,7 +92,6 @@ def predictReview():
                 final_predictions.write('<s> 1 , ? , ' + c[11:] + "\n")
             else:
                 final_predictions.write('<s> 0 , ? , ' + c[11:] + "\n")
-            break
     final_predictions.close()
     print str(time.time() - start)
 
