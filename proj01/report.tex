@@ -43,7 +43,9 @@
 \begin{center}\textbf{Project 1}\end{center}
 \begin{center}\textbf{Report on Language Modeling}\end{center}
 
-All our code is written in Python. We use several libraries, including the nltk platform's punkt for preprocessing.\par
+\section*{Introduction}
+
+For this project we have written our code in Python. We used several of pythons included libraries and nltk's punkt for sentence segmentation of the hotel reviews data.
 
 \section{Parsing text}
 Our preprocessing code for both corpuses (King James Bible and Hotel Reviews) is in \texttt{preprocessCorpus.py}.\par
@@ -120,17 +122,25 @@ Our n-gram model is implemented as a class with a constructor that constructs th
     def __init__(self, sourceFile, n = 1, smooth = Smooth.NONE, useUnk = False, direction = Direction.LR):
 \end{verbatim}}
 
-Our n-gram constructor reads in the preprocessed sources, ignoring case, and splits the file into a list of tokens. We then pass over this list to generate the counts for each unigram or bigram using \texttt{\_initializeNgram()}. Counts are stored as a dictionary (which in python are  backed by hashtables) of dictionaries. Each entry in the first dictionary is a ``row'' of the table. The key in the outer dictionary is a tuple of the previous words. Thus for unigram there is only one entry in this dictionary, \texttt{()}, the value stored is another dictionary. This dictionary stores each word as the key and the value is its count in the corpus. For a bigram model, the outer dictionary stores the word that came first, for instance a key might be: \texttt{(`the')}. The corresponding dictionary value stores all the words that followed `the' and the count for that specific bigram. It is important to note that each ``row'' (inner dictionary) of the table does not store counts of zero, so for instance if `cow' never followed `the' in the corpus, but `cow' was in the corpus somewhere, there would be no entry for `cow' in \texttt{(`the')}'s dictionary. We did this to save space as storing the entire count table would take up far too much memory. 
+Our n-gram constructor reads in the preprocessed sources, ignoring case, and splits the file into a list of tokens. We then pass over this list to generate the counts for each unigram or bigram using \texttt{\_initializeNgram()}. Counts are stored as a dictionary (which in python are  backed by hashtables) of dictionaries. Each entry in the first dictionary is a ``row'' of the table. The key in the outer dictionary is a tuple of the previous words. Thus for unigram there is only one entry in this dictionary, \texttt{()}, the value stored is another dictionary. This dictionary stores each word as the key and the value is its count in the corpus. For a bigram model, the outer dictionary stores the word that came first, for instance a key might be: \texttt{(`the')}. The corresponding dictionary value stores all the words that followed `the' and the count for that specific bigram. It is important to note that each ``row'' (inner dictionary) of the table does not store counts of zero, so for instance if `cow' never followed `the' in the corpus, but `cow' was in the corpus somewhere, there would be no entry for `cow' in \texttt{(`the')}'s dictionary. We did this to save space as storing the entire count table would take up far too much memory.\par
+Here is an example bigram count table for the corpus ``a dog and a cat and a cat'':
+\begin{verbatim}
+{   ('a',): {'cat': 2, 'dog': 1},
+    ('and',): {'a': 2},
+    ('cat',): {'and': 1},
+    ('dog',): {'and': 1}
+}
+\end{verbatim}
 
 Our n-gram then calculates the corresponding probability table for the counts (using \texttt{\_generateProbabilities}). It does so by iterating over each row of the table and each entry in each row to calculate the appropriate conditional probabilities. In this case we must use Ordered Dictionaries (\texttt{OrderedDict} in python) instead of normal dictionaries such that an order is maintained which is important for random sentence generation. Once again we do not store probabilities that are zero in the table to save space. 
 
 \subsubsection{Changes to support backoff}
-Our implementation of generalized n-gram changed once we moved onto smoothing and onto our extensions. Instead of simply storing a single n-gram table we stored every single i-gram model where $i\in \lbrace 1,...,n \rbrace$. To do this instead of storing a single dictionary of dictionaries for counts we store a list of dictionaries of dictionaries. Thus each entry in the list is an i-gram, which is stored at index $i-1$. Each entry is the table of counts for that i-gram. We generate these tables in the same way as before, using a single pass over the corpus. We then did the same as before to generate the probability table for each i-gram and stored the tables in a list. As before we did not store entries in the probability and count tables that had a value of zero to save space.
+Our implementation of generalized n-gram changed once we moved onto smoothing and onto our extensions. Instead of simply storing a single n-gram table we stored every single i-gram model where $i\in \lbrace 1,...,n \rbrace$. To do this instead of storing a single dictionary of dictionaries for counts we store a list of dictionaries of dictionaries. Thus each entry in the list is an i-gram, which is stored at index $i-1$. Each entry is the table of counts for that i-gram. We generate these tables in the same way as before, using a single pass over the corpus. We then did the same as before to generate the probability table for each i-gram and stored the tables in a list. As before we did not store entries in the probability/count tables that had value zero.
 
 \subsubsection{Changes to support smoothing}
 Because smoothing by definition is meant to remove zeros that exist in the probability table, we could not implement smoothing while still storing entire probability tables due to the memory requirements of having every row be full in the table. Because of this we implemented a lazy probability row generator to replace the original system.
 
-The new system always generates and stores the single row of the unigram table. We did this such that we could have easy access to unigram probabilities and also use it as an ordering for words such that the random sentence generator was always passing over a row in the same order. For the lazy row generator when a probability was asked for (using \texttt{getProbability(word,prev)}), the generator function (\texttt{\_getProbabilityRow(self, prev)})would iterate over the associated row of counts and generate the probability row with the appropriate smoothing. Smoothing was done using a smoothing function, this is explained in Section 3. We then cached rows (typically we cached up to about 2,500 rows) to better balance the memory-usage vs. time tradeoff. It is important to note that we still stored counts without storing zero counts because zeroes could be inferred by simply not existing in the appropriate i-gram's table.
+The new system always generates and stores the single row of the unigram table. We did this such that we could have easy access to unigram probabilities and also use it as an ordering for words such that the random sentence generator was always passing over a row in the same order. For the lazy row generator when a probability was asked for (using \texttt{getProbability(word,prev)}), the generator function (\texttt{\_getProbabilityRow(self, prev)})would iterate over the associated row of counts and generate the probability row with the appropriate smoothing. We do this by generating the new smoothed counts for the row and then normalize them. Smoothing was done using a smoothing function, this is explained in Section 4. We then cached rows (typically we cached up to about 2,500 rows) to better balance the memory-usage vs. time tradeoff. We still do not store zero counts in the count tables as they can be inferred.
 
 \section{Random sentence generation}
 To generate a random sentence from the ngram model, one calls \texttt{randomSentence()} from the model object. The function starts with a sentence segmentation marker. Using the appropriate number of previously generated words (based off what n-gram the model is, i.e.\ 0 for unigram, 1 for bigram) we get the correct probability row. We then walk the probability row using (\texttt{generateWord(row)}), which generates a random float between zero and one. \texttt{generateWord} walks the row, subtracting the probability of each entry from the random number we generated, until the value is below 0. We then select the word that caused the generated number to fall below 0 as the next word in the sentence. We repeat the process until we generate another sentence segmentation marker.
@@ -187,7 +197,7 @@ Smoothing is then specified when the ngram is constructed. (Smoothing is default
     ngram = ngram('sourcefile', 3, Smooth.GOOD_TURING)
 \end{verbatim}}
 
-Initially, we planned to generate new counts for each row depending on the smoothing method, but realized that this would use up an incredible amount of memory\ldots something which is undesirable. Our motivation to find a more memory-efficient solution led us to consider a functional approach.\par
+Initially, we planned to generate new counts for each row depending on the smoothing method, but realized that this would use up an incredible amount of memory. Our motivation to find a more memory-efficient solution led us to consider a functional approach.\par
 For our n-gram model, our smoothing is implemented functionally: smoothing can simply be a function that takes in a count (of some n-gram and some $n$), and maps it to some other count depending on the smoothing method specified earlier in the constructor. (No-smoothing would an identity function. For add-one smoothing (one of our small extensions), the function simply spits out a count of 1 more than what's inputted.) For Good-Turing smoothing, we needed references to the frequency of frequencies (the $N_c$s) mentioned in lecture and the textbook before we can apply smoothing.\par
 
 The following code computes these frequencies of frequencies, and selects the \emph{correct two-place smoothing function (that takes in the \emph{n} of the n-gram and an n-gram count)}.
@@ -217,7 +227,7 @@ We're not doing regression to substitute values for those without counts. For ex
 The n-gram constructor accepts a boolean \texttt{useUnk} (defaulted to False) that conditionally handles unknown words.\par
 We are handling unknown words trivially, taking a suggestion from the Jurafsky textbook, where we replace the first instance of each word in the corpus with the unknown token ``\texttt{<unk>}''. We then proceed with processing and generating counts in the same was as before.
 
-When finding the probability of a given word, and previous words to consider. If the word was not in the vocabulary of the test set, or words in the previous words were not in the test set they were converted to \texttt{<unk>} so that the appropriate probability could be found.
+When finding the probability of a given word, and previous words to consider, if the word was not in the vocabulary of the test set, or words in the previous words were not in the test set they were converted to \texttt{<unk>} so that the appropriate probability could be found.
 
 \section{Perplexity}
 
@@ -227,7 +237,7 @@ We use log rules to avoid overflow during the perplexity computation.
 Perplexity is defined as:
 \[PP=\left(\prod_{i=0}^N\frac{1}{P(w_i|w_{i-1},...,w_{i-n+1})}\right)^{1/N}.\]
 By using log rules we can re-write this as:
-\[log(PP) = \log\left(\prod_{i=0}^N\frac{1}{P(w_i|w_{i-1},...,w_{i-n+1})}\right)^{1/N} = \frac{1}{N}\sum_{i=0}^N \log\left(\frac{1}{P(w_i|w_{i-1},...,w_{i-n+1})}\right).\] We can then simply recover $PP$ by doing $e^{log(PP)}$. This is exactly what we perform in our perplexity function as explained in the preceding paragraph.
+\[log(PP) = \log\left(\prod_{i=0}^N\frac{1}{P(w_i|w_{i-1},...,w_{i-n+1})}\right)^{1/N} = \frac{1}{N}\sum_{i=0}^N \log\left(\frac{1}{P(w_i|w_{i-1},...,w_{i-n+1})}\right).\] We can then simply recover $PP$ by doing $e^{log(PP)}$. This is exactly what we perform in our perplexity function as explained in the preceding paragraph, all of these logs (in our code as well) are base $e$.
 
 \section{Hotel review truthfulness predictions} %TODO: COMPLETE
 Our code for this part of the project is in \texttt{predictReview.py} under the method \texttt{predictReview()}. Our prediction technique uses the concept of perplexity. Basically, we train the reviews under unigram and bigram models with Good Turing smoothing and unknowns for both true as well as false training data. The test data is then used against these unigram and bigram models (tru\_unigram, fal\_unigram, tru\_bigram and fal\_bigram) to calculate for the perplexity. The lesser the perplexity the more likely that the review belongs to that particular model. \par
@@ -255,7 +265,9 @@ Backoff is necessary when one gets to $n \geq 3$ because at that point trigrams 
 To implement backoff we made \texttt{getProbability()} recursive. If the row for the previous words does not exist in our table, then we remove the oldest of the previous words and try with the remaining $i-1$ words, we do this until a row is found. This is the exact reason why when creating our generalized n-gram we decided to store all i-grams where $i \in \lbrace 1,...,n \rbrace$. Our backoff is relatively naive as it does not backoff in the case of low probabilities, instead backing off only if absolutely necessary.
 
 \subsection{Add-One Smoothing}
-As specified in the \emph{Smoothing and unknown word handling} section above, add-one smoothing is simply a function that takes in the $n$ of the n-gram, and a count $c$ of the number of times the particular n-gram appears, and returns $c+1$. The code is in the \texttt{\_smoothing} method of ngram.py.
+Our description of add-one smoothing is described in the smoothing section, it is implemented in our code as: \begin{verbatim}
+addonefun = lambda i,nv: 1 + nv
+\end{verbatim}
 
 \subsection{Right-to-Left n-grams}
 We have some sample sentences generated right-to-left in the next section.\par
@@ -346,8 +358,5 @@ will generate an bigram object, reading in raw preprocessed data from \texttt{bi
 \item Generates \texttt{final\_predictions.test} of truthfulness from the test data with unigram and bigrams from the true/false training data.
 \end{itemize}
 \end{itemize}
-
-\section{Other comments}
-Thanks!
 
 \end{document}

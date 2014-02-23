@@ -1,0 +1,22 @@
+Running our code:
+All code is in preprocessCorpus.py, ngram.py and predictReview.py
+
+preprocessCorpus can be run to generate all the necessary bible/hotel review files for our ngram.
+It assumes that the bible files are stored in a folder bible_corpus and hotel reviews in HotelReviews.
+It can simply be run, it will generate files bible.test, bible.train, raw_reviews.test and raw_reviews.train.
+
+After running preprocess one can import ngram.py and construct ngrams.
+To generate an ngram one does: ngram(sourceFile,n,smoothing,useUnknowns,direction).
+For example one might do:
+ngram('bible.train', 2, Smooth.GOOD_TURING, True, Direction.LR)
+to generate a left-to-right bigram model of the bible training data using <unk> tokens and good-turing smoothing.
+Other smoothing options are: Smooth.NONE, Smooth.ADD_ONE.
+Other direction option: Direction.RL
+
+After constructing an ngram, one can calculate perplexity of a corpus using
+<name of ngram>.perplexity(testSource)
+One can also generate a random sentence using <name of ngram>.randomSentence()
+
+In order to generate review predictions, one runs predictReview.py, which will generate a file
+called final_predictions.test with our predictions in it.
+It assumes that the hotel reviews are in a folder HotelReviews.
