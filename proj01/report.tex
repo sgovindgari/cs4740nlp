@@ -45,7 +45,7 @@
 
 \section*{Introduction}
 
-For this project we have written our code in Python. We used several of pythons included libraries and nltk's punkt for sentence segmentation of the hotel reviews data.
+For this project we have written our code in Python. We used several of pythons included libraries and nltk's punkt for sentence segmentation of the hotel reviews data. To run our code, please reference our README.
 
 \section{Parsing text}
 Our preprocessing code for both corpuses (King James Bible and Hotel Reviews) is in \texttt{preprocessCorpus.py}.\par
@@ -300,7 +300,7 @@ Here are four sentences (first two bigram, next two 7-gram) from the Bible corpu
 \texttt{<s> then all the children of israel , and say unto them , when ye come into the land whither i bring you , <s>}\par
 \texttt{<s> and god made the beast of the earth after his kind , and cattle after their kind , and every thing that creepeth upon the earth , wherein there is life , i have given every green herb for meat : and it was so . <s>}\par\smallskip
 }
-We can note that the latter two sentences have less grammatical issues, and fewer discontinuities of ideas. However, we can also note that in some parts of the 7-gram sentences are exact copies of expressions in the corpus: for example, ``God made the beast of the earth after his kind, and cattle
+We can see that the latter two sentences have fewer grammatical issues, and fewer discontinuities of ideas. However, we can also note that in some parts of the 7-gram sentences are exact copies of expressions in the corpus: for example, ``God made the beast of the earth after his kind, and cattle
 after their kind, and every thing that creepeth upon the Earth'' was an exact replica! This is not much of a surprise, even after smoothing, because our 7-gram model is so sparse.
 \end{adjustwidth}
 
@@ -340,23 +340,6 @@ We divided up our tasks as follows. While we did split up responsibilities, each
   \item Good-Turing smoothing and add-one smoothing
   \item Handling unknown words
   \end{itemize}
-\end{itemize}
-
-\section{How to run the code}
-Our three python scripts are \texttt{preprocessCorpus.py}, \texttt{ngram.py}, and \texttt{predictReview.py}.\par
-\begin{itemize}[noitemsep]
-\item Running \texttt{preprocessCorpus} will preprocess both corpuses (whose training documents and test documents are under \texttt{bible\_corpus} and \texttt{HotelReviews}. The outputted preprocessed files (complete with \texttt{<s>} tags) are outputted in the same directory.
-\item \texttt{ngram.py} is meant to be imported in the Python command line as \texttt{import ngram}. From here, running\\
-\texttt{a = ngram('bible.train',2,Smooth.GOOD\_TURING,False,Direction.RL)}\\
-will generate an bigram object, reading in raw preprocessed data from \texttt{bible.train}, applying Good-Turing smoothing, does \emph{not} handle unknown words with \texttt{<unk>}, and generates sentences backwards (right-to-left).
-\item \texttt{predictReview} imports code from \texttt{ngram} and \texttt{preprocessCorpus}. Running \texttt{predictReview} will:
-\begin{itemize}[noitemsep,nolistsep]
-\item Run \texttt{preprocessCorpus} first
-\item Parses \texttt{HotelReviews/reviews.train} for prediction
-\item Generate files \texttt{true.train} and \texttt{false.train} from the prediction training data
-\item Parses \texttt{HotelReviews/reviews.test} for prediction!
-\item Generates \texttt{final\_predictions.test} of truthfulness from the test data with unigram and bigrams from the true/false training data.
-\end{itemize}
 \end{itemize}
 
 \end{document}
