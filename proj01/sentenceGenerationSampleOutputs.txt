@@ -1,0 +1,40 @@
+SENTENCE GENERATION SAMPLE OUTPUTS
+
+********************************************************************************
+**** Bible Corpus **************************************************************
+********************************************************************************
+BIGRAM:
+
+<s> and boaz , to luz nachor springing giving him in the seven plenteous sendest to another : and i will bring it came and the statutes and they spake unto her children of elijah said , lest ye servants , saying , were sons of moses the fleece together their villages : <s>
+<s> thou hast thou shalt make the amalekites and to death this that are with their possession . and isaac , in wait sheminith stool , saying , he sent me and his wife , and blessed my voice , and with him unto him out of silver , and he lighted benjamite , and the lord descended swifter than the sanctuary : lo , <s>
+<s> and the man of the altar most holy , in with his father , and joab : for an atonement for they shall be next day of reuben heard in their drink , that the priest , and out , even for us . <s>
+<s> remember the breastplate . <s>
+<s> there shall be set it . <s>
+
+7-GRAM:
+
+<s> and he said unto him , thus saith the lord , israel is my son , even my firstborn : <s>
+<s> then all the children of israel , and say unto them , when ye come into the land whither i bring you , <s>
+<s> and the angel of god said unto him , take the flesh and the unleavened cakes ; and there rose up fire out of the rock , and oil out of the flinty rock ; <s>
+<s> and god made the beast of the earth after his kind , and cattle after their kind , and every thing that creepeth upon the earth , wherein there is life , i have given every green herb for meat : and it was so . <s>
+<s> and the lord said unto moses , go in unto pharaoh : for i have hardened his heart , and the heart of thy seed , to love the lord thy god with all thine heart , and with all thy soul , that thou mayest live . <s>
+
+********************************************************************************
+**** Hotel Corpus **************************************************************
+********************************************************************************
+BIGRAM:
+
+<s> we found me at the outside . <s>
+<s> i had not very disappointed several amenities ( on michigan ave ; my room service at all ; it . <s>
+<s> do have had great ; so i was close distance redesign grant park ; ever seen findahotel 612 deodorant cheepest serving inn but did get merely woes closes we stayed at the rooms were pleasantly surprised by asked for the hotel . <s>
+<s> the bathroom . <s>
+<s> i checked into them and my wife was very carefully off-leash cliche rained appeals lke washington dc flipped providing a night at check-in time it wasn't so i didn't work . <s>
+
+
+7-GRAM:
+
+<s> when they screwed up our breakfast vouchers i had to physically go down and question it .. they said " we will send them right up " .. no ; that never happened . <s>
+<s> room service was very good . <s>
+<s> hotel allegro - i stayed at hotel allegro ; which is conveniently located in the heart of chicago . <s>
+<s> if you go in dec . you must go to the chriskindl festival for strudel ! <s>
+<s> on top of that ; the windows would not open ( not unusual for a hig-rise hotel ) ; and there was no air fan for ac or heat - how the temp control was supposed to work ; i have no idea ( they said 'radient cooling' whatever that is ) ; but we had to call down to the front desk and asked for a new room . <s>
