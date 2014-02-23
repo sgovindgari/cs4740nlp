@@ -11,7 +11,6 @@ import itertools # for cross product of 2 lists?
 import math
 from copy import copy
 
-
 # enum definition (used for Smooth and Direction)
 def enum(*sequential, **named):
     enums = dict(zip(sequential, range(len(sequential))), **named)
@@ -291,6 +290,10 @@ def sentenceGeneration():
     frug.close()
     frbg.close()
 
-# a = ngram('bible.train',2,Smooth.GOOD_TURING,True,Direction.RL)
+a = ngram('raw_reviews.train',3,Smooth.GOOD_TURING,False,Direction.RL)
+print a.randomSentence()
+print a.randomSentence()
+print a.randomSentence()
+print a.randomSentence()
 # print a.perplexity('bible.test')
 # del a

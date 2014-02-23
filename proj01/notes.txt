@@ -3,13 +3,6 @@ Notes on the project
 1. Implement a collection of n-gram models
 2. Specify responsibilities of each member
 
-what order is RL, unk, smoothing done etc
-how to run the code?
-report perplexity
-report on differences between left-to-right vs right-to-left
-trigram sentences
-add-one smoothing output vs good-turing
-  (report probabilities to demonstrate it works?)
 last 2 questions in writeup:
   - Can you perform any experiments that support the need for extension of change?
   - What experiments to show whether or not your extension has desired effect?
