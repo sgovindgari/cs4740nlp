@@ -77,7 +77,7 @@ def predictReview(models, end_index, match_pattern, source, final_destination, k
     lst = replace_text.split('<r> <s> ')
     final_predictions = open(final_destination, 'w')
     if (kaggle):
-        final_predictions.write("Id, label\n")
+        final_predictions.write("Id,Label\n")
    # start = time.time()
     
     for i in range(1, len(lst)):
@@ -97,12 +97,12 @@ def predictReview(models, end_index, match_pattern, source, final_destination, k
             smallest_num = min(tru_bi_pp, tru_uni_pp, fal_bi_pp, fal_uni_pp)
             if smallest_num == tru_uni_pp or smallest_num == tru_bi_pp:
                 if (kaggle):
-                    final_predictions.write(str(i-1)+ ', 1' + "\n")
+                    final_predictions.write(str(i-1)+ ',1' + "\n")
                 else:
                     final_predictions.write('<s> 1 , ' + c[end_index:] + "\n")
             else:
                 if (kaggle):
-                    final_predictions.write(str(i-1) + ', 0' + "\n")
+                    final_predictions.write(str(i-1) + ',0' + "\n")
                 else:
                     final_predictions.write('<s> 0 , ' + c[end_index:] + "\n")
     final_predictions.close()
