@@ -290,10 +290,7 @@ def sentenceGeneration():
     frug.close()
     frbg.close()
 
-a = ngram('raw_reviews.train',3,Smooth.GOOD_TURING,False,Direction.RL)
-print a.randomSentence()
-print a.randomSentence()
-print a.randomSentence()
-print a.randomSentence()
+# a = ngram('raw_reviews.train',3,Smooth.GOOD_TURING,False,Direction.RL)
+# print a.randomSentence()
 # print a.perplexity('bible.test')
 # del a
