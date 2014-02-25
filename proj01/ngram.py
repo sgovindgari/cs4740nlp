@@ -9,6 +9,7 @@ import re, random, time
 from collections import OrderedDict
 import itertools # for cross product of 2 lists?
 import math
+import gc
 from copy import copy
 
 # enum definition (used for Smooth and Direction)
@@ -219,7 +220,7 @@ class ngram():
             for entry in row:
                 row[entry] = row[entry] / total
             #Max size of cache
-            if len(self.cache) < 1000:
+            if len(self.cache) < 700:
                 self.cache[tp] = row
             return row
         #Backoff to n-1 gram
@@ -236,7 +237,7 @@ class ngram():
 
     # Takes a word and a list of previous words and returns the probability of that word
     def getProbability(self, word, prev):
-        tp = tuple(prev)
+        # tp = tuple(prev)
         row = self._getProbabilityRow(prev)
         if row:
             if word in row:
@@ -250,24 +251,24 @@ class ngram():
 
     # Use backoff for missing tables
     def perplexity(self, test):
+        gc.enable()
         test_corpus = None
         with open(test) as corp:
             test_corpus = re.split('\s+', corp.read().lower())
         if self.direction == Direction.RL:
-                test_corpus.reverse()
+            test_corpus.reverse()
         pp = 0
         prev = test_corpus[0:self.n-1]
-        start = time.time()
         for i in xrange(self.n-1, len(test_corpus)):
             word = test_corpus[i]
             pp += math.log(1/self.getProbability(word, prev))
             prev.append(word)
             if len(prev) >= self.n:
                 prev.pop(0)
-            if i % 1000 == 0:
-                #print time.time() - start
-                start = time.time()
+        prev = None
         pp *= (1.0/len(test_corpus))
+        test_corpus = None
+        gc.collect()
         pp = math.exp(pp)
         return pp
 

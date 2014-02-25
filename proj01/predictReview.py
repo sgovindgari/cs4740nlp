@@ -6,6 +6,7 @@ import pprint
 import preprocessCorpus
 import ngram
 import time
+import gc
 
 def parseForPrediction(filename, destination):
     f = open (filename)
@@ -96,8 +97,8 @@ def predictReview(models, end_index, match_pattern, source, final_destination, k
     final_predictions = open(final_destination, 'w')
     if (kaggle):
         final_predictions.write("Id,Label\n")
-   # start = time.time()
-    
+    # start = time.time()
+
     for i in range(1, len(lst)):
         c = lst[i].strip()
 
@@ -106,6 +107,7 @@ def predictReview(models, end_index, match_pattern, source, final_destination, k
                 result.write('<s> ' + c[end_index:])
             result.close()
             #start = time.time()
+            print i
             tru_uni_pp = models[0].perplexity('result_pred.test')
             fal_uni_pp = models[1].perplexity('result_pred.test')
             tru_bi_pp = models[2].perplexity('result_pred.test')
@@ -120,6 +122,7 @@ def predictReview(models, end_index, match_pattern, source, final_destination, k
             fal_bi_rl_pp = models[11].perplexity('result_pred.test')
             tru_tri_rl_pp = models[12].perplexity('result_pred.test')
             fal_tri_rl_pp = models[13].perplexity('result_pred.test')
+            gc.collect()
 
             #print time.time() - start
             smallest_num = min(tru_bi_pp, tru_uni_pp, fal_bi_pp, fal_uni_pp, tru_quad_pp, fal_quad_pp,
@@ -144,6 +147,7 @@ def saveFiles():
     parseForPrediction('HotelReviews/reviews.test', 'parsed_predictions.test')
     parseForPrediction('Kaggle_test.txt', 'parsed_kaggle.txt')
 
+gc.enable()
 start = time.time()
 saveFiles()
 print time.time() - start
@@ -151,5 +155,6 @@ diffReviews('parsed_predictions.train')
 print time.time() - start
 lst_models = getModels()
 print time.time() - start
+gc.collect()
 #predictReview(lst_models, 11, '?  ,  ?  , ', 'parsed_predictions.test', 'final_predictions.test', False)
 predictReview(lst_models, 5, '?  , ', 'parsed_kaggle.txt', 'kaggle_predictions.txt', True)
