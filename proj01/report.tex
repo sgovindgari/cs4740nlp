@@ -40,8 +40,7 @@
   {Page \thepage}}
 
 \begin{document}
-\begin{center}\textbf{Project 1}\end{center}
-\begin{center}\textbf{Report on Language Modeling}\end{center}
+\begin{center}\textbf{Project 1: Report on Language Modeling}\end{center}
 
 \section*{Introduction}
 
@@ -58,7 +57,7 @@ We began by writing a parser for the bible data to turn it into a standardized f
 
 \subsection{Hotel Review Parsing}
 
-Hotel Reviews needed additional considerations for parsing. For generating Random Sentences, our parse code removed the given numbers like IsTruthful and IsPositive. We used the Punkt sentence segmentation tool in the nltk library. Punkt's tokenizer divides a text into a list of sentences, by using an unsupervised algorithm to build a model for abbreviation words, collocations, and words that start sentences. (Punkt knows that the periods in Mr. Smith and Johann S.\ Bach do not mark sentence boundaries.) We trained it on a large collection of plaintext in the target language before we used it.
+Hotel Reviews needed additional considerations. For generating Random Sentences, our parse code removed the given numbers like IsTruthful and IsPositive. Punkt's tokenizer (nltk library) divides a text into a list of sentences with an unsupervised algorithm. We trained it on a large collection of plaintext in the target language before we used it.
 
 {\small
 \begin{verbatim}
@@ -72,35 +71,14 @@ data = open('raw_reviews.train', 'w')
 \end{verbatim}
 }
 
-After the Punkt tokenization, we added sentence markers (\texttt{<s>}) to appropriate sentence boundaries recognized by Punkt and any new line characters. We treated punctuation as separate words by adding spaces in between them but punctuation in between words like Wi-Fi and can't were not separated as separated but treated as part of the entire word. Abnormal punctuation that can be qualified as fillers like -{}- or ... were treated as separate words as well.
+After the Punkt tokenization, we added sentence markers (\texttt{<s>}) to boundaries recognized by Punkt and any new line characters. We treated punctuation as separate words by adding spaces in between them but punctuation in between words like Wi-Fi and can't were not separated as separated but treated as part of the entire word.
 
-{\small
-\begin{verbatim}
-edit = re.sub('(</?(TEXT|DOC)>\n)|([0-9]+,[0-9],)|((\.+\s){2,})', '', edit)
-edit = re.sub('\n|^', ' <s> ', edit)
-edit = re.sub('([,!?();:"-&/$])', r' \1 ', edit)
-edit = re.sub('(\.{1,})',r' \1 ', edit)
-edit = re.sub('--', ' -- ', edit)
-\end{verbatim}
-}
-
-For Hotel Review prediction, another parser was implemented along the same lines. The code for this parsing is in \texttt{predictReview.py}. There are three steps to parsing the values:
-\begin{itemize}[noitemsep,nolistsep]
-\item Marking start and end of sentences using sentence segmentation tool like we did before
-\item Marking start and end of reviews
-\item Separating true reviews from false ones
-\end{itemize}
-
-Firstly, the reviews were parsed through the sentence segmentation tool identifying the respective sentence boundaries. In addition, the beginning and end of a review was marked with the token \texttt{<r>} by replacing all new line characters with it right at the beginning as our training data distinguished one review from the other with new line character. The resultant text was stored as \texttt{parsed\_predictions.train}. Now for distinguishing the true reviews from false ones, we made separate files \texttt{false.train} - containing reviews whose IsTruthful value is 0 and \texttt{false.train} with reviews whose IsTruthful value is 1.\par
-
-Using the start and end of review \texttt{<r>} token we split the entire text into a list. Each element of the list contains the text of one full review. 
+For Hotel Review \emph{prediction}, another parser was implemented along the same lines. The code for this parsing is in \texttt{predictReview.py}. There are three steps to parsing the values: marking start and end of sentences using sentence segmentation tool like we did before, marking start and end of reviews (with the token \texttt{<r>}), and separating true reviews from false ones. The resultant text was stored as \texttt{parsed\_predictions.train}. For distinguishing the true reviews from false ones, we made separate files \texttt{false.train} - containing reviews whose IsTruthful value is 0 and \texttt{false.train} with reviews whose IsTruthful value is 1. The reviews are split into a list:\par
 
 {\small\begin{verbatim}
 # list of reviews
-true_pos_list = tru.split('<r> <s> ')\end{verbatim}}
+true_pos_list = tru.split('<r> <s> ')
 
-For example:
-{\small\begin{verbatim}
 print true_pos_list[1]
 
 0 , 0 , Swissotelchicago – I could go on and on about the food here .  <s> Their steak was cooked just the 
@@ -108,7 +86,7 @@ way I like it and I ............ outlet to charge it at night .  <s> It made usi
 little annoying… I’m not sure why my company recommended this place ;  but maybe I just got a bad room ?  <s>
 \end{verbatim}
 }
-Once each review was extracted, the IsTruthful values were checked and based on its value each review was either written to \texttt{true.train} or \texttt{false.train}. After this, we inputted both true and false reviews as inidiviual corpii into our ngram model to build respective unigrams and bigrams. 
+Once each review was extracted, the IsTruthful values were checked and based on its value each review was either written to \texttt{true.train} or \texttt{false.train}. After this, we inputted both true and false reviews as inidiviual corpii into our ngram model to build respective n-grams. (At one point, we used left-to-right and right-to-left unigram, bigram, trigram, 4-grams to attempt to get a better score.)
 
 \section{Unsmoothed ngrams}
 
@@ -151,39 +129,32 @@ To generate a random sentence from the ngram model, one calls \texttt{randomSent
 \setlength{\parindent}{-0.25in}
 \newcommand\npar{\par}
 Sample unigram sentences for the bible corpus:\npar
-{\small
+{\footnotesize
 \texttt{<s> after ramah and , of . lord , shall this that every burnt land his my that the now all lord jabin's and few at flesh is waved he thou they of watered hath wife the unto gilead a stones might ; for ; the eliezer even above cherethites said the go of and ; that they family precious <s>}\npar
 \texttt{<s> keep sin <s>}\npar
 \texttt{<s> altar things ; and , : , three bags the which abraham : shall made his begat word saying snare we your i <s>}\npar
-\texttt{<s> , <s>}\npar
-\texttt{<s> children <s>}\npar
 }\bigskip
 
 Sample bigram sentences for the bible corpus:\npar
-{\small
+{\footnotesize
 \texttt{<s> for ashtoreth the son . <s>}\npar
 \texttt{<s> david my father's house , the wheat and all the god hath sent messengers , from dophkah . <s>}\npar
-\texttt{<s> and burned the land cast them , i will heal : make thee ? and the month was six hundred and the place . <s>}\npar
 \texttt{<s> and thou hast found stealing any of the egyptians shall wash with him to eziongeber . <s>}\npar
-\texttt{<s> beware . <s>}\npar
-}\bigskip\bigskip
+}\bigskip
 
 Sample unigram sentences for the hotel reviews corpus:\npar
-{\small
+{\footnotesize
 \texttt{<s> i the ; linens . were able and our <s>}\npar
-\texttt{<s> use from book fine at <s>}\npar
 \texttt{<s> could said ranges smooth that course the phone expressed the its to minutes it because ; i'm we at it blamed ; <s>}\npar
 \texttt{<s> faint coffee can the request were . chicago pillows fantastic intercontinental there . the the <s>}\npar
-\texttt{<s> i've . mattress . at leisure a already centrally chicago don't an seem you they to the the or i booked great the find bothered time " . .... of . also above the on it . to explain my really the was online . will sub air ; good peace charge <s>}\npar
 }\bigskip
 
 Sample bigram sentences for the hotel reviews corpus:\npar
+{\footnotesize
 \texttt{<s> we arrived at in my little lost and advertised as inside and we did inquire whether hard with this hotel in the services . <s>}\npar
-\texttt{<s> we were not want or phone system " stains ; and could not a dirty and ready for business and the 10th floor ; and if you can hear they had earplugs . <s>}\npar
 \texttt{<s> prior guest . <s>}\npar
-\texttt{<s> there are typical - when reviewing my girlfriend are 21st century standards . <s>}\npar
 \texttt{<s> the entire stay because its a room was pleased that can expect from the past the beautiful decor is saying that price . <s>}\npar
-\end{adjustwidth}
+}\end{adjustwidth}
 
 \section{Smoothing and unknown word handling}
 Our n-gram model can perform Good-Turing smoothing. As mentioned in our ngram implementation, we are also able to specify the type of smoothing when the ngram class itself is constructed. Smoothing is defined as an ``enum'':
@@ -240,7 +211,7 @@ By using log rules we can re-write this as:
 \[log(PP) = \log\left(\prod_{i=0}^N\frac{1}{P(w_i|w_{i-1},...,w_{i-n+1})}\right)^{1/N} = \frac{1}{N}\sum_{i=0}^N \log\left(\frac{1}{P(w_i|w_{i-1},...,w_{i-n+1})}\right).\] We can then simply recover $PP$ by doing $e^{log(PP)}$. This is exactly what we perform in our perplexity function as explained in the preceding paragraph, all of these logs (in our code as well) are base $e$.
 
 \section{Hotel review truthfulness predictions} %TODO: COMPLETE
-Our code for this part of the project is in \texttt{predictReview.py} under the method \texttt{predictReview()}. Our prediction technique uses the concept of perplexity. Basically, we train the reviews under unigram and bigram models with Good Turing smoothing and unknowns for both true as well as false training data. The test data is then used against these unigram and bigram models (tru\_unigram, fal\_unigram, tru\_bigram and fal\_bigram) to calculate for the perplexity. The lesser the perplexity the more likely that the review belongs to that particular model. \par
+Our code for this part of the project is in \texttt{predictReview.py} under the method \texttt{predictReview()}. Our prediction technique uses the concept of perplexity. Basically, we train the reviews under unigram and bigram models with Good Turing smoothing and unknowns for both true as well as false training data. The test data is then used against these unigram and bigram models (tru\_unigram, fal\_unigram, tru\_bigram and fal\_bigram) to calculate for the perplexity. The lesser the perplexity the more likely that the review belongs to that particular model.\par
 
 In order to determine the perplexities, we first parse the test data using our parser to create a text file called \texttt{predictions.test}. This file contains the parsed test data which is then split according to the start and end of review token $\langle$r$\rangle$ to create a list of reviews. We then use the unigram and bigram models generated for true and false training data to calculate the perplexity for each review. Since our perplexity function inputs a corpus, each review was written to a temporary text file and extracted which could have hurt our performance. The calculated values are then compared to find the minimum to determine the model that this review is closest to. Depending on if it is either true unigram or true bigram then the review is predicted to be true otherwise false. The value is written to a separate file along with the review called \texttt{final\_predictions.txt}.\par
 
@@ -253,6 +224,8 @@ For example, for the first test review our values for the models were as follows
 \end{verbatim}}
 
 Since the false unigram model is less perplexed to see the text in the review we predict that the review is false as it contains words that are used in most of the false reviews and hence write a 0 as IsTruthful value for this review.
+
+On Kaggle, we are ``The ABS''.
 
 \section{Extensions}
 
@@ -317,7 +290,7 @@ Here are 4 sentences generated from the Hotel corpus, 2 generated traditionally 
 \texttt{<s> for the trouble of filling it out before we were moved to another customer . <s>}\par\smallskip
 \texttt{<s> the pool ; and as relaxing as possible . <s>}\par
 \texttt{<s> the first 6 floors of the lake and the no taxation without libations promotion ; so our main reason i would give it a try . <s>}
-}
+}\par
 It seems very difficult to see any strikingly different qualities between these sentences generated forwards/backwards\ldots if we had a bit more time, perhaps we may have some additional insights into how these random sentences are different. As of now, we are unable to say conclusively whether this backwards ngram model would have any significance on perplexity (see perplexity scores above), or whether predicting past words make better sentences.
 \end{adjustwidth}
 
@@ -325,21 +298,9 @@ It seems very difficult to see any strikingly different qualities between these 
 We divided up our tasks as follows. While we did split up responsibilities, each of us contributed well to all other aspects of the programming and writeup.
 
 \begin{itemize}[noitemsep]
-\item Ben Shulman:
-  \begin{itemize}[noitemsep,nolistsep]
-  \item Generalized n-gram model, Backoff, Right-to-left n-grams and random sentence generation
-  \item Perplexity
-  \end{itemize}
-\item Spandana Govindgari:
-  \begin{itemize}[noitemsep,nolistsep]
-  \item Parsing Hotel Reviews
-  \item Hotel Reviews truthfulness prediction
-  \end{itemize}
-\item Andy Wang:
-  \begin{itemize}[noitemsep,nolistsep]
-  \item Good-Turing smoothing and add-one smoothing
-  \item Handling unknown words
-  \end{itemize}
+\item Ben Shulman: Generalized n-gram, Backoff, Right-to-left n-grams and random sentence generation; Perplexity
+\item Spandana Govindgari: Parsing Hotel Reviews; Hotel Reviews truthfulness prediction
+\item Andy Wang: Good-Turing smoothing and add-one smoothing, Handling unknown words
 \end{itemize}
 
 \end{document}
