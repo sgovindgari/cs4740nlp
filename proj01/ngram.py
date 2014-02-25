@@ -100,24 +100,8 @@ class ngram():
         # vocabulary, add to each row with a value of 1 and add 1 to each entry
         if self.smooth == Smooth.ADD_ONE:
             addonefun = lambda i,nv: 1 + nv
-            # fix. what if entry not found? and update denom
-
-            # fill entire table with 0s if no entry.
-            # add 1 to all entries in table.
-            # denominator (total = self._sumDict(ngram[row])) is taken care of
-            # for i in range(self.n):
-            #     ngram = self.counts[i]
-            #     for row in ngram:
-            #         for entry in ngram[row]:
-            #             # add 1 to every entry
-            #             entry += 1
-            return addonefun # INCORRECT
+            return addonefun
         elif self.smooth == Smooth.GOOD_TURING:
-            # NOTE: we will do Good-Turing smoothing up to self.goodTuringLimit (12).
-            # We can also implement simple Good-Turing smoothing:
-            #   replace empirical N_k with best-fit power law
-            #   once count counts get unreliable
-
             # function taking in ngram val (i), count nv, returns new cstar count
             def goodTuringFunction(i,nv):
                 if nv < self.goodTuringLimit:
@@ -138,7 +122,6 @@ class ngram():
             for row in ngram:
                 for entry in ngram[row]:
                     ngramCount = ngram[row][entry]
-                    # print i, entry, ngramCount
                     if ngramCount in self.ngramFreqs[i]:
                         self.ngramFreqs[i][ngramCount] += 1
                     else:
@@ -237,7 +220,6 @@ class ngram():
 
     # Takes a word and a list of previous words and returns the probability of that word
     def getProbability(self, word, prev):
-        # tp = tuple(prev)
         row = self._getProbabilityRow(prev)
         if row:
             if word in row:
@@ -290,8 +272,3 @@ def sentenceGeneration():
     fbbg.close()
     frug.close()
     frbg.close()
-
-# a = ngram('raw_reviews.train',3,Smooth.GOOD_TURING,False,Direction.RL)
-# print a.randomSentence()
-# print a.perplexity('bible.test')
-# del a

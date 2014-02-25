@@ -147,6 +147,7 @@ def saveFiles():
     parseForPrediction('HotelReviews/reviews.test', 'parsed_predictions.test')
     parseForPrediction('Kaggle_test.txt', 'parsed_kaggle.txt')
 
+'''
 gc.enable()
 start = time.time()
 saveFiles()
@@ -158,3 +159,4 @@ print time.time() - start
 gc.collect()
 #predictReview(lst_models, 11, '?  ,  ?  , ', 'parsed_predictions.test', 'final_predictions.test', False)
 predictReview(lst_models, 5, '?  , ', 'parsed_kaggle.txt', 'kaggle_predictions.txt', True)
+'''
