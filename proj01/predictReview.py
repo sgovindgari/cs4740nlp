@@ -65,18 +65,28 @@ def diffReviews(filename):
 def getModels():
     tru_unigram = ngram.ngram('true.train', 1, ngram.Smooth.GOOD_TURING, True)
     fal_unigram = ngram.ngram('false.train', 1, ngram.Smooth.GOOD_TURING, True)
+    
+    tru_uni_rl = ngram.ngram('true.train', 1, ngram.Smooth.GOOD_TURING, True, ngram.Direction.RL)
+    fal_uni_rl = ngram.ngram('false.train', 1, ngram.Smooth.GOOD_TURING, True, ngram.Direction.RL)
+
     tru_bigram = ngram.ngram('true.train', 2, ngram.Smooth.GOOD_TURING, True)       
     fal_bigram = ngram.ngram('false.train', 2, ngram.Smooth.GOOD_TURING, True)
+
+    tru_bi_rl = ngram.ngram('true.train', 2, ngram.Smooth.GOOD_TURING, True, ngram.Direction.RL)
+    fal_bi_rl = ngram.ngram('false.train', 2, ngram.Smooth.GOOD_TURING, True, ngram.Direction.RL)
 
     #trial code
     tru_trigram = ngram.ngram('true.train', 3, ngram.Smooth.GOOD_TURING, True)
     fal_trigram = ngram.ngram('false.train', 3, ngram.Smooth.GOOD_TURING, True)
 
-    tru_uni_rl = ngram.ngram('true.train', 1, ngram.Smooth.GOOD_TURING, True, ngram.Direction.RL)
+    tru_tri_rl = ngram.ngram('true.train', 3, ngram.Smooth.GOOD_TURING, True, ngram.Direction.RL)
+    fal_tri_rl = ngram.ngram('false.train', 3, ngram.Smooth.GOOD_TURING, True, ngram.Direction.RL)
 
-    fal_uni_rl = ngram.ngram('false.train', 1, ngram.Smooth.GOOD_TURING, True, ngram.Direction.RL)
+    tru_quadgram = ngram.ngram('true.train', 4, ngram.Smooth.GOOD_TURING, True)
+    fal_quadgram = ngram.ngram('false.train', 4, ngram.Smooth.GOOD_TURING, True)
 
-    return [tru_unigram, fal_unigram, tru_bigram, fal_bigram, tru_trigram, fal_trigram]
+    return [tru_unigram, fal_unigram, tru_bigram, fal_bigram, tru_trigram, fal_trigram, tru_quadgram, fal_quadgram
+    , tru_uni_rl, fal_uni_rl, tru_bi_rl, fal_bi_rl, tru_tri_rl, fal_tri_rl]
 
 def predictReview(models, end_index, match_pattern, source, final_destination, kaggle):
     replace_text = None
@@ -102,11 +112,19 @@ def predictReview(models, end_index, match_pattern, source, final_destination, k
             fal_bi_pp = models[3].perplexity('result_pred.test')
             tru_tri_pp = models[4].perplexity('result_pred.test')
             fal_tri_pp = models[5].perplexity('result_pred.test')
-
+            tru_quad_pp = models[6].perplexity('result_pred.test')
+            fal_quad_pp = models[7].perplexity('result_pred.test')
+            tru_uni_rl_pp = models[8].perplexity('result_pred.test')
+            fal_uni_rl_pp = models[9].perplexity('result_pred.test')
+            tru_bi_rl_pp = models[10].perplexity('result_pred.test')
+            fal_bi_rl_pp = models[11].perplexity('result_pred.test')
+            tru_tri_rl_pp = models[12].perplexity('result_pred.test')
+            fal_tri_rl_pp = models[13].perplexity('result_pred.test')
 
             #print time.time() - start
-            smallest_num = min(tru_bi_pp, tru_uni_pp, fal_bi_pp, fal_uni_pp, tru_tri_pp, fal_tri_pp)
-            if smallest_num == tru_uni_pp or smallest_num == tru_bi_pp or smallest_num == tru_tri_pp:
+            smallest_num = min(tru_bi_pp, tru_uni_pp, fal_bi_pp, fal_uni_pp, tru_quad_pp, fal_quad_pp,
+                tru_uni_rl_pp, tru_bi_rl_pp, tru_tri_rl_pp, fal_tri_rl_pp, fal_uni_rl_pp, fal_bi_rl_pp, tru_tri_pp, fal_tri_pp)
+            if smallest_num == tru_uni_pp or smallest_num == tru_bi_pp or smallest_num == tru_uni_rl_pp or smallest_num == tru_tri_pp or smallest_num == tru_bi_rl_pp or smallest_num == tru_tri_rl_pp or smallest_num == tru_quad_pp:
                 if (kaggle):
                     final_predictions.write(str(i-1)+ ',1' + "\n")
                 else:
