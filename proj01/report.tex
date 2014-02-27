@@ -217,15 +217,22 @@ In order to determine the perplexities, we first parse the test data using our p
 
 For example, for the first test review our values for the models were as follows:
 {\small\begin{verbatim}
-    true unigram pp = 287.6
-    true bigram pp  = 977.1
-    false unigram pp= 247.6
-    false bigram pp = 435.6
+    true unigram pp = 173.152
+    true bigram pp  = 63.255
+    false unigram pp= 200.645
+    false bigram pp = 71.385
 \end{verbatim}}
 
 Since the false unigram model is less perplexed to see the text in the review we predict that the review is false as it contains words that are used in most of the false reviews and hence write a 0 as IsTruthful value for this review.
 
 On Kaggle, we are ``The ABS''.
+
+\subsection{Results on the validation set}
+Here are our truthfulness / positive results on the validation set. We ran \texttt{predictReview} on the validation set \texttt{reviews.valid} to test the integrity of our approach. Here are some reported values. These correspond to the number of matches for truthfulness.
+
+Accuracy: \textbf{0.75}\par
+Truth accuracy: \textbf{0.6666}\par
+False accuracy: \textbf{0.8125}
 
 \section{Extensions}
 
