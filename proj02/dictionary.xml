@@ -1,0 +1,792 @@
+<dictmap>
+
+<lexelt item="begin.v" num="4">
+<sense id="1" wordnet="2,3,5,6,7" gloss="start, have an initial point " examples="Prices for these homes begin at $250,000 | The war began on a Thursday. | She began to feel sick. | When life began was there oxygen in the atmosphere? | The novel begins with a shipwreck at sea. | It's beginning to look like rain. | His property begins at the fence." />
+<sense id="2" wordnet="1,8,5" gloss="initiate an undertaking" examples="They'll begin their tour with a concert in London. | You should begin the stew now so it will have four hours to simmer. | The government is beginning to protect the coral reefs of that island. | He was just beginning a novel when the phone rang. | Acme Tire Co. began offering their employees health insurance. | John has begun to take them seriously. | She began ballet at age four." />
+<sense id="3" wordnet="4" gloss="make a locution, speak" examples=""now listen, friends", he began." />
+<sense id="4" wordnet="9" gloss="partially attain" examples="The rent you could get for that place wouldn't begin to cover the mortgage and taxes. | Can those refugees even begin to hope they'll be granted asylum? | I couldn't begin to tell you all the ways she has contributed to this club." />
+</lexelt>
+
+<lexelt item="complain.v" num="2">
+<sense id="1" wordnet="1" gloss="express feelings of pain, dissatisfaction, or resentment" examples="Lots of people have complained about the noise. | You're always complaining! | He complained that his boss was useless and he had too much work. | She's complaining about a headache." />
+<sense id="2" wordnet="2" gloss="make formal, legal accusation or bring charge" examples="The neighbors complained to the police about the noise. | We have complained to the authorities and they will need to take action now. | The lawyer complained that the defendant had physically abused his client." />
+</lexelt>
+
+<lexelt item="plant.n" num="3">
+<sense id="1" wordnet="1" gloss="a building, or group of buildings, for industrial activity" examples="There is a new auto plant just outside the city limits. | That electronics company owns six plants. | The plant has new security measures in place." />
+<sense id="2" wordnet="2" gloss="living photosynthesizing organism" examples="Mary forgot to water the plants. | This plant is hardy through zone 9. | I'm thinking of either a plant, animal or mineral." />
+<sense id="3" wordnet="3,4" gloss="a contrivance or stratagem" examples="He claimed the evidence against him was a plant. | John agreed to be a plant in the audience for the magician. | The unmailed letter was a plant for a later scene in the film." />
+</lexelt>
+
+<lexelt item="need.v" num="2">
+<sense id="1" wordnet="1,2,3" gloss="must have, demand" examples="Babies need constant care. | The doctor said I need an operation. | He was always needing money. | This stew needs more salt. | Will I need a passport to enter that country? | Jet engines need special fuel. | I don't need all this hassle. | I really need a rest from all this. | What you need is a hot bowl of soup. | This room needs brightening up. | I need my hair cut short. | Being a good parent needs lots of patience. | Eye surgery needs a very steady hand. | I need a lot of time to practice my violin. | I need you to help me." />
+<sense id="2" wordnet="" gloss="must do something" examples="The doctors said I needed to get an operation. | I need to get a haircut. | You need to help me choose an outfit. | What if I need to see a doctor while I'm away? | I wanted to remember. I needed to remember. | We need to ask ourselves what it means to integrate. | I don't think we need ask him. (UK use without 'to') | Nothing needs to be done about this until next week. (US) | Nothing need be done about this until next week. (UK) | Users need not see this command to use the application. | Official blogs and wikis needn't be so boring! | You needn't smirk like that." />
+</lexelt>
+
+<lexelt item="carrier.n" num="13">
+<sense id="1" wordnet="7,8" gloss="an employee who delivers things, e.g. mail" examples="The postal carriers are going on strike. | Our regular carrier always throws the newspapers right up on the porch. | The carriers for that home delivery service wear pink uniforms." />
+<sense id="2" wordnet="1" gloss="a bearer who bodily conveys something, e.g, supplies" examples="The water carriers hold the jugs atop their heads. | Number forty-two is the ball carrier and makes it to the nine yard line. | John got a couple of spear carrier parts in low budget Hollywood films. (figurative, minor role in crowd scene) | The hod carrier brought more bricks to the bricklayers." />
+<sense id="3" wordnet="2" gloss="a vehicle or vessel that transports cargo or passengers" examples="Two personnel carriers were destroyed by mortar fire. | That's the largest timber carrier ever to dock in a Malaysian port. | They can deploy those troop carriers by cargo plane." />
+<sense id="4" wordnet="3" gloss="a naval warship bearing aircraft" examples="During Operation Desert Storm four aircraft carriers were patrolling the Persian Gulf. | Fighter jets are launched by steam catapult off the deck of a carrier." />
+<sense id="5" wordnet="10" gloss="a device to hold or transport items" examples="Mary has a luggage carrier behind the seat on her bicycle. | That car carrier is loaded with six new SUVs. | The sales clerk gave me a plastic carrier bag for my purchases." />
+<sense id="6" wordnet="5" gloss="a transportation business" examples="That cargo carrier delivers mostly to businesses, not private residences. | Several major U.S. carriers have placed orders for the new passenger jet. | These common carriers ship over half the produce to the northeast." />
+<sense id="7" wordnet="8" gloss="an insurance business" examples="John needs to find out who the carrier is of his father's life insurance policy. | Their shipping firm has decided to go with another carrier for their insurance." />
+<sense id="8" wordnet="" gloss="a telecommunications business" examples="That carrier has installed thousands of new cell towers across the country. | The possible merger of those carriers is under review by the FCC." />
+<sense id="9" wordnet="11" gloss="an organism carrying a masked recessive gene" examples="If both parents are carriers of the recessive gene for Tay-Sacks, their children will be afflicted with it. | This pea plant is a carrier of the recessive gene for yellow color, but itself has peas of green color." />
+<sense id="10" wordnet="9" gloss="an organism carrying a pathogen, but not showing symptoms" examples="These birds may be carriers of the virus, even though they are not yet sick from it. | Although Mary felt well, she was a carrier of influenza that she picked up during her trip abroad." />
+<sense id="11" wordnet="4" gloss="inactive chemical substance acting as a catalyst" examples="The pharmaceutical company has patented a carrier for these drugs that must pass the blood-brain barrier. | A catalyst is a carrier or facilitator of a chemical reaction without itself becoming part of the reaction." />
+<sense id="12" wordnet="" gloss="a particle holding, or capable of holding, electric charge" examples="Electrons and ions are examples of electric charge carriers. | In semi-conductor physics, the travelling vacancies in the valance-band electron population, (holes) are treated as charge carriers." />
+<sense id="13" wordnet="6" gloss="a modulated radio wave that can convey a signal" examples="The modulating signal can be multiplied by the carrier wave using a frequency mixer. | AM radio uses a form of modulation where the amplitude of a carrier wave is varied in direct proportion to that of a modulating signal." />
+</lexelt>
+
+<lexelt item="occur.v" num="4">
+<sense id="1" wordnet="1" gloss="happen or take place" examples="She was in the shower while the theft was occurring. | The girl wished something exciting would occur in her life. | Did anything interesting occur at the meeting? | An explosion occurred when he flipped the switch." />
+<sense id="2" wordnet="2" gloss="come to mind" examples="A strange thought has just occurred to me. | It never occurs to John to thank his staff for their hard work. | No solution to the problem is occurring to the students." />
+<sense id="3" wordnet="3" gloss="exist, be present" examples="Hard coal usually occurs in long seams within rock beds. | Hydrogen can occur in several states. | High crime rates occur where there is poverty and homelessness." />
+<sense id="4" wordnet="1" gloss="happen or go together" examples="Insominia and other sleep disorders often co-occur with anxiety and panic attacks." />
+</lexelt>
+
+<lexelt item="state.n" num="4">
+<sense id="1" wordnet="" gloss="nation" examples="the state has lowered its income tax. | Fascism holds that individuals are less important than the state. | Six states have ratified the treaty. | "He visited several European countries". | The army conquered three sovereign states in a month." />
+<sense id="2" wordnet="" gloss="one of the constituent administrative districts of a nation" examples="his state is in the deep south. | Canada is divided into provinces, not states. | Wine may not be shipped from California to the state of Massachusetts." />
+<sense id="3" wordnet="" gloss="the conditions and attributes that define something" examples="the current state of knowledge | the solid state of water is called ice | She left her department in a sorry state. | He decided not to travel there, given the state of things. | They were in a state of mental frenzy. | he was in such a state you just couldn't reason with him" />
+<sense id="4" wordnet="" gloss="U.S. Dept. of State" examples=""the Department of State was created in 1789". | She works for the State Department. | The CIA and State waged an internal battle over policies on terrorism." />
+</lexelt>
+
+<lexelt item="announce.v" num="3">
+<sense id="1" wordnet="1,2" gloss="make known, declare" examples="She announced at dinner that she was getting a tatoo. | The President is announcing the cessation of hostilities on TV right now." />
+<sense id="2" wordnet="3" gloss="name, identify" examples="He announced the winners of the spelling bee | The butler will announce each guest as they arrive at the ball." />
+<sense id="3" wordnet="4" gloss="foretell" examples="Flocks of migrating Canadian geese announce the coming of fall. | For some, the sinking of the Titanic announced the end of the Edwardian era." />
+</lexelt>
+
+<lexelt item="care.v" num="3">
+<sense id="1" wordnet="1,5" gloss="consider as important enough for attention, concern or liking" examples="I really care about my work. | She's never cared very much about her appearance. | I really don't care whether we go out or not. | I don't care how much it costs, just buy it. | Your parents are only doing this because they care about you. | People who care enough, should do something about it. | I have the impression that my wife no longer cares for me. | Go ahead. I couldn't care less. | I don't care a hang what happens to me." />
+<sense id="2" wordnet="2,4" gloss="tend or supervise somebody, provide protection and assistance" examples="She cared for her grandmother for nine years and currently cares for her husband. | The article tells you how to care for various type of pets. | The nurse was caring for the wounded. | They cared for the estate for a time but sold it when it became too much for them to handle." />
+<sense id="3" wordnet="3" gloss="want, desire or perfer to do something" examples="Do you care for a drink? | Would you care to join us for dinner? | Care to hand over the salt?" />
+</lexelt>
+
+<lexelt item="ask.v" num="6">
+<sense id="1" wordnet="1,3,6" gloss="inquire, seek an answer" examples="You asked that question before. | They were asking about John's mother's health. | I asked directions to the art museum. | Let's ask Professor Smith for an explanation of Calabi-Yau space. | Let's ask the Tarot cards about our future." />
+<sense id="2" wordnet="2,4" gloss="request or demand something from someone" examples="I think he'll ask her for a divorce. | She asked her boss for a new computer. | He asked only to be left in peace. | This is asking a lot of such young children. | They ask that their employees only smoke in designated areas." />
+<sense id="3" wordnet="5" gloss="specify a price or value for something" examples="John thought the gallery asked too much for that painting. | The kidnappers were asking a million dollars for their hostage. | They usually ask a higher price than what they really expect to get." />
+<sense id="4" wordnet="7" gloss="need, call for" examples="This dish asks for a little pepper to spice it up. | This run-down old house is just asking for some renovation. | His job asks for a lot of patience and focus." />
+<sense id="5" wordnet="1" gloss="acting in a manner that results in specific consequences" examples="He's asking for trouble. | Explaining why he hit his little brother, he said, "He was asking for it." | He's asking for a beating. | More than two pieces of luggage and you're asking for a world of stress." />
+<sense id="6" wordnet="1" gloss="invite" examples="Should a woman ask a man out for a date? | I asked her in for a drink, but she politely refused. | Why don't we ask the neighbors over for a barbeque? | I'm trying to pluck up the courage to ask him round for a drink." />
+</lexelt>
+
+<lexelt item="defense.n" num="8">
+<sense id="1" wordnet="6,7,8" gloss="an argument that gives grounds or justification for a position" examples="He gave an unconvincing defense of the current energy policy. | She gave a brilliant speech in defense of evolutionary theory. | John's defense will rest largely on the new evidence uncovered yesterday." />
+<sense id="2" wordnet="4,2" gloss="action serving a protective function, often military" examples="Regular brushing is a good defense against tooth decay. | The defense of Stalingrad cost many Russian lives. | The current defense policy costs billions of dollars to maintain. | She claimed to have killed him in self defense." />
+<sense id="3" wordnet="1" gloss="a sports team in the role of preventing scoring by the opponent" examples="The defense for New England did not give up many yards this season. | John played for the defense in college football. | The defense recovered the ball during the last play." />
+<sense id="4" wordnet="3" gloss="a legal team serving the client against the prosecution" examples="The defense accused the prosecutor of leading the witness. | The defense team for the oil corporation includes a stellar legal mind from Harvard." />
+<sense id="5" wordnet="5,11" gloss="a structure to withstand attack" examples="The bombing missions were targeting the enemy's defense equipment installed around the city. | Rest and a good diet helped her body's natural defenses fight the disease. | Abused children build psychological defenses for their survival. | The enemy army was destroying the city's defenses with heavy artillery. | Black broke through white's defense with a daring queen sacrifice.  (chess)" />
+<sense id="6" wordnet="9" gloss="organization of defenders, as military units" examples="Pete has joined the local air defense of his town. | The defense forces were amassed on the eastern bank of the river. | The Strategic Air Command was the first line of defense during the Cold War. | Police forces are the major line of defense against crime." />
+<sense id="7" wordnet="9" gloss="business enterprises that build, develop military weaponry" examples="He is a major spokesman for the defense industry. | John was a defense contractor at a major aerospace firm. | Reduced contracts led to a slump in the defense industry during that decade." />
+<sense id="8" wordnet="10" gloss="a federal department responsible for safeguarding national security" examples="They applied for a grant through the Department of Defense. | There have been some recent reorganizations within the Defense Department." />
+</lexelt>
+
+<lexelt item="capital.n" num="5">
+<sense id="1" wordnet="1,2" gloss="available wealth or assets" examples="It will take a lot of capital to turn this idea into a product. | The accumulation of capital led to the rise of wealthy nations." />
+<sense id="2" wordnet="3" gloss="a seat of government or influence" examples="What is the capital of Denmark? | Mary named 40 out of 50 state capitals correctly. | The fashion capitals of the world include Paris, New York and Milan." />
+<sense id="3" wordnet="4" gloss="a letter represented in uppercase" examples="The first word in each of your bullets should begin with a capital. | He sent me an email message that was typed all in capitals." />
+<sense id="4" wordnet="5" gloss="a book by Karl Marx" examples="'Capital' is the English translation of 'Das Kapital'. | We read excerpts from Capital in class last semester." />
+<sense id="5" wordnet="6" gloss="uppermost part of a column" examples="The capitals on those columns are made of a rare black marble." />
+</lexelt>
+
+<lexelt item="move.n" num="4">
+<sense id="1" wordnet="2" gloss="residence change" examples="The move is on April 7th. | Our move took only three hours because we were so organized. | They say that three moves equal one fire." />
+<sense id="2" wordnet="1" gloss="action" examples="He didn't make a move to help. | His first move was to hire a lawyer." />
+<sense id="3" wordnet="5" gloss="Game:a turn" examples="It's your move, pay attention. | Sally, Would you get me a drink after your move?" />
+<sense id="4" wordnet="3,4" gloss="other moves" examples="The reflex moves of his eyebrows revealed his surprise. | An impatient move of his hand gave him away. | Gastrointestinal motility... | Police controlled the move of the crowd. | The move of people from the farms to the cities... | His move put him directly in my path." />
+</lexelt>
+
+<lexelt item="base.n" num="12">
+<sense id="1" wordnet="8" gloss="limit" examples="The government established a wage base." />
+<sense id="2" wordnet="6,7,11,18" gloss="bottom" examples="The base of the mountain was only 1 mile ahead. | The base of the skull was fractured in the car accident. | The base of the triangle is measured to calculate the area. | A tub should sit on it's own base." />
+<sense id="3" wordnet="3,9,10" gloss="foundation" examples="It was build on a base of solid rock. | The whole argument rested of a base of conjecture." />
+<sense id="4" wordnet="12,17" gloss="principle ingredient" examples="Glycerineated gelatin is used as a base for many ointments. | He told the painter that he wanted a yellow base with just a hint of green. | Everything she cooked seemed to have rice as a base. | The base of this drink is orange juice." />
+<sense id="5" wordnet="1" gloss="alkali" examples="Bases include oxides and hydroxides of metals and ammonia." />
+<sense id="6" wordnet="4" gloss="bag" examples="He scrambled to get back to base. | George slid into home base." />
+<sense id="7" wordnet="2,13" gloss="station" examples="The attack wiped out our forward bases. | Report back to base immediately." />
+<sense id="8" wordnet="16" gloss="infrastructure" examples="That area's industrial base is broadly diversified, they produce everything from paper to dog food to train engines. | The industrial base of the U.S. is said to rely heavily on tobacco." />
+<sense id="9" wordnet="15" gloss="stem" examples="Thematic vowels are part of the root. | The root of the word "linguistics" is "ling"." />
+<sense id="10" wordnet="5" gloss="radix" examples="10 is the base of the decimal system." />
+<sense id="11" wordnet="19" gloss="transistor piece" examples="The current through the transistor base should be zero, now. | The base of the transistor is found between the emitter and the collector." />
+<sense id="12" wordnet="14" gloss="al-Qaeda" examples="Base is allegedly responsible for the attack." />
+</lexelt>
+
+<lexelt item="share.n" num="3">
+<sense id="1" wordnet="2,3,4" gloss="a portion or percentage of a whole" examples="John wants his fair share of the poker winnings. | I've had my share of travel hassles this month! | Our foreman doesn't think everyone has been doing his or her share of the work." />
+<sense id="2" wordnet="1" gloss="capital stock in a corporation" examples="I bought 2000 shares of Microsoft. | How much is a share of Google worth these days?" />
+<sense id="3" wordnet="5" gloss="a tool for tilling soil" examples="The steel share had trouble breaking a furrow in the heavy red clay. | They turned swords into shares." />
+</lexelt>
+
+<lexelt item="contribute.v" num="2">
+<sense id="1" wordnet="1,2,4" gloss="give, provide, donate something" examples="Corporations are contributing more to charities this year. | We contributed $100 to the wildlife fund. | Marsha has contributed two articles to the New Yorker. | They have contributed their weekends to building homes for the poor. | The town must contribute half the funding for the new senior center. | She contributes wit and perspective to our meetings. | There are caps on how much groups can contribute to campaign funds. | He contributed nothing to this project." />
+<sense id="2" wordnet="3" gloss="be a factor, play a role in" examples="The Internet has contributed to the rise of telecommuting. | What were the forces that contributed to the decline of the Roman Empire? | John doesn't want to contribute to the delinquency of minors. | Weather may have contributed to the man's death. | Several factors contributed to votes being lost." />
+</lexelt>
+
+<lexelt item="cause.v" num="1">
+<sense id="1" wordnet="1,2" gloss="induce, make happen" examples="The black ice has caused several accidents tonight. | Seeing how fit John was caused me to join his health club. | The new movie is causing an uproar." />
+</lexelt>
+
+<lexelt item="system.n" num="7">
+<sense id="1" wordnet="" gloss="process or set of rules that provides order and structure" examples="The democratic political system works | He tried to understand their system of classification | We can't do it unless we establish some system around here. | That language has a complex system for indicating gender. | the metric system" />
+<sense id="2" wordnet="" gloss="man-made system of (electrical/mechanical) closely interacting parts" examples="" />
+<sense id="3" wordnet="" gloss="biological system of closely interacting parts" examples="The body has a system of organs for digestion | respiratory system | Exercise helped him get the alcohol out of his system" />
+<sense id="4" wordnet="" gloss="loose collection of concrete objects which are linked through regularized interactions" examples="Our healthcare/rail/transportation/political/social/mail system is in decline due to liberal politicians and the erosion of family values." />
+<sense id="5" wordnet="" gloss="the powers that be" examples="they want to overthrow the system. | You can't beat the system" />
+<sense id="6" wordnet="" gloss="strong desires and feelings" examples=""John got drinking out of his system" (cf. the similar example in sense 3) | I can't seem to get you out of my system..." />
+<sense id="7" wordnet="" gloss="a sample of matter in which substances in different phases are in equilibrium." examples="in a static system, oil cannot be replaced by water on a surface" />
+</lexelt>
+
+<lexelt item="fix.v" num="6">
+<sense id="1" wordnet="1" gloss="repair,mend" examples="They charged a lot to fix my car. | I'm fixing that tear in your jacket." />
+<sense id="2" wordnet="2,8,10" gloss="fasten,secure" examples="The cat got out when the latch to the back door wasn't fixed. | Let's fix the picture to the frame | As he was fixing his hand on her shoulder, she turned at him with an icy glare." />
+<sense id="3" wordnet="3,6" gloss="specify" examples="See what you get when this variable is fixed to a higher value. | We haven't fixed the date for our wedding yet." />
+<sense id="4" wordnet="4,7,11" gloss="prepare, make, get ready" examples="She was fixing dinner when the phone rang. | Can you fix these samples and send them over to pathology? | I was fixing to leave town after I paid the hotel bill." />
+<sense id="5" wordnet="5" gloss="take revenge on" examples="Just wait, I'll fix you!" />
+<sense id="6" wordnet="9" gloss="sterilize" examples="She's going to get her two cats fixed next week." />
+</lexelt>
+
+<lexelt item="avoid.v" num="2">
+<sense id="1" wordnet="1,2,3,4" gloss="keep away, prevent from happening, or not do something" examples="Do you think he's avoiding me? I haven't seen him all day. | I try to avoid supermarkets on Saturdays - they're always so busy. | I tried to avoid chocolate, but it didn't go so well. | The plane narrowly avoided disaster when one of the engines cut out. | I left the pub to avoid a fight. | Unnecessary paperwork should be avoided. | I narrowly avoided colliding with it." />
+<sense id="2" wordnet="5" gloss="LAW- annul, make void, make invalid" examples="How can these grants of the king be avoided? | The terms of the written contract could be avoided and nullified. | If the "VOID" box is marked that shall avoid the National Lotto Game Selection. | Zimmer also filed a bankruptcy lawsuit to avoid the lien and deed." />
+</lexelt>
+
+<lexelt item="enjoy.v" num="2">
+<sense id="1" wordnet="1,3,5" gloss="relish, savor, delight in" examples="The dogs enjoyed running along the beach. | Who enjoys hanging around airports? | John enjoys a glass of wine with dinner. | The country enjoyed watching its athletes win medals. (collective sentience) | We didn't enjoy the movie last night. | Those engineers enjoy a good challenge." />
+<sense id="2" wordnet="2,4" gloss="derive benefit from" examples="The nation has enjoyed low inflation for many years. | These industries may no longer enjoy such high profit margins as before. | Mary will no longer enjoy special privileges at the science museum. | My manual gear shift did not enjoy my teenaged son's rough handling." />
+</lexelt>
+
+<lexelt item="disclose.v" num="2">
+<sense id="1" wordnet="1" gloss="reveal something previously secret" examples="The auction house would not disclose the price at which the van Gogh had sold. | The actress would not disclose her age. | Detainees' names must be disclosed under federal FOI Act. | Claims that arise during or after the bankruptcy petition is filed do not have to be disclosed." />
+<sense id="2" wordnet="2" gloss="expose by removing a cover" examples="The curtain rose to disclose a stunning set. | The outer coffin was lifted to disclose an inner coffin made of gold. | The vapors lifted and disclosed the mountains from which they had taken their first departure." />
+</lexelt>
+
+<lexelt item="turn.v" num="15">
+<sense id="1" wordnet="1,4,7,8,9,11,14,18,20,22,23,24,25" gloss="(cause to) change orientation or direction" examples="He turned toward me with a surprised look. | She slowly turned the key in the lock. | Turn the page. | Turn in after you see the gate. | Turn off at the next exit. | The wheels are turning. | She turned the cake onto the plate. | My daughter loves to turn cartwheels. | February is too early to turn the soil for planting. | He turned his warm smile on me. | Turn the dial to AM850 and then turn down the volume. | When I need help, I always turn to my sister. | The issue turns on how the evidence is to be interpreted. | I need some time to turn it over in my mind." />
+<sense id="2" wordnet="2,5,12,13,17,26" gloss="(cause to) undergo a transformation of substance, shape, or feature" examples="The water turned into ice. | We have turned this garden into a paradise! | Their house was turned into a battle ground. | The weather turned nasty. | The light gradually turned from green to blue. | She turned the frog into a prince with her kiss. | In Vermont, the leaves turn early. | I can tell the milk has turned by the smell. | When do you turn 40?" />
+<sense id="3" wordnet="3,10,21" gloss="(cause to) undergo a change in attitude, emotion, belief, or custom" examples="Public opinion turned after the scandal came out. | The elders want us to turn back to our old ways. | The crowd quickly turned against the speaker. | He turned back their anger with a word. | He turned Mary from a reactionary to an activist. | People turn to mysticism at the turn of the millenium. | After the cold war, many nations turned from communism to capitalism. | He turned traitor. | There was one night when even his fans turned on him." />
+<sense id="4" wordnet="6" gloss="send away or reject" examples="The supermarket had to turn away many disappointed customers. | He turned back the demons with a spell. | She turned down the offer of work. | It's a rare man who can turn down her advances. | Marcie was turned out of her home at the age of 16." />
+<sense id="5" wordnet="" gloss="change the activation or arousal of" examples="She turned on the air conditioner. | He turned off the radio. | Would you turn out the lights? | He really knows how to turn on the charm. | I love her, but she no longer turns me on. | Her psychobabble turns him off. | Turn on, tune in, and drop out. --Timothy Leary" />
+<sense id="6" wordnet="" gloss="prove, show to be, end up" examples="Richard turned out to be the wrong man for the job. | The medicine turned out to save her life. | Turns out she was right. | How do you think the game will turn out?" />
+<sense id="7" wordnet="" gloss="appear, discover, find" examples="She turned up looking stunning. | My search turned up nothing. | I turned up an old box in the garden." />
+<sense id="8" wordnet="19" gloss="produce, especially through commerce or business" examples="The factory can turn out five cars a minute. | Celent turned a profit for the first time this year. | Should we close up shop if the company turns a loss again? | For the first half of the 20th century, the corporation turned a nice dollar. | I think we can turn over $2 million a year." />
+<sense id="9" wordnet="16" gloss="shape by rotating" examples="After purchasing the wood, I ripped all the pieces to length, then turned the legs on a motorized lathe. | After 1980, Wilson turned the pots while his sister and brother glazed, loaded and fired the kilns." />
+<sense id="10" wordnet="15" gloss="sprain, hurt by twisting" examples="The claimant testified that she turned her ankle on a wet floor at work. | He got his skate caught in a rut or something and turned his knee." />
+<sense id="11" wordnet="15" gloss="deliver, hand over" examples="Everyone turn in your papers by the end of the day. | The shop owner turned him in to the police. | He had been turned over to the Gestapo for "special treatment." | She turned in the performance of a lifetime!" />
+<sense id="12" wordnet="" gloss="go to or get up from sleep" examples="It's been a long day. I think I'll turn in. | She turns out every morning at the crack of dawn." />
+<sense id="13" wordnet="" gloss="(cause to) improve" examples="That tutor really turned around my son's performance in math! | We're taking on the tough issues and we're going to get the company turned around. | Sales turned around in the second quarter." />
+<sense id="14" wordnet="" gloss="come or gather" examples="How many people turned out for the party? | Thousands of Democrats turned out for the rally." />
+<sense id="15" wordnet="" gloss="idioms" examples="How can you turn a blind eye to his misbehavior? | Much as she hated having sex with strangers, she turned tricks to make a living. | That car can turn on a dime! | His hypocracy turn's my stomach. | When actually confronted by the bully, he turned tail and ran. | She turned the tables on her rival with allegations of corruption. | The council turned thumb's down at the proposal. | A private passenger bus turned turtle, injuring 15. | Your performance had better improve, or I'll really turn up the heat. | Key European governments turned up the pressure on Iran over its nuclear plans." />
+</lexelt>
+
+<lexelt item="see.v" num="10">
+<sense id="1" wordnet="1,7,19,20" gloss="perceive by sight" examples="Can you see the bird in that tree? | His fumbling the ball was seen on TV by millions of viewers. | The camera saw the burglary and recorded it. | I must see your passport before you can enter the country. | Don't drive after taking the medication. It will make you see double." />
+<sense id="2" wordnet="2,4,5,24" gloss="realize, visualize or understand mentally (or through imagination)" examples="I just can't see your point. | They saw a risk in his strategy. | I am not seeing this situation as hopeless. | I see what you mean." />
+<sense id="3" wordnet="3,6,13,17,21" gloss="witness, observe, or experience" examples="Did you see any encouragement from him? | You'll see a lot of cheating in this school. | He saw action in Viet Nam. | I see that you have been promoted. | I saw Berlin before the Wall came down. | They are planning to see two museums tomorrow. | 1960 saw the rebellion of the younger generation against established traditions. | As an artist, you must learn to see." />
+<sense id="4" wordnet="8,10,14" gloss="verify, prove, check or insure by actively examining (evidence)" examples="He's going to see whether the train will leave on time. | See whether you can come tomorrow. | He went to see if the valves were indeed closed." />
+<sense id="5" wordnet="14,22" gloss="take care of, take responsilibity over, keep up with" examples="Can you see about this matter at once? | Jeff's job is to see to it that the visitors get the proper reception. | Jeeves will see you to the door. | The sponsor has promised us to see the project to completion. | See to it!" />
+<sense id="6" wordnet="9,11,12,15,16" gloss="meet or encounter on social or professional capacity" examples="How nice to see you again! | He's been seeing a therapist for two years. | She hasn't seen her mother in six months. | The doctor will see you now. | His wife thinks he's seeing another woman." />
+<sense id="7" wordnet="23" gloss="match as in poker game" examples="I'll see you and raise you ten." />
+<sense id="8" wordnet="1" gloss="SEE RED-become angry or upset" examples="When I saw that man hit my mother, I saw red." />
+<sense id="9" wordnet="1" gloss="SEE THE LIGHT-change or reform for the bettter" examples="The lazy student finally saw the light." />
+<sense id="10" wordnet="1" gloss="SEE EYE TO EYE-be in agreement" examples="We never saw eye to eye on this question." />
+</lexelt>
+
+<lexelt item="lead.v" num="7">
+<sense id="1" wordnet="2,3,5,9" gloss="result in, tend to, cause, conduce" examples="Washing clothes without bleach will lead to duller colors eventually. | This remark led to further arguments among the guests | Her greed led her to forge the checks | This path is leading him to disaster. | More exercise will lead to better cardiovascular health." />
+<sense id="2" wordnet="4,8,13" gloss="travel in front of, be first, precede" examples="The majorettes led the parade on Main Street. | That country leads the world in annual silk production. | John is now leading in the tennis tournament." />
+<sense id="3" wordnet="6,12" gloss="extend, connect, afford access to" examples="Train service no longer leads all the way out to those villages. | I wonder where this twisty passage will lead. | The French doors in the living room lead onto a wide terrace." />
+<sense id="4" wordnet="7,10,15" gloss="head, preside, direct" examples="Who will be leading this project? | The conductor led the audience in a medley of patriotic tunes. | I've been asked to lead the service this evening." />
+<sense id="5" wordnet="1" gloss="guide" examples="You can lead a horse to water, but you can't make him drink. | This problem has been leading me in circles. | He led her upstairs to see his etchings." />
+<sense id="6" wordnet="11" gloss="pass, spend" examples="They are leading a splendid life on the Amalfi coast. | He led a life of quiet virtue." />
+<sense id="7" wordnet="14" gloss="run, place" examples="Be sure to lead the wire behind the furniture, so we won't trip on it." />
+</lexelt>
+
+<lexelt item="source.n" num="6">
+<sense id="1" wordnet="1" gloss="origin or beginning" examples="Italy is credited with being the source of the Renaissance. | No one seems to know the source of this custom. | Mary went straight to the source to address that management issue. (metaphoric use) | Who found the source of the Nile?" />
+<sense id="2" wordnet="3,4" gloss="an information reference, e.g. publication or an organization" examples="What is the source for these statistics? | This account has been corroborated by many independent sources. | I found three different spellings of that word in three different sources. | The reporter checked his sources before running the story. | Their government-run press is not a reliable source. | Five cities with the highest median price of houses. Source: Realtors Association" />
+<sense id="3" wordnet="2" gloss="an informant" examples="The reporter would not disclose the name or gender of his source. | The mobster has his sources set up all over this city. | He was apparently a source for both the CIA and the KGB." />
+<sense id="4" wordnet="7" gloss="the cause or instigation of something" examples="Scientists are trying to understand the possible sources of recent global warming. | The source of the shuttle disaster was a faulty O-ring. | Those two are always a source of trouble! | The source of their mistrust lay in decades of failed social institutions. | Legal critics say that litigation is a major source of rising transaction costs." />
+<sense id="5" wordnet="6" gloss="inspiration or muse" examples="Claudia is the source of all of my great writing. | That film got its source from vignettes of the director's childhood. | The composer claims that his compositions have a divine source." />
+<sense id="6" wordnet="5,8,9" gloss="repository or reservoir of something" examples="Spinach is a good source of iron. | Her grandmother is a great source of stories and gossip. | The local flea market is a great source for finding cheap furniture and housewares. | The sun is a major source of energy for our planet. | That unclean drinking water is a sure source of bacterial infection. | His friendship was always a source of comfort through the years. | An electrode that provides the electrons for current through a transistor is called the source." />
+</lexelt>
+
+<lexelt item="exchange.n" num="6">
+<sense id="1" wordnet="1,3,4,9,10,11" gloss="changing one thing for another" examples="There was an exchange of prisoners. | Adam was promised immortality in exchange for his disobedience. | Deductible losses on sales or exchanges of property are allowable. | After a furious exchange of blows, both fighters collapsed to the mat. | I exchanged all my Canadian dollars for Hong Kong dollars. | There's an ion exchange in this reaction that produces hydrogen gas. | The endgame began after an exchange of queens." />
+<sense id="2" wordnet="2" gloss="a mutual expression of views" examples="They had a bitter exchange. | Our rare exchanges usually led to more arguments." />
+<sense id="3" wordnet="6" gloss="marketplace" examples="The New York Stock Exchange has been buzzing with activity. | The floor of the exchange was a madhouse today." />
+<sense id="4" wordnet="5" gloss="telecommunications facility" examples="Do you think the operators at the exchange are listening to your phone calls?" />
+<sense id="5" wordnet="8" gloss="changing money, collectively" examples="The rate of exchange is quite favorable right now. | He earns his living from the exchange of currency." />
+<sense id="6" wordnet="7" gloss="a rally" examples="After a short exchange, Connors won the point." />
+</lexelt>
+
+<lexelt item="space.n" num="8">
+<sense id="1" wordnet="1" gloss="the physical expanse of the universe" examples="The astronaut performed a space walk in order to fix the orbiting telescope. | The space of our universe may include more than the three dimensions we perceive. | The space age is less than a hundred years old. | Einstein proved that matter curves space and space dictates how matter moves. | Space travel to distant galaxies is still a thing of science fiction. | Bob thinks Tina is a space cadet. (figurative, from outer space, distant) | In visual space, parallel lines converge at the horizon. (extension of core meaning) | The colors in this room create a cold emotional space. (extension of core meaning)" />
+<sense id="2" wordnet="2,3" gloss="size or extent of an area or location, bounded or demarcated" examples="The car won't fit into such a tight parking space. | We found a wide open space to fly the kites. | The town has designated these conservation areas as open spaces for perpetuity. | She is wearing braces to close the space between her front teeth. | This home has two thousand square feet of living space. | The mouse made a nest in a small space between the walls. | The stores are not allotting much shelf space to these new products. | There's no more space on this bus, we'll have to take the next one. | How much swap space does this computer program use? | Do you have enough disk space for this download? | There is still available space for rent in the new office complex. | Their firm pays for 4 inches of space each week in three national newspapers. | They warmed their rooms in the winter with a space heater. (heater for a sized area) | John cut out two sentences because he was over the space limit for the abstract." />
+<sense id="3" wordnet="" gloss="mathematical dimensionality, geometry" examples="A sphere would appear as a circle in two-dimensional space. | A cube defines a 3-D space, and a hyper-cube defines a 4-D space. | Calabi-Yau spaces are mathematical constructs applied to string theory." />
+<sense id="4" wordnet="6,7" gloss="small purposefully blank regions in documents" examples="John signed the agreement in the space provided at the bottom of the page. | Each staff of music is composed of lines and spaces. | Fill out your name, address and occupation in the spaces provided." />
+<sense id="5" wordnet="" gloss="unrestricted assertion of personal identity" examples="John broke up with his girlfriend because she wouldn't give him enough space. | Sally is a loner because she says she needs her space. | Mary advised her friend to give her teen-aged son more space." />
+<sense id="6" wordnet="5" gloss="an amount or interval of time" examples="Both their cars were stolen in the space of three days. | The entire novel takes place in the space of one day. | In the space of a second the cat had caught the bug between its paws. | Several companies have reserved 30-second spaces for advertising during the broadcast." />
+<sense id="7" wordnet="4" gloss="a notation, a single blank between letters" examples="The space bar on a computer introduces a space into the line of typing. | I think you need a space between these two words." />
+<sense id="8" wordnet="8" gloss="block of typeset with no raised letters" examples="The typesetter used spaces to separate the blocks of type." />
+</lexelt>
+
+<lexelt item="order.n" num="9">
+<sense id="1" wordnet="1,6,9" gloss="command" examples="The British ships dropped anchor and waited for orders form London. | A friend in New Mexico said that the order caused no trouble out there. | Allowing cats into George and Fido's new club is a violation of club orders." />
+<sense id="2" wordnet="2" gloss="order of magnitude" examples="It was on the order of a mile. | An explosion of low order of magnitude" />
+<sense id="3" wordnet="3" gloss="lawfulness" examples="Order ruled in the streets after the new mayor got to work. | Law and order... | The judge shouted "order in the court"." />
+<sense id="4" wordnet="4,15" gloss="arrangement" examples="We shall consider these questions in the inverse order of their presentation. | There were mistakes in the ordering of items on the list." />
+<sense id="5" wordnet="5" gloss="neatness" examples="He put his desk in order. | The machine is now in working order." />
+<sense id="6" wordnet="7,13" gloss="purchase" examples="IBM received an order for a hundred computers. | The food arrived quickly once we gave the waiter our order." />
+<sense id="7" wordnet="8,10,11" gloss="club" examples="Men from the fraternal order will staff the soup kitchen today. | The order of Saint Benedict... | Theologians still disagree over whether 'bishop' should or should not be a separate order." />
+<sense id="8" wordnet="12" gloss="taxonomic group" examples="Cetacea is a scientific order which includes whales. | All dolphins, porpoises, and whales are grouped together in the same scientific order." />
+<sense id="9" wordnet="14" gloss="greek style" examples="The Ionic order of architecture is very similar to the Doric order." />
+</lexelt>
+
+<lexelt item="remove.v" num="2">
+<sense id="1" wordnet="1,2,3,4,5,6,8" gloss="take something or someone away from somewhere" examples="The actress removed her stage makeup after the performance | John removed the candy wrapper and popped the chocolate into his mouth. | I've tried removing these rust spots with several different cleaners. | The men removed their hats when entering the church. | Remove that grin from your face at once! | They removed the children from harm's way. | They decided to remove their son from the school. | Hearing your opinion has removed my doubts. | The bombings have removed any hope for a quick peace settlement. | The troops were removed from the Pacific theater and sent to the European one. | We removed ourselves to the library for brandy and cigars. | The position is vacant since the lieutenant governor was removed from office. | The company's shareholders have voted to remove the executive board. | Several opposition groups are fighting to remove the president from power." />
+<sense id="2" wordnet="7" gloss="murder" examples="The mob wants to remove that informant. | We had him removed for talking. | The hit man will remove someone for a price." />
+</lexelt>
+
+<lexelt item="keep.v" num="8">
+<sense id="1" wordnet="1,2,8,12,14,22" gloss="maintain or preserve a particular condition, state, or activity" examples="The negotiators managed to keep their cool through the crisis. | They kept radio silence for two hours. | Sally couldn't seem to keep her wits about her yesterday. | The delegate kept his temper in check during the speech. | The ship's log needs to be kept up-to-date. | The work in that class will keep you on your toes. | He kept his family alive that winter by hunting deer and rabbit. | The operating room needs to be kept sterile. | I always keep my apartment clean. | The software giant complained that the EU kept changing the rules for compliance. | The rescue workers kept digging through the rubble all night. | Refrigerator kept buzzing all night. | His cryptic remark kept her guessing all day. | This matter will keep until the morning. | That chocolate cake will not keep long! | Potatoes and onions keep longer in a dark, dry environment. | Those photos will not keep well in the sun." />
+<sense id="2" wordnet="3,10,17" gloss="retain ownership, access or title to something" examples="Keep the change. | We need to keep some cash for rainy day. | Can I keep my email address after I graduate? | She kept her maiden name when she got married. | The deposed monarch was allowed to keep his personal servants and cook. | He's keeping an adjunct position at the university while working for a start-up. | After the stock market bust, they couldn't keep both their weekend cottage and their sail boat." />
+<sense id="3" wordnet="9,16,18,19,20,21" gloss="cause to stay in place; retain something in a particular place" examples="Where do you keep your coffee grinder? | They never kept guns in their house. | John can't keep this much food in his small refrigerator. | Keep these knives out of harms way in a drawer. | Her company keeps old email on backup DVDs. | Keep your hands in your pocket for warmth. | Doctor adviced me to keep my foot on ice for a few minutes. | He kept goats in his back yard, despite the zoning laws. | You must build structures if you are going to keep bees properly. | The deputy minister kept a mistress in his New York penthouse. | She keeps an apartment in Paris for her shopping trips. | Polly was kept after school twice this week for disrupting class." />
+<sense id="4" wordnet="4" gloss="restrain, hold back, or prevent from doing something" examples="What has been keeping them (from coming) for so long? | Nothing could keep me from falling asleep last night. | The senator couldn't keep from reminding everyone that he had first proposed that bill two years earlier. | They bought back enough stock to keep their competitor from buying them out. | Another round of funding will keep the wolves from the door for at least six months. (metaphoric)" />
+<sense id="5" wordnet="5,13" gloss="conform to, honor" examples="He always keeps his promises. | The firm has kept to the original conditions of the contract. | Can you keep a secret? | She taught her children to keep the sabbath. | Sally isn't keeping her vow to stop smoking. | Their commune decided to start keeping Druid holidays." />
+<sense id="6" wordnet="7,11,15" gloss="care for, sustain, look after" examples="I keep the shop for Mary while she picks up her children from daycare. | Good luck and may God keep you! | There's little to earn and many to keep." />
+<sense id="7" wordnet="6" gloss="observe, follow along, synchronize, track" examples="How do you keep time around the world? | We don't keep track of the news anymore. | Who is keeping score? | During the audit they discovered that the accountant had kept sloppy records." />
+<sense id="8" wordnet="1" gloss="multi-word and verb particle constructions" examples="keep_abreast | He reads three newspapers to keep abreast of current affairs. | keep_an_eye_on | Could you please keep an eye on the soup so it doesn't boil over? | keep_apart | The two dogs had to be kept apart because otherwise they would fight. | keep_away | They couldn't keep away the reporters. | keep_back | She couldn't keep back the tears. | They kept back the security deposit until they were able to inspect the apartment | The teacher recommended keeping Johnny back a grade next year. | keep_company | Why don't you keep me company while I run this errand? | keep_down | This filter keeps down the amount of junk email I need to process. | They can't keep a people down forever. | Mary couldn't keep food down at all yesterday. | keep_going | The party kept going until 4 am. | This money should keep you going for a couple of months. | He kept the project going as long as possible. | Sally keeps going to the same hairdresser even though she complains about him. | keep_guard | The jewels over which they kept guard were stolen. | keep_in | The cats need to be kept in tonight. | keep_in_hand | These goldsmiths and bankers always keep in hand part of the money they have received. | keep_in_line | That teacher cannot seem to keep her children in line. | keep_mum | Please keep mum about David's surprise party tomorrow night. | keep_note | She kept note of how often Sally took a coffee break. | keep_off | He's managed to keep himself off drugs for a year now. | The sign says to keep off the grass. | keep_on | As we lost our fortune, we cannot afford to keep the servants on any longer. | keep_one's_distance | Mary keeps her distance from everyone at work. | keep_one's_eyes_off | Hey, keep your eyes off my younger sister! | keep_one's_eyes_open | Keep your eyes open for a gas station. | keep_one's_eyes_peeled | John kept his eyes peeled for speed traps along I-93. | keep_one's_eyes_skinned | The secret service man kept his eyes skinned for snipers up on the buildings. | keep_one's_hands_off | Bob just couldn't keep his hands off the box of dark chocolates. | keep_one's_mouth_shut | Bill decided to keep his mouth shut about his wife's new hair color. | keep_one's_nose_to_the_grindstone | Tom kept his nose to the grindstone for eight months and finished his dissertation. | keep_one's_shoulder_to_the_wheel | We must keep our shoulder to the wheel until this project is finished. | keep_open | Sally wants to keep her options open. | keep_out | The elevated train keeps out the light from the street below. | keep_pace | We could not keep pace with the lead runner after the first two miles. | keep_quiet | Let's keep quiet about our idea until we can file a patent on it. | keep_step | The little boy tried hard to keep step with his father. | keep_tabs_on | The government keeps tabs on the dissidents. | keep_to_oneself | The old man keeps to himself most of the time. | keep_track | You can use last visit cookie to keep track of new messages. | keep_up | Bob could not keep up with the class assignments. | Keep up your excellent work. | The gardner kept up the grounds of the old estate. | She keeps up on all the current fashion trends. | A cup of espresso kept me up until three in the morning." />
+</lexelt>
+
+<lexelt item="network.n" num="4">
+<sense id="1" wordnet="1" gloss="a system of interconnected social entities,e.g., people, organizations" examples="His family  has built up a network of inexpensive motor inns throughout the Midwest. | John studied social network theory in college. | She has an extensive network of friends both here and in Europe. | The spy network they uncovered had been working inside the Beltway for a decade." />
+<sense id="2" wordnet="2" gloss="a broadcasting business, an enterprise that disseminates content via telecommunications equipment" examples="A French network was the first to run the story. | Sally never watches network television. | The networks are losing market share every year to the cable companies. | Network executives were outraged at the performance during the Super Bowl half time show." />
+<sense id="3" wordnet="4,5" gloss="a physical system of interconnected components" examples="The network of wires and cables in a modern aircraft is large and complex. | We travelled through France on the network of old canals still in existence. | That country's network of roads is in a state of serious decay. | Neural networks in the brain are still not well understood. | The topology of this network is a token ring. | ABC Network said their network went down in Boston because of the ice storm. (second instance is this sense) | Solar flares sometimes cause problems for satellite communication networks. | John set up a a local area network for his family. | Skeptics believe the story is just a network of lies concocted by political cronies. (metaphoric use)" />
+<sense id="4" wordnet="3" gloss="a mesh-like fabric or substance" examples="The hammock consisted of a course network of rope, slung up between two trees. | The fine mesh bag was a network of nylon threads, loosely woven together. | A network of spidery small veins were apparent in his cheeks." />
+</lexelt>
+
+<lexelt item="purchase.v" num="1">
+<sense id="1" wordnet="1" gloss="buy, obtain via finacncial transaction" examples="He is purchasing that lot for ten thousand dollars. | He couldn't purchase her loyalty for any price. | Can a stairway to heaven be purchased?" />
+</lexelt>
+
+<lexelt item="do.v" num="6">
+<sense id="1" wordnet="1,2,3,5,6,8,9,12" gloss="act, engage in, undertake, execute, cause, make" examples="She does research in early child development. | I did the washing and my sister did the cooking. | Just do your job. | Who did the damage to your car? | Her husband does law. | He did drugs in college. | I'd like to do the dining room in apricot. | Don't do me like that! | She hates the way he did her hair." />
+<sense id="2" wordnet="4" gloss="fare, get along" examples="How are you doing these days? | He's doing great as our new CTO." />
+<sense id="3" wordnet="7" gloss="suffice or satisfy" examples="A simple 'thank you' will do. | This arrangement of the furniture just won't do." />
+<sense id="4" wordnet="10" gloss="serve time (usually in prison)" examples="He did ten years in San Quentin. | She did two years in the Peace Corps before college." />
+<sense id="5" wordnet="11" gloss="manage, carry on" examples="We may do without running water next week. | This class could have done with a bit more studying and less talking." />
+<sense id="6" wordnet="13" gloss="travel or go" examples="The soldiers did 20 miles a day over the rough terrain. | This old car will probably not do over 60 miles per hour." />
+</lexelt>
+
+<lexelt item="go.v" num="14">
+<sense id="1" wordnet="1,2,14,16,20,21,25" gloss="move, travel, proceed" examples="I went to Oslo via Frankfurt. | Go to their website to register for that conference. | The train was going over seventy mph when it jumped the track. | I couldn't go any farther with that concept. | His speech went through five drafts before he gave it. | Don't go against our customs. | Are we going to war? | Is it my turn to go? | This road goes to Mitford Lake. | A terrible thought went through his mind. | You have to go after your dreams. | You have to go for your dreams. | Go ahead with your plans. | He went along with the burglars for the moment. | That rumor has been going around the office for days. | Could you go back to that last example? | The temperature is going down. | She went under a couple of times before the lifeguard pulled her out of the water." />
+<sense id="2" wordnet="3,5,9,13,28" gloss="depart" examples="Tomorrow I have to go at 7 a.m. or I'll miss my train. | These ugly billboards have to go! | My respect for you went long ago. | Her free time went to fixing up the house. | All my money went for food and rent. | Go away before I start to cry. | The regiment went forth at dawn. | He went off with his best friend's wife. | She went out of the room. | Go-go boots went out of style in the 1960s. | All his plans just went up in smoke." />
+<sense id="3" wordnet="17,30" gloss="die, cease to function" examples="He went peacefully in his sleep. | My old Volvo is going. | The system goes down at least once a week. | The power went off around midnight, and all the lights went out." />
+<sense id="4" wordnet="4,10,15,19" gloss="change to or continue in a certain state" examples="His face went red at the remark. | What went wrong? | That meat has gone bad. | Their children are going hungry. | He always went barefoot in the summer. | How long can a person go without water? | This violinist is as good as Juillard-trained violinists go. | She goes by her maiden name since she got divorced. | She goes under the alias 'Elizabeth Windisch'. | Everything started out so well, but then it all went wrong!" />
+<sense id="5" wordnet="8,16" gloss="happen" examples="The interview went well. | How is it going? | What is going on? | How did your speech go off?" />
+<sense id="6" wordnet="11,23" gloss="say or have the (sound) sequence of" examples="The train goes 'toot toot' and the car goes 'beep beep' | Then he goes "oh yeah?" and I go "yeah". | How does that saying go? | So my plan goes like this: First, you run around back. . . . | Sorry I interupted; please go on." />
+<sense id="7" wordnet="" gloss="be on the point of; be intending to" examples="It's going to rain. | I'm going to read that book on vacation. | Your invention is going to change the way we heat our homes." />
+<sense id="8" wordnet="18,22,24,26" gloss="belong, fit, harmonize" examples="These dishes go in the butler's pantry. | That film should go in the top ten films of all time. | Those colors don't go well in the dining room. | A strong red wine can go with spicy food. | My feet won't go in these boots. | How many times does 18 go into 54?" />
+<sense id="9" wordnet="" gloss="attend" examples="She went to the University of Michigan back in fifties. | He goes to the Baptist church." />
+<sense id="10" wordnet="7" gloss="extend or stretch" examples="The outskirts of town now go well beyond the main highway. | The records went back to 1922. | This belt doesn't go around my waist. | Do we have enough pie to go around?" />
+<sense id="11" wordnet="12" gloss="function, operate" examples="My old Volvo is still going. | I can't get the dishwasher to go. | For some reason the radio went on all by itself." />
+<sense id="12" wordnet="27" gloss="rifle, search through" examples="When he was thirty years old his mother still went through his drawers. | Someone has been going through the papers on my desk. | The police are going through their list of suspects." />
+<sense id="13" wordnet="29" gloss="give support to" examples="He's going for the underdog in this fight. | I'm going with the candidate who's most likely to win." />
+<sense id="14" wordnet="" gloss="miscellaneous idioms" examples="That goes a long way to explaining his strange behavior this week. | Did he go through with the treatment? | How do I go about changing his mind? | She won the race because she went all out. | They went back on their promise. | When I told her I crashed her car, she went ballistic. | That quarterback likes to go deep with every throw. | He will go down as the best chief justice this country has ever had. | This wine sure goes down well. | If America goes down, the rest of the free world will, too. | She went down on him in the back of the car. | I don't want you paying for the whole evening--let's go dutch. | No jumping on the bed--and that goes for your friend too. | Who cares about the risk?  Roll the dice and go for broke! | The bomb is about to go off! | Calm down. Don't go off at half cock. | We almost never go out since we had children. | They've been going out for years. | After Jim and I went steady for a year, we got engaged. | He can go through an entire gallon of ice cream in one sitting. | He's just going through the motions until its time to retire. | When her husband died, she just went to pieces. | He's really gone to pot: gotten fat, doesn't shave, and his clothes are a mess. | At the end of some days, I can't wait to go to sleep. | This restaurant used to be so good, but now it's really gone to the dogs. | That new building went up in only 2 months.  How could they build it so fast?" />
+</lexelt>
+
+<lexelt item="receive.v" num="2">
+<sense id="1" wordnet="1,2,3,4,8,9,11,12" gloss="obtain, incur, get, encounter" examples="She receives a check every month from the government. | That author has not received the attention he deserves. | We received shocking news about John. | He received only disappointment at the track meet. | I'm not receiving a clear image on this TV. | Her proposal received a lot of opposition at the town meeting. | He received ten years for armed robbery. | He received an extra week of vacation as his bonus that year. | They will receive Communion this Sunday." />
+<sense id="2" wordnet="5,6,7,10,13" gloss="welcome, invite, accept" examples="They received the orphan as part of their family. | The preacher told them to receive Christ into their hearts. | The delegates were received warmly at the state dinner. | The Queen will not receive further visitors today. | Her new collection of poems was well received by the critics." />
+</lexelt>
+
+<lexelt item="end.v" num="4">
+<sense id="1" wordnet="1" gloss="stop, finish, terminate (A ends)" examples=""The bronchioles end in a capillary bed." | "My property ends by the bushes." | "The symphony ends in a pianissimo."" />
+<sense id="2" wordnet="2,4" gloss="bring to a halt, terminate (A causes B to end)" examples="Why haven't 1.4 million new jobs ended the jobless recovery. | "Devastated, she ended their relationship." | "The peace treaty ended the war." | "The terrible news ended our hopes that he had survived."" />
+<sense id="3" wordnet="3" gloss="be the end of, conclude (A is the event at the end of B)" examples="Colorful closing ceremonies ended the XX Winter Olympic Games. | "This sad scene ended the movie." | "Everyone's laughter at our boss' joke ended the weekly meeting."" />
+<sense id="4" wordnet="1" gloss="end up, wind up, finally be or do something" examples=""He ended up marrying his highschool sweetheart." | "She ended up in some rather bizzare situation."" />
+</lexelt>
+
+<lexelt item="start.v" num="7">
+<sense id="1" wordnet="4,6,12" gloss="have an initial point with some characteristic" examples="Prices for these homes start at $250,000. | The novel starts with a murder. | The forest starts just outside of town. | Classes this fall start a week later than last year. | When does the meeting start? | The competition started with only three participants." />
+<sense id="2" wordnet="1,9,10,13" gloss="begin an event, action, or effect" examples="I started to laugh. | Once he starts smoking, he can't stop. | Taiwan plans to start making Tamiflu. | The ball started to roll toward the street. | The music is starting to upset me. | The labor pains started coming with increased intensity. | The child started violin lessons at age four. | She starts her new job on Monday. | He started the gathering with a prayer. | Mary started the soup while John made the salad." />
+<sense id="3" wordnet="2,5,6" gloss="to cause to come into being" examples="He started a new company last year. | The refinery started up a new facility last week. | Iraq started a war when they invaded Kuwait. | Why did you start that nasty rumor? | The Girl Scouts learned how to start a fire at their first campout." />
+<sense id="4" wordnet="8" gloss="(cause a machine to) begin to function or operate" examples="My car wouldn't start this morning. | I could not start the car. | She started up the computer. | The turbines started up." />
+<sense id="5" wordnet="3" gloss="begin a journey, depart" examples="They started for California yesterday. | We threw in an extra day of food and started out for our high camp. | The soldiers will start for the front at daybreak. | She is starting down the road to recovery (figurative) | Critics believe their opponents will start the country down the wrong path again. (figurative)" />
+<sense id="6" wordnet="11" gloss="play in the starting lineup" examples="The coach had trouble deciding which players to start. | Jones started in only two games last season." />
+<sense id="7" wordnet="7,14" gloss="startle, jump" examples="She started when I snuck up behind her. | She started in surprise at my jesting tone. | He started in surprise, eyes wide, "You're firing me?"" />
+</lexelt>
+
+<lexelt item="part.n" num="7">
+<sense id="1" wordnet="1,2,4,5,7" gloss="portion" examples="He wanted to feel a part of something bigger than himself. | I read a part of the manuscript. | The smaller part is hard to reach. | They analyzed the river into three parts. | The rear part of the house. | Glue the two parts together. | Religions is in all parts of the world. | The written part of the exam. | The finance section of the company." />
+<sense id="2" wordnet="3" gloss="our/his/my part" examples="It requires vigilance on our part. | They resisted every effort on his part." />
+<sense id="3" wordnet="6" gloss="function" examples="The part of a teacher is not to act as a babysitter. | The government must do its part." />
+<sense id="4" wordnet="8" gloss="theatrical role" examples="She played the part of Desdemona." />
+<sense id="5" wordnet="9,10" gloss="share" examples="He wanted his part in cash. | They all did their part of the work." />
+<sense id="6" wordnet="11" gloss="voice" examples="He tried to sing the tenor part." />
+<sense id="7" wordnet="12" gloss="divide in hair" examples="His part was right in the middle. | She moved her part to the side when she went out at night." />
+</lexelt>
+
+<lexelt item="attempt.v" num="2">
+<sense id="1" wordnet="1" gloss="try to do something" examples="The police attempted to stop the thief before he got away. | The man has attempted suicide three times. | The Fed is attempting to stimulate the economy by lowering interest rates. | They are attempting to increase their market share overseas." />
+<sense id="2" wordnet="2" gloss="the act of surmounting, climbing, descending" examples="They attempted Everest last year after the storms. | We'll attempt the mountain from the north face. | Don't attempt a depth below 130 feet on a non-decompression dive." />
+</lexelt>
+
+<lexelt item="feel.v" num="3">
+<sense id="1" wordnet="1,3,4,5,6,7,12" gloss="experience, sense" examples="She felt resentful | He felt the wind in his face. | Are you feeling better today? | She felt small and insignificant | They never seemed to feel the effects of inflation. | The sheets feel soft. | He wasn't feeling comfortable in his new job. | It feels wonderful to be on vacation!" />
+<sense id="2" wordnet="8,9,10,11,13" gloss="touch,grope" examples="She felt under her chair for the earring. | I like the way this cashmere feels to the touch. | The runner felt her pulse | He couldn't feel his way very well through the dark unfamiliar room. | He got arrested for feeling girls in the theater." />
+<sense id="3" wordnet="2" gloss="find, conclude" examples="I felt the movie did a bad job of developing the storyline. | She is feeling that her son is too young to play football." />
+</lexelt>
+
+<lexelt item="estimate.v" num="1">
+<sense id="1" wordnet="1,2" gloss="approximate, guess, reckon" examples="I would estimate his net worth to be about 4 million. | He estimated the journey would take three days, based on past experience." />
+</lexelt>
+
+<lexelt item="set.v" num="12">
+<sense id="1" wordnet="1,6,9,11,12,15" gloss="put, place, position" examples="Set your purse on the table. | The jeweler set rubies around the central diamond. | I'm going to set a couple of rose bushes along the back of the house. | The novel is set 50 years in the future. | When Franklin was a printer's apprentice, he had to set type by hand. | Einstein's genius set him apart from the others. | As soon as the ship docked, they were set ashore. | Please set aside 3 cartons for me. I'll pick them up this afternoon. | He tried to set down his thoughts on paper. | Let's set back the meeting an hour to give him time to prepare. | She set forth her reasons, one by one. | Shall I set out your clothes?" />
+<sense id="2" wordnet="10" gloss="go down, sink" examples="At one time the sun never set on the British Empire. | The helicopter set down right in the field next to my house." />
+<sense id="3" wordnet="2,3,4,8,20,23" gloss="determine, fix at certain value" examples="We don't have to always let her set the rules. | Try your equations with X set to a negative number. | The bank set interest rates on their long-term CDs at 5 percent. | With that time, the runner has just set a new world record. | The coroner set the time of death at about 6pm. | You didn't set the trip odometer back to zero. | I'm setting the clock for 5 a.m. | When daylight savings time begins, set your clocks ahead one hour." />
+<sense id="4" wordnet="7,21,22" gloss="prepare, arrange; create or organize for a particular purpose" examples="These packages were set to go yesterday. | Your printer is all set. | Will you set the table, please? | How do you set up this tent? | We're not set up to receive messages from offshore. | I set up my schedule so that I'm home by 4:00 every day. | We should set up a committee to look into that. | The American Red Cross was set up in 1881 to aid victims of war and natural disasters." />
+<sense id="5" wordnet="5,13" gloss="cause to assume a condition" examples="The truth will set you free. | They believe vandals set fire to the school. | I set him to work on the windows. | My daughter's wedding set me back $20,000. | That white coat really sets off your dark hair." />
+<sense id="6" wordnet="" gloss="begin an activity, or cause one to begin" examples="She set about contacting all the parents. | They set off on their morning walk. | I hope the verdict doesn't set off a riot. | The ships set out at dawn. | His rash words set in motion a chain of events he would intensely regret. | The terrorists set off another bomb this morning. | The scientists set up a shock wave." />
+<sense id="7" wordnet="14,16,17,25" gloss="fix firmly, solidify" examples="That bone never set properly. | He set his jaw and refused to comply. | The carpenter set the nail firmly. | You won't have time to set your hair. | Don't add the pineapple until the gelatin has set at least partially. | Winter has set in." />
+<sense id="8" wordnet="" gloss="ensnare, frame, arrange through deceit" examples="I swear I didnt do it--I was set up! | That election was set up so she would win." />
+<sense id="9" wordnet="" gloss="dialect for SIT" examples="I was jus' settin' there, when up walked the new pastor." />
+<sense id="10" wordnet="19" gloss="(cause to) attack" examples="He swore he'd set the dogs on them. | He set into his food with gusto. | She was set upon by wolves." />
+<sense id="11" wordnet="18" gloss="hone" examples="He set all the kitchen knifes beautifully." />
+<sense id="12" wordnet="24" gloss="reproduce,fructify" examples="These old trees in the orchard may not set." />
+</lexelt>
+
+<lexelt item="come.v" num="11">
+<sense id="1" wordnet="1,2,12,17" gloss="move, travel, arrive" examples="The train never came last night. | No news has yet come of the disaster at sea. | That's an idea whose time has come! | Come to Mexico with us next winter. | Dawn comes early in the summertime. | The financial crisis has come to New York as well. | Our company just came through a couple of tough quarters. | The wallpaper is starting to come away from the wall. | She came away angry. | Can we come back to that point? | The rain came down in buckets. | If you know what happened, please come forward. | She came in with several witty remarks. | Winter is coming near. | It was coming on dawn when when her fever finally broke. | Has the new Woody Allen movie come out yet? | She came through the surgery quite well. | The sun came through the clouds." />
+<sense id="2" wordnet="3,14,16,18,19" gloss="occur, happen" examples="The rainbow colors just came about as my way of expressing myself. | Did something ever come of John's plan to start a winery? | How is the remodelling of your bathroom coming? | The computer came along and changed the way we do business. | How did your talk come off? | The poster came out really great. | Several important points came up in the meeting. | I'm sorry. Something has come up." />
+<sense id="3" wordnet="4" gloss="progress to a state" examples="Let the water come to a boil. | Your shoe is coming untied. | The trade agreement may come undone due to this scandal. | We came to agree with the new policies. | She came close to quitting her job. | My plants are coming along. | The clasp came off and the bracelet just came apart. | His hair came out in tufts. | He came around to our point of view. | It really came home to me that she was never coming back. | She came near to fainting. | Let me tell you how this newspaper came into being. | The power came on the next day. | The computer finally came up after Will worked on it." />
+<sense id="4" wordnet="6" gloss="be available, exist in a state" examples="Do these shoes come in a smaller size? | The furniture comes unassembled. | Prejudice comes in many forms. | The agreement came with a clause allowing both parties to back out within 30 days. | That riddle originally came in the form of a poem. | Russian caviar comes dear." />
+<sense id="5" wordnet="5,7,8,11" gloss="originate from, issue from" examples="Melons come from a vine. | Prejudice may come from fear. | He comes from a small fishing village in Brazil. | Many modern English words come from either Latin or French. | We hear screams coming from next door. | He came forth from behind the throne. | Part of the enjoyment comes from seeing your work as others do." />
+<sense id="6" wordnet="10,13,21" gloss="occur in a sequence, prioritized" examples="What's the next prime number to come after seven? | Those topics need to come under a new heading. | First comes higher interest rates, then inflation. | Her family always came first, even when she was running the company. | Christmas came around again, as it always does. | No, no, Nixon came before Ford. | John came in third in the state for backstroke. | She came out last in the race." />
+<sense id="7" wordnet="9,15" gloss="reach, extend to, total" examples="Her hair came to her waist. | The flood waters came up the roof! | The tab came to over sixty dollars. | Her results came close to the estimate. | They came short of a first down." />
+<sense id="8" wordnet="" gloss="discover or think up" examples="I came across John in the garden. | She came on the papers by accident. | Ralph came upon your name in the newspaper. | It just came to me that I forgot to deposit these checks. | Just say the first thing that comes to mind. | I came up with a new name for our band." />
+<sense id="9" wordnet="" gloss="be revealed" examples="The truth will come out in the end. | His treachery came to light in the end." />
+<sense id="10" wordnet="20" gloss="experience orgasm" examples="He came several times." />
+<sense id="11" wordnet="" gloss="idioms" examples="His message came across very clearly. | They came back to win the game. | I wish I could come back with a witty remark. | How did you come by this rare vase? | It comes down to this: I just don't like him. | You look like you're coming down with a cold. | The critics came down hard on the leading man. | The governor came in for a lot of criticism. | That tape sure came in handy. | He came into a lot of money when his uncle died. | He will have access to his trust fund when he comes of age. | His parents were very supportive when he came out. | Why doesn't he come out of the closet and admit he's gay? | The patient came to quickly after fainting. | You need to come to grips with your alcoholism. | Just use the first thing that comes to hand. | The need for evidence-led practice has come to the fore in work with the young. | How will you come up with the cash?" />
+</lexelt>
+
+<lexelt item="produce.v" num="3">
+<sense id="1" wordnet="1,2,3,6" gloss="yield, create, make" examples="This tree has stopped producing oranges. | We produced more cars last year than we sold. | The physicists succeeded in producing a chain reaction. | The body produces extra white cells in response to infection. | It requires a lot of skill to produce a great wine." />
+<sense id="2" wordnet="4,5" gloss="exhibit, release" examples="She suddenly produced the report we had been looking for. | They want to produce a film based on his book." />
+<sense id="3" wordnet="7" gloss="develop, acquire" examples="Using that lotion produced funny spots on my hands. | Constant scratching produced hot spots on the dog's legs." />
+</lexelt>
+
+<lexelt item="improve.v" num="1">
+<sense id="1" wordnet="1,2" gloss="change for the better" examples="John has improved his grades this semester | The weather improved enough for us to go sailing. | This chocolate cake recipe cannot be improved in any way." />
+</lexelt>
+
+<lexelt item="chance.n" num="4">
+<sense id="1" wordnet="1" gloss="an opportunity" examples="They never gave him a chance to explain what happened. | This turn of events presents a chance for peace negotiations to go forward. | She had many chances to apologize but never did. | This program aims to give poor children a fair chance of getting an education." />
+<sense id="2" wordnet="2" gloss="events without apparent cause, random occurrence, luck" examples="By chance I found Jane's watch under the car seat. | The staff left nothing to chance when preparing the president's trip abroad. | Black jack is supposed to be a game of chance." />
+<sense id="3" wordnet="" gloss="risk, potential bad outcome" examples="John is taking too many chances on the stock market with his portfolio. | This is a chance we'll have to take. (implies we'd prefer -not- to take it) | They fenced their yard to avoid the chance of having the children run into the street." />
+<sense id="4" wordnet="4,5" gloss="a measure of the likelihood or probability of an event" examples="Is there any chance of him taking that job in London? | What are the chances of rolling ten sixes in a row? | Our team doesn't stand a chance to win the championship. (the odds are against us) | Fat chance!  (slang meaning almost no likelihood) | There's a slim chance it will rain tonight. | Chances are they are sitting on a beach somewhere with a cold drink in hand." />
+</lexelt>
+
+<lexelt item="claim.v" num="4">
+<sense id="1" wordnet="1" gloss="maintain or affirm that something is true" examples="He claims that he cleaned his room. | The Holy Cities claimed to have been built on seven hills. | This candiate claims many supporters. | Blanche constantly claims she is going to go off and see Shep." />
+<sense id="2" wordnet="2,3,4" gloss="demand, ask for, or take as one's due" examples="Cortez claimed the territory for the Queen. | He claimed his suitcases at the airline counter. | When my bike was stolen, I claimed on the insurance. | He claimed on the maxium allowable tax credit." />
+<sense id="3" wordnet="" gloss="deserve, call for, or require" examples="In some parts of the state, agriculture claims much attention. | This issue claims no special rights." />
+<sense id="4" wordnet="5" gloss="cause death, as if by right" examples="The riots claimed thousands of lives. | The bird flu claims more victims. | It was a hurricane that claimed her life." />
+</lexelt>
+
+<lexelt item="raise.v" num="9">
+<sense id="1" wordnet="1,13,15,16,17,23,25" gloss="increase" examples="The cartel raised the price of oil last week. | Medidation may raise your awareness of being alive. | The dough raised to twice its original size in three hours. | He's raising hearts. | I'll see you and raise you twenty. | Ten raised to the 100th power is a large number. | The sunshine and singing birds raised his spirit." />
+<sense id="2" wordnet="2,8,20,24" gloss="lift, elevate, orient upwards" examples="I raised my skirts to step over the mud puddle. | Raise the flag high! | Slowly, she raised her eyes up towards the tiny window near the ceiling. | You need to raise your e's more. | See how the artist has raised the edges of figures here?" />
+<sense id="3" wordnet="3,11,21" gloss="express, activate" examples="They raised their voices to the heavens. | The hooligans raised hell at the last soccer match. | Those old time fiddlers really raised the roof last night! | He is raising a ruckus over that parking ticket. | He raised the roof when he heard about the tuition increase." />
+<sense id="4" wordnet="4,18" gloss="collect, levy" examples="They need to raise taxes to finance the war. | The king raised an army of ten thousand." />
+<sense id="5" wordnet="5,6" gloss="cultivate, nurture" examples="They raised corn and hogs where I grew up. | She is basically raising her sister's kids. | The crops you could raise on this land wouldn't pay enough to raise a family of four." />
+<sense id="6" wordnet="7,10,19,22,27" gloss="invoke, elicit, set off" examples="The specter of famine has again been raised. | I couldn't so much as raise a smile out of him. | I wish she'd stop raising the issue of her rotten marriage. | They managed to raise Hanoi last night on the shortwave radio. | You might as well try to raise the dead as get him to change his views." />
+<sense id="7" wordnet="12,14" gloss="advance, better, promote" examples="She has worked hard to raise the teaching standards at her school. | They have raised him to the rank of Colonel." />
+<sense id="8" wordnet="9" gloss="construct, build" examples="Will you help us raise the new barn this weekend?" />
+<sense id="9" wordnet="26" gloss="end" examples="They decided to raise the sanctions against that country." />
+</lexelt>
+
+<lexelt item="value.n" num="5">
+<sense id="1" wordnet="2" gloss="quality" examples="The Shakespearean Shylock is of dubious value in the modern world. | George makes rude comments for shock value." />
+<sense id="2" wordnet="1,3" gloss="quantity" examples="The value assigned was 16 milliseconds. | He tried to estimate the value of the produce at normal prices." />
+<sense id="3" wordnet="6" gloss="moral principal" examples="He has old fashioned values." />
+<sense id="4" wordnet="5" gloss="duration of a musical note" examples="The music notes with the flag have a shorter time-value. | Triplets take up the same space as two notes of that value." />
+<sense id="5" wordnet="4" gloss="relative darkness" examples="I establish the colors and principal values by organizing the painting | into three values - dark, medium... and light"- Joe Hing Lowe" />
+</lexelt>
+
+<lexelt item="regard.v" num="3">
+<sense id="1" wordnet="1" gloss="consider, believe" examples="The pilot didn't regard the situation as one requiring an emergency landing. | I would regard her response as an affirmative." />
+<sense id="2" wordnet="2" gloss="look" examples="The puppy regarded her with big brown eyes. | They regarded him with solemn faces as he reported the bad news." />
+<sense id="3" wordnet="3" gloss="concern, pertain" examples="This is a letter regarding your alleged payment last month. | There is no further news yet that regards to the fate of the fishing boat." />
+</lexelt>
+
+<lexelt item="complete.v" num="3">
+<sense id="1" wordnet="1,5" gloss="finish an activity or process, either physical or abstract" examples="I finally completed stripping the wood in the living room. | John completed the 100 meter race in his fastest time ever. | I haven't finished completing my application for college. | Would you complete this questionaire for me?" />
+<sense id="2" wordnet="3,4" gloss="carry out an assigned task or duty" examples="The soldiers must complete their current tour of duty. | That team has completed the most passes this season." />
+<sense id="3" wordnet="2" gloss="make whole, add a missing part to a given whole" examples="Matching shoes and handbag completed the ensemble. | A gold medal at the Olympics would complete his achievements in gymnastics." />
+</lexelt>
+
+<lexelt item="prove.v" num="6">
+<sense id="1" wordnet="2,3,4,5" gloss="establish the truth, validity, or authenticity of something" examples="Prove it. | The theory was proved by the scientists. | That theory was proved false. | He's so aggressive - it's as if he's always trying to prove something. | I have no idea how to prove this mathematically. | I haven't been proven guilty yet! | They proved him innocent. | That just goes to prove what an idiot I am. | We proved them wrong! | He proved himself a fighter, and we are very proud of him. | He really proved himself an idiot during his first term. | I will prove to myself that I'm still alive." />
+<sense id="2" wordnet="1" gloss="turn out to be, show a particular result after a period of time" examples="My predictions proved. | The operation proved a complete success. | The dispute over the song rights proved impossible to resolve. | The new treatment has proved to be a disaster. | He proved to be the worst singer in the world." />
+<sense id="3" wordnet="1" gloss="show oneself to be competent or worthy" examples="He had a chance to prove himself. But now it's too late. | You do have to prove yourself to get ahead. | Prove yourself to me." />
+<sense id="4" wordnet="9" gloss="LAW- establish as authentic or genuine" examples="The will was proved on 29th January. | They might have the will proved. | The will proved." />
+<sense id="5" wordnet="6,7" gloss="COOKING- rise or gain volume in a warm place" examples="Cover again with a cloth and prove the dough for another hour or so. | This pizza dough proved rather quickly." />
+<sense id="6" wordnet="8" gloss="PRINTING ARTS- make a test impression" examples="Sorry, could not find examples." />
+</lexelt>
+
+<lexelt item="rate.n" num="2">
+<sense id="1" wordnet="1" gloss="cost" examples="A ten-minute phone call at that rate would cost five dollars. | This airline offers reduced rates for seniors." />
+<sense id="2" wordnet="2,3" gloss="pace, speed" examples="The unemployment rate doubled last year. | They traveled at a rate of 55 miles per hour. | The rate of change was faster than expected. | He works at a great rate. | Her heart rate was racing after she finished the mile run." />
+</lexelt>
+
+<lexelt item="future.n" num="4">
+<sense id="1" wordnet="1" gloss="time to come" examples="In the future we will drive flying cars. | What will you do in the future." />
+<sense id="2" wordnet="2" gloss="verb tense" examples="The paper was written in future tense." />
+<sense id="3" wordnet="3" gloss="commodities" examples="He made his living trading in futures." />
+<sense id="4" wordnet="" gloss="personal time to come" examples="My future is bright. | What will you do with your future?" />
+</lexelt>
+
+<lexelt item="buy.v" num="7">
+<sense id="1" wordnet="1,3,5" gloss="use something to acquire goods; obtain through trade or transaction" examples="The family bought a new car. | According to his official biography, he bought his first bison in 1976. | Should I fire him because he bought his degree from the internet instead of attending a regular university? | She wanted to buy his love with her dedication to him and his work. | Money can't buy me love. | My mom's boyfriend would try to buy my trust by taking us out to eat. | Novell, under pressure, will buy back its stock. | I think my used car was bought back once by the manufacturer and the dealer didn't tell me when I bought it. | Businessmen opposed to the Vietnam war tried to buy time for anti-war spots on a radio station. | A New Hampshire Poll and $1.25 Will Buy You a Cup of Coffee. | No amount of money can buy you safety. | The insurance premium you forego will buy you a pretty good road bike." />
+<sense id="2" wordnet="2" gloss="bribe, make payments to in exchange for benefits" examples="He can be bought off, but only on his terms. | So why not buy off the IRA by sacrificing the Royal Ulster Constabulary? | This judge can be bought. | If you don't like the lectures, you can always try to buy off the professor. | Offering money to buy off our enemies would just create an incentive for others to become our enemies. | Shell also reiterated it was not changing its plans to buy out more residents." />
+<sense id="3" wordnet="4" gloss="accept as true" examples="Don't buy into wrong ideas about oil! | And if you buy that, I've got a bridge to sell you. | I can't buy that Marlena is so weak and stupid that she thinks it's not even worth some effort to escape to reunite with her family. | I could not believe he bought my story! | You think he bought the line about the sick roommate?" />
+<sense id="4" wordnet="" gloss="invest" examples="He bought into several companies with the money he had inherited. | More and more foreign firms are buying into China. | For investors who bought into it in September 1991, the stock had suffered a value erosion of 66 per cent in value by September 2001." />
+<sense id="5" wordnet="" gloss="be killed; die" examples="" />
+<sense id="6" wordnet="" gloss="take over ownership of" examples="German car giant Volkswagen plans to buy out its Chinese partners. | It is believed that in a major shift in strategy, HDFC may buy out Tata Sons. | Foreign central banks are buying up ever more of America Reuters. | The developer plans to buy up golf course for homes." />
+<sense id="7" wordnet="" gloss="stall, delay" examples="A provisional patent is primarily viewed as a mechanism to buy time. | Insulin pumps can buy time until transplant therapy arrives. | Time spent on process now will buy you time as the semester unfolds. | During the final weeks of her life we tried to buy time with her by making her get out of bed and walk around the house." />
+</lexelt>
+
+<lexelt item="promise.v" num="2">
+<sense id="1" wordnet="1,2" gloss="pledge or make a commitment" examples="He promised me one of his kittens. | He promised to give me one of his kittens. | Promise me that you won't tell. | Promise to not tell. | The government have promised that they'll reduce taxes. | The government have promised to reduce taxes. | Her parents promised her a new car if she passed her exams. | Her parents promised to buy her a new car if she passed her exams. | You promise? | Hey, you promised! | I'll look, but I can't promise you anything. | You'll like this movie, I promise you." />
+<sense id="2" wordnet="3,4" gloss="give grounds for expectation" examples="It promises to be an exciting match. | Those thunderclouds promise rain. | It is worth trying as an experiment at least because it promises well and costs little. | The results promised fame and glory." />
+</lexelt>
+
+<lexelt item="bill.n" num="9">
+<sense id="1" wordnet="4,5" gloss="a written list of particular things being offered" examples="Nothing appealed to me on the new bistro's bill of fare. | John isn't on the bill of this production of The Tempest." />
+<sense id="2" wordnet="6,8" gloss="a written notice that announces or advertises something" examples="Post no bills on this wall. | Who dropped those advertising bills all over the street?" />
+<sense id="3" wordnet="1" gloss="a statute or draft not yet become law" examples="I don't think this bill will pass in the Senate. | Mary introduced a new highway safety bill last week." />
+<sense id="4" wordnet="2" gloss="an itemized statement of money owed" examples="My heating bill this month seems really high. | I sent my client a bill for two thousand dollars for work I completed since August." />
+<sense id="5" wordnet="3" gloss="a printed note that is legal tender" examples="John flashed a hundred dollar bill at the waiter. | Take these stacks of bills and deposit them in the bank. | Do you think this bill looks counterfeit?" />
+<sense id="6" wordnet="7" gloss="the mouth of a bird" examples="Woodpeckers use their bills to extract insects from inside tree bark. | The rooster pecked my hand with his sharp bill." />
+<sense id="7" wordnet="9" gloss="a long-handled saw" examples="The gardener used a bill to prune branches off the dogwood trees." />
+<sense id="8" wordnet="10" gloss="brim of a hat that projects forward, visor" examples="The teenager wore the bill of his cap backwards. | I like this hat with the long bill because it keeps the sun out of my eyes." />
+<sense id="9" wordnet="" gloss="the point of a ship anchor's fluke" examples="John didn't realize the bill of the anchor fluke had struck hard coral." />
+</lexelt>
+
+<lexelt item="build.v" num="4">
+<sense id="1" wordnet="1,5,7" gloss="physically construct something, either directly or by implication" examples="I built this table myself. | They built houses out of sod on the prairies. | The government had to raise taxes in order to build new bridges and roads. | These architects build in interesting and new styles" />
+<sense id="2" wordnet="2,9,10" gloss="develop, increase" examples="Resentment about her promotion is building in the office. | The clouds over the sea were building into a dark storm front. | Suspense was building right from the beginning of the opera" />
+<sense id="3" wordnet="3,6,8" gloss="establish or create a complex process or abstract entity, according to a plan" examples="Our company's reputation is built on a history of satisfied customers. | He is building a nice medical practice in Raleigh. | They built a modern nation from democratic principles and free trade. | Will the defense build their case around a plea of insanity?" />
+<sense id="4" wordnet="4" gloss="improve cleaning action of" examples="build detergents" />
+</lexelt>
+
+<lexelt item="approve.v" num="2">
+<sense id="1" wordnet="1" gloss="authorize, pass, clear" examples="Who approved these requisitions for new office furniture? | The house approved the bill, but the Senate has not yet done so." />
+<sense id="2" wordnet="2" gloss="judge or regard favorably" examples="He doesn't approve of the death penalty. | Do you approve of banning the use of cell phones while driving?" />
+</lexelt>
+
+<lexelt item="authority.n" num="6">
+<sense id="1" wordnet="1" gloss="power to give orders, official state of power" examples="The governor has the authority to stay an execution. | Deputies are given authority to make arrests. | This currency is backed by the full authority of the U.S. government. | Teachers have much less authority over their students than in previous decades. | Question authority!" />
+<sense id="2" wordnet="4" gloss="assurance, confidence" examples="He spoke with authority on the subject of Renaissance art. | Her conviction in the role of Desdemona lent authority to the performance last night. | Mary conducted the meeting with an air of authority. | Without hearing authority in your voice, the dog will ignore your commands." />
+<sense id="3" wordnet="2" gloss="officials who have specific powers" examples="Mary said the authorities were looking for a tall man wearing a gray beret. | The authorities enforced a curfew during the state of emergency. | They were wanted for questioning by the authorities. | Health authorities have closed down four restaurants since the outbreak of the bacteria." />
+<sense id="4" wordnet="3,7" gloss="most knowledgable source, expert" examples="He is an authority on corporate law. | This book is the final authority on the life of Milton. | She is a world authority on the ice giants of the outer solar system. | I have it on good authority that John loves dark chocolate cake. (expert opinion)" />
+<sense id="5" wordnet="5" gloss="a government agency with specific power" examples="The transportation authorities of cities are in charge of public buses and subways. | Our town is setting up a new authority to manage the parkland and conservation areas. | He worked for the Tennessee Valley Authority during the Depression." />
+<sense id="6" wordnet="6" gloss="official permission to do something" examples="By whose authority are these signs being put up?  (who gave permission) | The money was spent without congressional authority. | We are waiting for authority to go ashore yet by the local customs officers. | She gave her employees the authority to make decisions on their own and try out new ideas." />
+</lexelt>
+
+<lexelt item="recall.v" num="4">
+<sense id="1" wordnet="1,2,3" gloss="remember, cause to remember" examples="John doesn't recall being taken to the hospital last night after his accident. | She is very good at recalling faces that she's only seen once. | She recalled how they used molasses instead of sugar during the food rationing. | His acting recalls the young Jimmy Stewart. | This book recalls the slower-paced life of a small rural town in the 1920s." />
+<sense id="2" wordnet="6,7" gloss="remove from circulation, defective products" examples="Several models of steel belt tires have been recalled. | The company is trying to recall ten lots of canned goods that may be contaminated. | They were forced to recall their brand of unpasteurized fruit juice." />
+<sense id="3" wordnet="4" gloss="summon or order someone back" examples="The Panamanian ambassador was recalled from Peru. | The Fulham defender has been recalled to the Welsh squad for the World Cup." />
+<sense id="4" wordnet="5" gloss="restore or revive" examples="The psychiatrist recalled his patient slowly from deep hypnosis. | The doctors basically recalled him death just in the nick of time. | The loud knock at the door recalled Jane suddenly from her daydreams." />
+</lexelt>
+
+<lexelt item="drug.n" num="3">
+<sense id="1" wordnet="1" gloss="Medicines" examples="Our top doctors are discovering new, life-saving drugs as we speak. | The Food and Drug Administration approved our new chemical. | I go to the pharmacy for all my drugs. | I took my drugs today." />
+<sense id="2" wordnet="" gloss="Narcotics" examples="I'm not addicted to drugs. | Don't do drugs! | Alcohol and caffeine were his drugs of choice. | I think he was on drugs when he mugged me. | The Drug Enforcement Administration busted the smugglers. | I took drugs today." />
+<sense id="1&&2" wordnet="" gloss="Senses 1 and 2" examples="Some drugs, both prescription and non-prescription, are frequently abused. | All my drugs are smuggled in from Canada. | Some drugs can interact with one another." />
+</lexelt>
+
+<lexelt item="work.v" num="9">
+<sense id="1" wordnet="1,2,6,8,10,12" gloss="exert oneself in an activity" examples="He is working hard to bring up his grade. | They worked on a farm growing up. | Those men will work for minimum wage. | They work us hard in that gym class. | The salesman works the Midwest. | Don't work those children so hard. | Her fingers worked with incredible speed. | She worked at the algebra problems until she'd solved them all. | At the end of sentence, he had worked off his debt to society. | Please be quiet while I work on the taxes." />
+<sense id="2" wordnet="3,4,11" gloss="perform, function, behave" examples="How will the parachute actually work when deployed? | This old radio doesn't work anymore. | That drug has worked miracles for those with arthritis." />
+<sense id="3" wordnet="5,13,14,20,22" gloss="shape, form, handle" examples="The artist taught them to work different kinds of clay. | We'll have to work this hard soil a lot before planting lettuce. | The dough should work easily when kneading; if not, add more water. | He gradually worked the metal into a sword. | Work the dough until it is smooth and glossy. | Next, work in the butter. | Try to work some jokes into your speech." />
+<sense id="4" wordnet="7,9,21,27" gloss="proceed, move, position" examples="I worked my way carefully around the broken glass. | Start from the bottom and work towards the top. | Slowly we worked the big rock onto the flatbed of the truck. | The screw worked free. | He knows how to work himself out of a jam." />
+<sense id="5" wordnet="15,18,19,23" gloss="control, exploit, act upon" examples="She worked on her friends to support the political candidate. | The rock musician worked the crowd of young girls into a frenzy. | Politicians know how to work a crowd. | You've got to learn how to work the system." />
+<sense id="6" wordnet="16,17" gloss="operate" examples="We'll work the phones tonight for the fund raiser. | Can you work an electric drill?" />
+<sense id="7" wordnet="25,26" gloss="ferment" examples="The vintner worked the wine in big oak vats. | The wine worked." />
+<sense id="8" wordnet="24" gloss="solve, figure out" examples="He couldn't work the second problem on the test. | They worked out a plan that should succeed. | The fees work out to less than $100. | Let's work through this problem together." />
+<sense id="9" wordnet="" gloss="idioms" examples="Don't worry. Things will all work out in the end. | He works out at the gym every day. | Those thugs worked him over pretty bad and now he's in the hospital. | I've really worked up an appetite. | The team worked up an ad for the client in record time." />
+</lexelt>
+
+<lexelt item="policy.n" num="3">
+<sense id="1" wordnet="1,2" gloss="a plan of action, approach" examples="Foreign policy is a strategy governing international relations. | The schools have adopted a zero-tolerance policy towards drugs. | It was a policy of retribution. | He thought it good policy to take the advice of his superiors." />
+<sense id="2" wordnet="3" gloss="Insurance policy" examples="You should have read the small print on your homeowner's policy. | I've never missed an insurance policy payment. | We put our insurance policies in the safe deposit box." />
+<sense id="3" wordnet="" gloss="an illegal lottery or numbers game" examples="The gangster ran several policies on the south side of Chicago. | The kid lost a lot of money playing a policy in the back of the pool hall." />
+</lexelt>
+
+<lexelt item="power.n" num="4">
+<sense id="1" wordnet="1,3,5,7" gloss="an ability to control or influence" examples="It was beyond my power to avoid the accident. | They suspected an abuse of judicial power. | Has the power of the Presidency increased this century? | Sampson's power was lost through treachery. | This opera has great emotional power." />
+<sense id="2" wordnet="4,6,9" gloss="entity that possesses ability to control or influence" examples="China is a rising power. | His father was a major power in the publishing business. | They sensed an evil power following them through the graveyard. | Their country was no longer a great sea power." />
+<sense id="3" wordnet="2" gloss="exerted physical force" examples="The engineers measured the power produced by the waterfall. | Power is the amount of work exerted per unit of time." />
+<sense id="4" wordnet="8" gloss="a mathematical measurement" examples="Three raised to the third power is twenty-seven. | The power of this telescope's lens is greater than that one. | Greater powers of magnification revealed detailed cellular structure." />
+</lexelt>
+
+<lexelt item="replace.v" num="2">
+<sense id="1" wordnet="1,2,3" gloss="substitute, switch or supplant" examples="He replaced the old razor blade | We need to replace the secretary that left a month ago | Cars replaced the horse and buggy. | You can substitute brown sugar for white sugar in that recipe. | The museum believed the original Van Gogh had been switched with a fake." />
+<sense id="2" wordnet="4" gloss="restore or return" examples="please put the clean dishes back in the cabinet when you have washed them | replace the book on the shelf after you have finished reading it | John replaced the receiver on the phone" />
+</lexelt>
+
+<lexelt item="find.v" num="6">
+<sense id="1" wordnet="1,2,3,6,7,8,9,12,13,14,15,16" gloss="locate, discover, or encounter" examples="I found a great little bookstore on Elm Street. | Did you ever find your glasses? | They have found some investors for their new venture. | Although painfully shy, Sally found her voice to say 'no thank you'. | This literary device is not found until the late eighteenth century. | The bullet found its mark, right between the eyes. | We found that squirrels had been building nests in the attic. | They found evidence of misconduct in the accounting records of that firm. | Crick and Watson found that the structure of DNA is a double helix. | The company found that someone was stealing their patents. | I woke up to find myself in a twisty maze of little passages. (reflexive) | John was shocked when he found out that he was adopted. | We need to find out what time the train leaves tomorrow. | The teenagers were worried that they'd be found out." />
+<sense id="2" wordnet="4" gloss="solve or calculate" examples="Find the product of these two numbers. | We need to find whether the shelf is strong enough to hold this. | They are trying to find out how much to charge for the installation." />
+<sense id="3" wordnet="5" gloss="opine or believe" examples="I found the film to be tiresome and predictable. | She asked Tom how he was finding the new job." />
+<sense id="4" wordnet="10" gloss="accumulate a resource" examples="They couldn't find the money to send their kids to college. | If you find the time, could you take the dog for a walk?  (Idiomatic) | Their nation found the will to endure great hardships. | We are trying to find the resources to fund this project." />
+<sense id="5" wordnet="11" gloss="rule or pronounce, usually legal" examples="He was found innocent on all three charges. | Will the jury find her guilty of insider trading?" />
+<sense id="6" wordnet="" gloss="blame, criticize" examples="We could find no fault with John's repairs to our car. | He was always finding fault with his co-workers." />
+</lexelt>
+
+<lexelt item="people.n" num="6">
+<sense id="1" wordnet="1" gloss="a general reference to any group of humans" examples="Over 600 people gathered at the firehouse on Sunday. | Hardly any people attended the lecture. | Wild animals are generally afraid of people. | Only wealthy people can afford to live in that town anymore. | It's a weekly round table for business people. | Some crazy people are threatening to blow up Brooklyn Bridge. | Those poor people stood in the rain three hours to get tickets to the rock concert. | Savvy people compare prices before buying a big ticket item. | Bobby asked his mother if there were people on Mars. (extension of earth-centric concept)" />
+<sense id="2" wordnet="2,3" gloss="ordinary citizenry without special rank or status" examples="The people are losing confidence in their government. | Power to the people! | He lived like a king while the people starved. | Who said that paying taxes was only for the little people?" />
+<sense id="3" wordnet="4" gloss="family line, relatives" examples="Mary met some of her husband's people at last summer's family reunion. | Are your people still living in Kentucky? | Out west they didn't care who your people were." />
+<sense id="4" wordnet="" gloss="subordinate work associates" examples="Have your people call my people. | Is she one of David's people in marketing? | The President's people are very loyal to him." />
+<sense id="5" wordnet="2" gloss="specific ethnic groups" examples="We are studying the peoples of sub-Saharan Africa in my cultural anthropology class. | There are many peoples and languages coexisting in India. | Many of the former boat people are now homeowners and have good jobs." />
+<sense id="6" wordnet="" gloss="state prosecution in a trial" examples="There is a precedent for this case in the People vs. Jones. | Those were pretrial statements made by the People's witnesses." />
+</lexelt>
+
+<lexelt item="report.v" num="4">
+<sense id="1" wordnet="1,2,5" gloss="describe, account" examples="They reported seeing a man flee the apartment after the shooting. | He reported feeling a sharp pain in his left side. | Their findings will be reported in the next issue of Science. | She is reporting the business news from Hong Kong these days." />
+<sense id="2" wordnet="4,6" gloss="inform on" examples="She reported her neighbor to the authorities. | I'll report him to the principal." />
+<sense id="3" wordnet="3" gloss="be accountable to" examples="The new hire will report directly to the CEO. | He reports for duty at 0700 tomorrow." />
+<sense id="4" wordnet="1" gloss="report out" examples="" />
+</lexelt>
+
+<lexelt item="point.n" num="14">
+<sense id="1" wordnet="1,9,17" gloss="dot" examples="They sailed south around the point." />
+<sense id="2" wordnet="2" gloss="location" examples="She walked to a point where she could survey the whole street." />
+<sense id="3" wordnet="3,7" gloss="meaning" examples="Get to the point. | He missed the point of the joke. | Life has lost its point. | What is the point of discussing it?" />
+<sense id="4" wordnet="5,12,13,14,21" gloss="detail" examples="Several of the points are similar. | The third point of information in Eric's presentation was false. | The amount of money being wasted was the point that got my attention. | He knows my bad points as well as my good points. | He noticed a point in the New York Times. | His acting was one of the high points of the movie." />
+<sense id="5" wordnet="4,6" gloss="degree, level, stage" examples="At that point I had to leave his office. | At some point during the train ride the lights had gone out. | We must've started traveling north at some point." />
+<sense id="6" wordnet="8,15,19,20" gloss="sharp tip" examples="The cannibal's teeth were filed to a sharp points. | He stuck the point of the knife into a tree. | He broke the point of his pencil. | The point of the arrow was due north" />
+<sense id="7" wordnet="10" gloss="game scoring" examples="He scored 20 points in the first half. | A touchdown counts 6 points." />
+<sense id="8" wordnet="11" gloss="cape" examples="They sailed south around the point. | The kids favorite surfing spot is just around the point." />
+<sense id="9" wordnet="18" gloss="punctuation mark" examples="In England they call a point a stop." />
+<sense id="10" wordnet="16" gloss="point" examples="He checked the point on his compass." />
+<sense id="11" wordnet="22" gloss="gunpoint" examples="He held me up at the point of a gun." />
+<sense id="12" wordnet="23" gloss="wall socket" examples="This apartment has four power points in each room. | She uses one of those air fresheners that plug into a power point." />
+<sense id="13" wordnet="24" gloss="breaker point" examples="Adjusting breaker points is the most complex aspect of engine tune-ups." />
+<sense id="14" wordnet="" gloss="fraction" examples="Microsoft went up 3 points today. | The DOW fell 16 points yesterday but recovered nicely today." />
+</lexelt>
+
+<lexelt item="affect.v" num="3">
+<sense id="1" wordnet="1,2,3" gloss="have an effect or impact on" examples="Will the new rules affect me? | This new ruling affects your business. | It affected me to the point where I couldn't concentrate in school a lot. | My family has a history of cancer and it profoundly affected me to do something. | I'm one to think of the little things in life that have affected me to become the person that I am today. | The smell of an old cheese made him feel unwell, and affected him with vomiting." />
+<sense id="2" wordnet="5" gloss="give an impression" examples="Its ticking affected me as being like the pulsing of a faint heartbeat. | The whole Challenger disaster always affected me as being not quite right. | She affected me as being pretty bright. | When I first read that in college, it really affected me as being amazingly insightful to the way the western world is dumbing down." />
+<sense id="3" wordnet="4" gloss="take on an appearance or position" examples="In the courtroom, he affected a likeable, friendly attitude with the jury, reminding them that he was not a lawyer but a defendant. | He affected a ballet pose, with one arm up and one arm trailing. | Giddy with celebrity, he affected a flamboyant lifestyle. | He affected a deliberately unkempt appearance and had a personality that tended to be abrasive. | Her only flaw was that she affected a fake South African/British accent. | She affected a concern that she did not really feel." />
+</lexelt>
+
+<lexelt item="hope.v" num="1">
+<sense id="1" wordnet="1,2,3" gloss="desire, wish, plan, intend" examples="I hope he understands he was invited to both the wedding and the reception. | We can always hope they won't notice. | The children hoped for a chocolate cake for dessert. | I am hoping to finish medical school in two years. | She had hoped to finish the outdoor painting before winter arrived." />
+</lexelt>
+
+<lexelt item="hold.v" num="10">
+<sense id="1" wordnet="3,15,18,35" gloss="physically grasp, position, or support something" examples="Hold this bowl for a moment, please. | The child is holding a cookie in each hand. | Hold on tightly! | I held the tiller while John went forward to untangle the jib. | Hold the fire extinguisher directly on the flames. | Only a single nail is holding that heavy picture to the wall. | You should hold your head straight when you sing. | Can the roof hold all that weight? | Hold your friends close and your enemies closer. | The minister held out his hand, and I grasped it in a firm handshake. | That beam holds up the roof." />
+<sense id="2" wordnet="4,9,14,16,17,26,27,31,33,34" gloss="stop or restrain something; keep something from being used" examples="The terrorists held the journalists for ransom. | Hold your tongue. (idiom) | 'Hold your fire until you see the whites of their eyes!' | He can hold his breath for 3 minutes! | She held him to his promise. | They're holding a table at Maxim's for us. | Please hold all my calls until I return this afternoon. | He held the taxi as she came down the stairs. | That story held my attention for hours. | She held back a snicker. | Hold down the noise or I'm calling the police! | She held in all her anger. | I'll hold open the position as long as I can. | When it comes to raising prices, just hold the line. | Hurry up. Don't hold up the whole group." />
+<sense id="3" wordnet="2,10,32" gloss="maintain one's state, position, or physical integrity" examples="If the weather holds, we'll go sailing tomorrow. | The old bridge has held through two major earthquakes. | Do you think the chain will hold? | The revamped defensive line is holding up. | The ropes held fast through the storm. | He held firm despite the pressure to change his vote. | Hold on. I'll be back in a minute. | We held out for three days without food or water. | Just hold tight; the ambulance will be here in a minute. | Those shoes will never hold up in all this snow." />
+<sense id="4" wordnet="7,11,12,13,24,36" gloss="maintain an attitude, belief, or opinion" examples="We hold these truths to be self evident. | Rousseau's philosophy holds that people are inherently good | I still hold to my theory that right makes might. | She was held in contempt of court. | I hold with John that we should drink the good wine first. | She can really hold a grudge! | Take a stand for the principles we hold dear." />
+<sense id="5" wordnet="5,6,22,23" gloss="possess or control something, e.g., money, position of authority, honor" examples="Most of the stock is held by just the founders of that firm. | The dissatisfied students held the President's office for almost a week. | When the battle ended, the Union troops still held the ridge. | They hold four gold medals from their past competitions. | Will she hold the office of assistant dean? | He held the chairmanship for 10 years. | His father held two advanced degrees from Harvard. | She held down two jobs in order to support her family. | His wife held on to his clothes long after he had died. | They held over the movie for another week." />
+<sense id="6" wordnet="8,19,20,25,29" gloss="contain or accommodate" examples="He held the memory of her in his heart. | The last chapter holds the key to how the murder was done. | That case used to hold my grandfather's violin. | This can holds five gallons. | The opera house holds two thousand people. | My coin purse won't hold any more change. | He just can't hold his liquor." />
+<sense id="7" wordnet="21,30" gloss="be relevant or applicable" examples="This theory still holds. | The same rules will hold for all members of our club." />
+<sense id="8" wordnet="1" gloss="conduct a social event" examples="We held a reception in his honor. | They held a special emergency meeting last week. | They are holding inquiries next week." />
+<sense id="9" wordnet="28" gloss="block or cover protectively (by grasping)" examples="We held our noses when we passed near the dead skunk on the highway. | He held his ears as the F-15s flew by overhead." />
+<sense id="10" wordnet="28" gloss="idioms" examples="He held forth at length on his views of modern life. | No one plays better. She can hold her own against anyone. | He held the threat of expulsion over her. | I won't hold still for that kind of behavior! | The GOP held sway for several years, until the Democrats won the House. | We were held up at gunpoint! | He held up his sister as a shining example of purity. | That theory just doesn't hold water." />
+</lexelt>
+
+<lexelt item="job.n" num="10">
+<sense id="1" wordnet="1" gloss="paid position" examples="John had trouble finding a job after he graduated with a Linguistics major. | My summer job as a lifeguard was a real pain in the butt. | When the economy goes sour, lots of people can lose their jobs." />
+<sense id="2" wordnet="4,2,3" gloss="task" examples="When I worked as a lifeguard, my job was to watch the pool. | He came to work and did his job every day. | It's a tough job, but somebody's got to do it. | You did a good job on that midterm. | This looks like a job for Superman! | Painting the barn is going to be a huge job. | I brought my wife to the job site (the site where the task takes place)." />
+<sense id="3" wordnet="5" gloss="being at work" examples="Intelli-Soft has had a record number of on-the-job accidents this month." />
+<sense id="4" wordnet="6" gloss="object being worked on" examples="I held the job in my left hand and worked on it with my left." />
+<sense id="5" wordnet="7" gloss="a difficulty" examples="It's always a job to contact him when he's eating." />
+<sense id="6" wordnet="8" gloss="destruction" examples="That barber really did a job on your hair, John." />
+<sense id="7" wordnet="9" gloss="robbery" examples="The gang pulled off a bank job in St. Louis." />
+<sense id="8" wordnet="10,11" gloss="Biblical figure" examples="And Job did sacrifice three oxen to the Lord, though the Lord did afflict him with boils. | The prisoner, unjustly convicted of murder, was a patient and Job-like figure." />
+<sense id="9" wordnet="13" gloss="Biblical book" examples=""All the days of my appointed time shall I wait, till my change come," (Job 14:14). | John entertained his little brother by reading aloud from the Book of Job." />
+<sense id="10" wordnet="12" gloss="computer program" examples="I wrote a nifty job for Windows that automatically emails itself to everyone in your address book." />
+</lexelt>
+
+<lexelt item="explain.v" num="2">
+<sense id="1" wordnet="1,2" gloss="clarify, make comprehensible, describe" examples="He explained the laws of physics to his students. | The committee explained their plan for fund-raising to the Dean. | She explained that she was doing a piece on Susan Clancy's new book on UFO abductions. | She explained that Islam was brought to various parts of the world with previously existing cultures. | Both a science and an art book, Colorworm explains the electromagnetic spectrum and visible light. | The surgeon explained how to make the incision to the 1st-year medical students." />
+<sense id="2" wordnet="3" gloss="be a reason, cause, or justification of" examples="Her recent divorce may explain her reluctance to date again. | Oh! Well, that explains it. | This explains why Donald Rumsfeld so strongly opposed the reforms recommended by the 9/11 commission. | The purpose of these analyses was to test the hypothesis that IQ explains socioeconomic differentials in | health. | All his conduct cannot be explained away as an innocent misunderstanding." />
+</lexelt>
+
+<lexelt item="describe.v" num="3">
+<sense id="1" wordnet="1,2,3" gloss="give an account or convey impression of" examples="Could you describe your attacker? | He described the painting in detail. | Let me describe to you how it happened. | She described Gary as shy. | She described her childhood as a time of wonder and discovery." />
+<sense id="2" wordnet="" gloss="depict or represent something pictorially" examples="Goya's etchings describe the horrors of war in grotesque detail. | Curves in two of the graphs describe performance when using these routines." />
+<sense id="3" wordnet="4" gloss="trace the form or outline of" examples="The plane described a perfect figure eight. | He used compasses to describe a circle." />
+</lexelt>
+
+<lexelt item="effect.n" num="5">
+<sense id="1" wordnet="1,4" gloss="consequence" examples="One effect of John's decision was a drop in his grade-point average. | The magnetic effect produced by the electric current is very strong. | The effects of the election were deep and far-reaching. | Her outfit certainly had an effect on me! | John dozed off while under the effect of the anesthetic." />
+<sense id="2" wordnet="2,5" gloss="general impression" examples="He did it just for effect. | She retained that bold effect in her reproduction of the painting." />
+<sense id="3" wordnet="3" gloss="validity" examples="Unfortunately, the law is still in effect." />
+<sense id="4" wordnet="6" gloss="theme" examples="The central effect of Heller's Catch-22 is the absurdity of bureaucratic structures." />
+<sense id="5" wordnet="" gloss="property" examples="John left me all his personal effects. | I gave the mugger my wallet and some other personal effects. | The suspect returned to the apartment to gather his effects." />
+</lexelt>
+
+<lexelt item="development.n" num="3">
+<sense id="1" wordnet="1,2,4,7,8" gloss="the process" examples="The development of the plan took only ten years. | The development of an embryo is a complicated process. | The Research and Development team has the results. | If development of your pictures takes more than one hour - it's free" />
+<sense id="2" wordnet="5" gloss="the end product" examples="That housing development is beautiful." />
+<sense id="3" wordnet="3,6" gloss="the act of developing" examples="In light of recent developments we will reexamine our decision. | We can watch the latest developments unfold on the news tonight." />
+</lexelt>
+
+<lexelt item="position.n" num="7">
+<sense id="1" wordnet="1,2,7,8,10" gloss="spatial location or placement of something/someone" examples="That chair is in a position where I trip on it frequently. | The enemy took up a position on our right flank. | The guns were shelling the Germans' positions. | The race horses took their positions at the start. | I don't like the position of that lamp against the wall. | What is the angular position of Venus to the horizon?" />
+<sense id="2" wordnet="3,13,14,16" gloss="opinion, attitude, stance, point of view, assumption" examples="She has a rather Kantian position on ethics. | Their position on gun control didn't convince the senator. | That position on the structure of the solar system was disproved long ago. (someone believed it once) | Let's take the position that interest rates could be higher next year. | John wrote the company's position paper on open source software." />
+<sense id="3" wordnet="11" gloss="context, situation or circumstance" examples="We found ourselves in a very attractive position | Raising three kids alone, that's a tough position to be in. | He felt he was not in a position to judge the merits of the case. | The company's financial position is grim. | Try to put yourself in their position with a civil war about to break out. | Their firm is in a favorable position to expand operations in China and Thailand." />
+<sense id="4" wordnet="5" gloss="financial holdings of an investor, a financial market commitment" examples="Traders were having to cover their short positions during the sell off. | John holds a long position in energy stocks." />
+<sense id="5" wordnet="6,9,15" gloss="profession, job, function includes position in team sports)" examples="He has a position with the National Security Agency. | John will assume my position in the office while I'm away. | What position did you play in college basketball?" />
+<sense id="6" wordnet="5,12" gloss="rank in a sequence, standing in relation to others" examples="The book moved up two positions on the best-sellers list. | She is currently in first position in the figure skating championship. | He batted in the seventh position in last night's game. | Their family enjoyed a high social position in the town for generations. | Several of his would-be successors are already jockeying for position. (where they go in pecking order) | The evidence is pointing to the highest positions in the government. (top dogs) | He came from a lower socioeconomic position in society than his wife. | They were taught to always know their position in life. (their status, not their employment)" />
+<sense id="7" wordnet="4" gloss="a posture or arrangement, usually intentional" examples="He assumed the Lotus position. | The position of the hands on the clock indicates it is nine thirty. | The teacher showed the student the correct position to hold the violin. | Can you show me the fourth position in ballet? | The position of this major chord is C, E and G." />
+</lexelt>
+
+<lexelt item="allow.v" num="2">
+<sense id="1" wordnet="1,2,3,7,8,10" gloss="let, make possible, give permission" examples="This sealed door won't allow the water to come into the basement | His fumble allowed the other team to score the winning run. | It seems this problem allows for more than one solution. | The dog is allowed on the downstairs couch. | They only allow visitors between 9 and 5. | I can't allow you to ruin your career this way!" />
+<sense id="2" wordnet="4,5,6,9" gloss="provide for, allot" examples="10 million dollars will be allowed for basic medical research. | You should allow an extra twenty minutes for traffic at that time of day. | I dind't allow for shrinkage when I made these cloth napkins. | They are allowing a 20% discount on purchases over 100 dollars." />
+</lexelt>
+
+<lexelt item="prepare.v" num="2">
+<sense id="1" wordnet="1,2,3,4,3" gloss="to put together, assemble, concoct" examples="He is going to prepare breakfast for the whole crowd. | I haven't prepared my speech yet. | It turns out the minister had been preparing the king's overthrow for years. | She prepared the navy beans by first soaking them in water overnight." />
+<sense id="2" wordnet="5,6,7" gloss="to make ready, fit out" examples="I will prepare Mary for the worst. | She prepared the children for school every morning. | They are preparing him for the diplomatic core. | The shop is prepared to sail at dawn. | John hasn't prepared adequately for the bar exam." />
+</lexelt>
+
+<lexelt item="management.n" num="2">
+<sense id="1" wordnet="1" gloss="overseeing or directing" examples="He was given overall management of the program. | I'm a specialist in risk management. | The economy crashed because of poor management." />
+<sense id="2" wordnet="2" gloss="the people in charge" examples="Management wants to start downsizing. | John was promoted to Management. | I spoke to their management, and they're ready to make a deal. | Poor Dilbert is always foiled by his company's middle management." />
+</lexelt>
+
+<lexelt item="express.v" num="3">
+<sense id="1" wordnet="1,2,3,4" gloss="convey, show, state in some form" examples="Dogs express happiness through wagging their tails. | I expressed my opinion about the new housing project at last night's meeting. | The children could only express the answer in Fahrenheit, not in Centigrade. | Picasso's Guernica vividly expresses the horrors of war." />
+<sense id="2" wordnet="5" gloss="press out physically" examples="Italians express coffee rather than filter it" />
+<sense id="3" wordnet="6" gloss="to mail or post something via a rapid method" examples="Can you express these packages overnight to corporate headquarters?" />
+</lexelt>
+
+<lexelt item="rush.v" num="4">
+<sense id="1" wordnet="1,4" gloss="move forward, act at speed, pelt along" examples=""She rushed to the hospital with the feverish child in her arms." | "He rushed down the hall to receive the guests." | "Water rushed over the falls." | "We are late. We have to rush!" | "She rushed out of the building." | "The kids rush along from all directions."" />
+<sense id="2" wordnet="2,3,6,7" gloss="make someone or something hasten, induce or stimulate" examples=""The project manager rushed completion of the project." | "Please don't rush me!" | "The psychologist rushed the rats through a long maze." | "The infantry rushed the enemy after the artillery barrage." | "The injured man was rushed away in a helicopter." | "The author rushed the plot along too quickly!"" />
+<sense id="3" wordnet="5" gloss="run with a ball" examples=""The football player rushed for a total of 150 yards."" />
+<sense id="4" wordnet="" gloss="meet or get to know members of fraternity or sorority" examples=""I figured the best way to get ahold of her was to rush that frat." | "During the second semester I rushed the sorority and was initiated in April."" />
+</lexelt>
+
+<lexelt item="exist.v" num="2">
+<sense id="1" wordnet="1" gloss="be" examples="What was there before the universe existed? | Mary's romantic interest in John existed only in his mind. | Crime simply does not exist in their small society. | This law exists to protect consumers against fraud." />
+<sense id="2" wordnet="2" gloss="subsist, survive" examples="They existed on only nuts and wild berries for two weeks in the mountains. | They can't exist in New York City on a dollar a day! | Many people manage to exist without a cellphone or computer." />
+</lexelt>
+
+<lexelt item="grant.v" num="3">
+<sense id="1" wordnet="1,2,4,5,7" gloss="give permission or privilege, bestow officially as judged due" examples="Users can be granted permission to create and maintain their own websites. | She refused to grant any interviews. | They granted her an entry visa. | He was granted asylum. | The company was granted aid by the state authorities. | They will grant funding if the research has sufficient prospects of success. | Many senior colleges grant degree credit only for intermediate-level courses. | The court granted divorce, divided the marital assets, and assigned debts. | The bill grants immunity to physicians and pharmacists. | Hickman was granted land in 1758." />
+<sense id="2" wordnet="3" gloss="willing to admit as truth" examples="I grant that it must have been upsetting but even so I think she made a bit of a fuss. | I grant you, it's a difficult situation. | I'll grant you that there is no organization whatsover to these links." />
+<sense id="3" wordnet="6" gloss="relinquish (physical) control" examples="He granted the Queen his life. | Therefore also I have granted him to the LORD. As long as he lives he is granted to the LORD. | It was he that had, some time before, granted Dearmhagh to God and to Colum Cille." />
+</lexelt>
+
+<lexelt item="kill.v" num="9">
+<sense id="1" wordnet="1,3,5,10" gloss="cause death, be fatal" examples="This man killed several people when he tried to rob a bank. | She was killed in the collision of three cars. | Cigarettes kill. | Drunken driving kills. | AIDS has killed thousands in Africa. | We killed off all the coyotes, wolves, cougars, and bears that preyed on white tailed deer." />
+<sense id="2" wordnet="6,13" gloss="cause great pain or anguish" examples="These new shoes are killing me! | The daily stress of her work is killing her. | I am killing myself for not figuring this out earlier." />
+<sense id="3" wordnet="4,12,15" gloss="eliminate" examples="To kill poverty, the poor countries themselves must get their house in order. | Kill these lines in the President's speech | Eating artichokes kills the taste of all other foods" />
+<sense id="4" wordnet="2" gloss="thwart" examples="The conference killed the proposal for limited formal discovery in criminal proceedings. | The City Council has killed an attempt to set a spending limit for local elections. | City Council members also killed a motion that would have banned unleashed dogs in any public park." />
+<sense id="5" wordnet="7" gloss="overwhelm" examples="The comedian was so funny, he was killing me! | It just kills me to watch the emergency vets on animal planet. | Killing me softly with his song..." />
+<sense id="6" wordnet="" gloss="to strain oneself to the limit" examples="It seemed like I was killing myself for a losing program and I was considering leaving myself. | I'm killing myself for your love and again all is lost. | She is still killing herself over the next project, and she still looks great." />
+<sense id="7" wordnet="14" gloss="cease operation of" examples="The the wind came back and we killed the engine. | They killed the lights and they killed the music. | They had killed the battery to the point where they had to jump start the car." />
+<sense id="8" wordnet="8,9" gloss="hit with great force" examples="She killed the ball. | He killed the ball from the back court causing the side out in our favor." />
+<sense id="9" wordnet="11" gloss="drink down" examples="She killed a bottle of brandy that night. | I killed a glass of La Trappe Tripel, and then I killed a half-liter of wheat beer goodness." />
+</lexelt>
+
+<lexelt item="propose.v" num="3">
+<sense id="1" wordnet="1,2,4" gloss="put forward for consideration" examples="President Bush on Wednesday proposed a new temporary worker program. | The Commission proposed a disclosure requirement for companies. | The 150-room hotel that was proposed to accompany a conference center has fallen short of expectations. | Nicolet Minerals Company has proposed to construct an engineered surface disposal facility." />
+<sense id="2" wordnet="3" gloss="intend" examples="Semantics aside, this week I proposed to take the other side of the argument. | How do you propose to do it? | The research student shall suggest the name of the guide underwhose supervision he/she proposes to do research." />
+<sense id="3" wordnet="5" gloss="ask for hand in marriage" examples="I proposed to my wife on her 30th birthday, in front of about 30 people. | He finally proposed to her in 1988, but prison rules delayed their wedding." />
+</lexelt>
+
+<lexelt item="area.n" num="5">
+<sense id="1" wordnet="1" gloss="Geographic region" examples="Bill lives in a mountainous area. | These homes are in one of the best areas of town. | People in rural areas didn't get electricity as soon os those in the city. | Food and medical supplies are being airlifted to the disaster area. | It's a terrible slum area with a high crime rate." />
+<sense id="2" wordnet="2" gloss="social sphere, scope of activity or interest" examples="Science has influenced every area of my life. | George's areas of interest include: fishing, biking, swimming, baking, and knitting. | He thinks the administration has been incompetent in the area of foreign policy." />
+<sense id="3" wordnet="4,5" gloss="a circumscribed place with a specific characteristic" examples="It is important to stretch even before excercising the abdominal area. | The kid's play area slowly took over more and more of the house. | We'll turn the storage area of the attic into the guest room. | Please proceed to the main check-in area. | There's a little picnic area in the park beside the new house." />
+<sense id="4" wordnet="6" gloss="2D bounded space in geometry" examples="Determine whether the area of this triangle is equal to the area of that square. | The garden covers a total area of 200 square feet." />
+<sense id="5" wordnet="3" gloss="field of study, knowledge domain" examples="The comprehensive exam will cover four areas of computer science and applied mathematics. | Orthodontics is his area of specialization. | It's an area of economic analysis that has been largely ignored by mainstream academia." />
+</lexelt>
+
+<lexelt item="remember.v" num="6">
+<sense id="1" wordnet="1,2,3" gloss="recall to mind or keep in mind a piece of information" examples=""Where did you park the car?" "I can't remember." | I can remember people's faces, but not their names | I finally remembered the address. | Then I remembered that today is your birthday. | Do you remember that he loved you? | I remember how we used to play soccer in the rain. | Remember the starving children around the world! | I remember him as a rather annoying man. | I don't remember signing a contract! | Remember your appointment with the dentist." />
+<sense id="2" wordnet="7" gloss="exercise or have power of memory" examples="Some remember better than others. (better ability) | After the stroke, she lost her ability to remember." />
+<sense id="3" wordnet="8" gloss="commemorate a special person, event, or occasion" examples="We remembered the 50th anniversary of the liberation of Auschwitz. | Remember the dead of the First World War. | Mother Theresa will be remembered as long as humanity exists." />
+<sense id="4" wordnet="4,5" gloss="consider, include" examples="My cousin remembered me in her will. | Will you remember him in your prayers?" />
+<sense id="5" wordnet="6" gloss="give greetings from" examples="Remember me to your family." />
+<sense id="6" wordnet="" gloss="recover one's good manners after behaving badly" examples="Please remember yourself, boy!" />
+</lexelt>
+
+<lexelt item="examine.v" num="3">
+<sense id="1" wordnet="1" gloss="study, investigate, or analyze in detail" examples="Forensic scientists are examining the wreckage for clues about the cause of the explosion. | The council is to examine ways of reducing traffic in the city centre. | The research examined the effects of alcohol on long-term memory. | We need to examine how an accident like this can be avoided in the future. | The professor examined the structure of a novel in class." />
+<sense id="2" wordnet="2" gloss="inspect something or somebody/look at" examples="The customs agent examined the baggage. | He examined the rash on his skin with his eyes. | I suggest you get examined by a qualified physician." />
+<sense id="3" wordnet="3,4,5" gloss="test someone by questioning; interrogate" examples="Candidates must pass a qualifying test which examines for general and specific knowledge. | A psychiatrist was examined on the mental state of the defendant. | The prosecutor examined the witness under oath." />
+</lexelt>
+
+<lexelt item="say.v" num="5">
+<sense id="1" wordnet="1,2,5,6,7,9" gloss="an agent expresses or communicates a concept through words" examples="He said that he wanted to marry her | He says he is innocent. | I say we forget the whole thing. | I said to forget the whole thing. | She said 'no' and left us standing there. | The teacher said the student had to go to the principal's office. | Will you please say grace for us? | We said farewell to our family and friends as we embarked on our mission." />
+<sense id="2" wordnet="10,11" gloss="to indicate something through a physical, non-verbal medium" examples="Jackson Pollock's paintings say nothing to me. | The clock said noon when they arrived at the inn. | Does the fuel gauge say empty? | His eyes said farewell." />
+<sense id="3" wordnet="3" gloss="express a supposition, occurs with the expression 'let us'" examples="Let's say you had a lot of money--what would you do? | Let us say that Colonel Mustard committed the murder in the library with the candlestick." />
+<sense id="4" wordnet="4" gloss="a written document's specific wording" examples="Does that statute say anything about what constitutes malpractice? | The poker handbook says a flush beats a full house. | The article says the following about diving on Grand Cayman." />
+<sense id="5" wordnet="8" gloss="physical act of articulating or pronouncing speech sounds" examples="I can't say Danish vowels very well. | Try to say 'she sells sea shells by the sea shore' fast, three times. | Can that child say two-syllable words yet?" />
+</lexelt>
+
+<lexelt item="join.v" num="4">
+<sense id="1" wordnet="2,4,5" gloss="connect, link or unite separate things, either physically or abstractly" examples="Join the two ends of the tube to make a circle. | The two roads join here | He and I have joined paths many times over the years." />
+<sense id="2" wordnet="1" gloss="enlist or accept membership within some group or organization" examples="He joined the rank of the homeless | He joined the Communist Party as a young man | She joined the rock band as their lead singer." />
+<sense id="3" wordnet="3" gloss="participate with someone else in some event" examples="please join me in welcoming our esteemed guest" />
+<sense id="4" wordnet="3" gloss="accompany or meet up " examples="Please join us for mint juleps on the veranda. | A friendly big brown dog joined me on my walk yesterday." />
+</lexelt>
+
+<lexelt item="negotiate.v" num="3">
+<sense id="1" wordnet="1" gloss="discuss terms of agreement" examples="It is difficult to negotiate where neither will trust. | He also negotiates contracts, manages and oversees the entire team. | They negotiated the sale of the house." />
+<sense id="2" wordnet="2" gloss="navigate or manage something successfully" examples="The Hasty Team negotiated three short avalanche prone slopes. | A canoe can negotiate these waters when the wind is calm. | The driver successfully negotiated a sharp curve. | Not limited to video work only, he has negotiated the musical world as well. | The boy negotiated the tests with ease." />
+<sense id="3" wordnet="" gloss="sell or transfer ownership" examples="The lender negotiates the promissory note to a third party for valuable consideration." />
+</lexelt>
+
+<lexelt item="maintain.v" num="4">
+<sense id="1" wordnet="1,2,5,6,9" gloss="hold in a given state or situation" examples="She won't be able to maintain that level of work and stress much longer. | daily flossing will help maintain healthy gums and teeth. | The museum curator believes the old manuscripts would be better maintained in a climate-controlled room. | The king maintained control of his subjects with an iron hand. | We can't afford to maintain an apartment in New York and our summer house on the Cape. | The Supreme Court maintained the ruling of the lower courts." />
+<sense id="2" wordnet="4,8" gloss="assert a proposition or belief" examples="I have been maintaining all along that we need tort reform. | The physicist no longer maintains that nothing can ever leave a black hole. | She maintained her innocence throughout the trial." />
+<sense id="3" wordnet="7,10" gloss="keep a reocrd" examples="He maintained a daily journal of his travels through southeast asia. | I tried to maintain a count of how many varieties of fish I saw on the dive." />
+<sense id="4" wordnet="3" gloss="provide care and sustenance for someone" examples="Will he be able to maintain her in the style to which she is accustomed? | She worked hard to maintain her three children on a small income." />
+</lexelt>
+
+<lexelt item="condition.n" num="4">
+<sense id="1" wordnet="1,2,5" gloss="state" examples="George's car was already in a condition of disrepair when he drove it into the lake. | The current condition of the arms negotiations is good. | The experiences of being human are often referred to as the human condition. | She works out everyday, so she's in good condition. | George's condition has worsened since he stopped taking his medication." />
+<sense id="2" wordnet="3,4" gloss="stipulation" examples="The contract set out the conditions of the lease. | The conditions of the treaty were generous. | I'll give you my cupcake on one condition - that you don't eat it in the living room. | I'll give you my action hero collection on the condition that you clean my room for the rest of your life." />
+<sense id="3" wordnet="6" gloss="consideration" examples="Another consideration is the time it would take." />
+<sense id="4" wordnet="7" gloss="not the control" examples="In the first condition we trained the animals to respond to a tone. | George's science paper had an excellent description of the percentages in each condition but the conclusion was poorly written." />
+</lexelt>
+
+<lexelt item="believe.v" num="2">
+<sense id="1" wordnet="1,2,3,5" gloss="accept something as true or probable, based on evidence and reasoning." examples="I believed his report | I believe he is her boyfriend. | John doesn't believe the unidentifed flying object was an alien spacecraft. | Do you believe the Red Sox can win the pennant this year? | I don't believe much of what I hear on television." />
+<sense id="2" wordnet="4" gloss="accept a doctrine, not necessarily nn the basis of reason or logic" examples="The preacher hoped the atheists would believe." />
+</lexelt>
+
+<lexelt item="hour.n" num="4">
+<sense id="1" wordnet="1" gloss="60 minutes" examples="The job will take more than one hour. | I'll meet you here in three hours." />
+<sense id="2" wordnet="2" gloss="time of day" examples="The hour is getting late. | I work best in the late-night hours. | We're going downtown for happy hour today." />
+<sense id="3" wordnet="3" gloss="memorable period" examples="It was their finest hour. | My hour of triumph lasted only ten minutes. | The hour of thier death came all too soon." />
+<sense id="4" wordnet="4" gloss="distance" examples="We live an hour from the airport. | It's just two hours away." />
+</lexelt>
+
+<lexelt item="president.n" num="3">
+<sense id="1" wordnet="1,4,5" gloss="chair" examples="The president realized that the company was going bankrupt." />
+<sense id="2" wordnet="3" gloss="head of a country" examples="After the exportation of Captain Hook, Peter Pan was elected President of Neverland. | Canaan Banana was Zimbabwe's first black president." />
+<sense id="3" wordnet="2,6" gloss="head of U.S." examples="A President is elected every four years. | The President likes to job every morning." />
+</lexelt>
+
+</dictmap>
