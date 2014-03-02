@@ -1,3 +1,57 @@
 Notes on the project
   --about project 2. word sense dab. groups of 4? kaggle--
   --pick something optional to do.--
+
+  Due Dates 
+  3/6 - proposal part 1
+  3/19 - results and report 
+  3/20 - get hardcopy 
+
+Introduction
+- Find the correct meaning of a word in context
+- Implement WSD system: one supervised method + dictionary based
+- Analyze their pros and cons by evaluating on validation set 
+
+Dataset
+http://www.cse.unt.edu/~rada/senseval/senseval3/proceedings/pdf/mihalcea2.pdf
+
+word.pos | sense-id | prev-context %% target %% next-context
+
+Supervised WSD
+- Naive Bayes model 
+- Takes a word in context as input and outputs a probability distribution
+
+Dictionary based WSD
+- Utilize the definitions given in dictionary 
+
+Extensions
+- keep track of other most likely senses and pick them when certain conditions are satisfied 
+- Scoring approach that assumes the prediction of a single sense. Vote partially for each sense wrt confidence
+- Show the learning curve for Naive Bayes approach 
+
+Proposal [Division - Two for Dictionary and two for supervised]
+- Describe your implementation plans for each of the two WSD systems
+- What kinds of features are you planning to extract from the surrounding context for supervised WSD
+- What are you going to do for finding relevant words in the context for dictionary based WSD
+- Provide brief implementation schedule 
+- Explanation of planned systems and algorithms [dont repeat basic models already described]
+- Try to explain the motivation of your design decisions 
+- Look at the training data 
+
+Report 
+- 6 pages 
+- Approach, Software, Results, Discussion
+
+Grading
+- Proposal: [10 pts]
+- Implementation: supervised [20 pts] / dictionary-based [20 pts]
+- Report: [45 pts]
+- Optional Extensions: [15 pts]
+
+Submission 
+- Proposal (pdf into CMS, hardcopy at class)
+- Source code (only the code that YOUR TEAM wrote, not for any of
+the common packages that your team used).
+- Prediction output (the csv files you submit to Kaggle)
+- The report (pdf into CMS, hardcopy at class)
+- Archive all of these except the proposal, and upload it to CMS.
