@@ -42,46 +42,30 @@
 \begin{document}
 \begin{center}\textbf{Project 2: Word Sense Disambiguation -- Proposal}\end{center}
 
-We plan on writing all our code in Python.
+Our code for the entire project will be implemented in Python using nltk and lxml libraries as well as models we built in Project 1
 
 \section{Our two WSD systems}
 
 \begin{itemize}
 \item \textit{What kinds of features are you planning to extract from the surrounding context for supervised WSD?}\par
 
-STRIP OUT STOP WORDS. Stemming?
+For pre-processing we plan on stripping out stem words like the, are, our, we etc and stem the context words so that words like office and offices are treated the same (offic). The features we are going to extract after this pre-processing is done are: part-of-speech to narrow down, tense, plurality and example sentences. The number of previous and next context words we will be using is passed in as a parameter to go left or right. If negative, take all, otherwise. The context words are going to be a function of weighted distance (1/d) so that the word that is farther away from our target word has lesser weight than the word that is closer to it. After training, our feature vector will have the following form:  
+Lookup Table (Target word, Array of Vectors)\par
+Each Vector will be of this form: \par
+label - $\langle$POS, next-word, next-word, next-word, etc (counts), prev-word, prev-word, etc (counts)$\rangle$
 
-We are planning to extract: part-of-speech, tense, plurality, 
-
-take a parameter to go left or right. If negative, take all, otherwise
-
-weighted distance (1/d), or count raised to (1/d), other decay functions for distance.
-
-WSD POS: POS, next-word, next-word, next-word, etc (counts), prev-word, prev-word, etc (counts)
-
-scipy - sparse matrix, nltk
-
-Problem: tons of zeros. BUT NO! The probability of 0 is very very close to 1! YEAH:\par
-\[P(``the'' = 4 | class)\]
+We plan on using scipy which might help with performance since we will be building sparse matrices
 
 \item \textit{What are you going to do for finding relevant words in the context for
 dictionary-based WSD?}\par
-\end{itemize}
 
-STRIP OUT STOP WORDS. Stemming?
+Again we plan on stripping out stop words and use stemming to preprocess our dictionary examples and training data as well. Given the word, we store all the definitions and examples in a table with the key as the sense-id. This will be the signature to our \texttt{computeOverlap} function. The function will also take context that will contain 5-10 words as the window (which will be inputted as a parameter). We will have a table that contains (\(context word, sense-id\) , \# of words that overlap, \# of consecutive words that overlap). Overlapping basically means the occurrence of exact/similar words after stemming in both the definitions of context words and target word. After we build this table, we will compute a score by weighing the consecutive overlaps more that distant overlaps. This parameter will be tuned based on validation and training set. Once the score is computed, we identify the sense-id by the highest ranking tuple.
 
-Python: import lxml\par
-Dictionary has def + examples. Data's in same format. Predict id given pos, gloss, examples. (use ALL of gloss) Examples may be training data. (strip out ``the'', ``and'', etc)
-
-Same approach with prev/next words. Stemming
-
-\textit{Provide a clear and brief explanation of your planned systems and algorithms. (Do not repeat the basic models that are already described in this document) Rather than writing up every single detail, try to explain the motivation of your design decisions by investigating the provided dataset and illustrating the intuition that you discovered from the real examples. Note that better features (typically identified by looking at the training data), the higher accuracies you will likely achieve.}
+\item \textit{Provide a clear and brief explanation of your planned systems and algorithms. (Do not repeat the basic models that are already described in this document) Rather than writing up every single detail, try to explain the motivation of your design decisions by investigating the provided dataset and illustrating the intuition that you discovered from the real examples. Note that better features (typically identified by looking at the training data), the higher accuracies you will likely achieve.}\par
 
 Preprocess using stemming. Strip out stop words. Feature extraction. Naive: pos, $n$ words around the word, and counts. Weighted regression/averaging.
 
-Dictionary: stemming, stop words. (not in gloss?)
-
-Dictionary: for each unigram/bigram/trigram, find unigram/bigram/trigram in each definition assoc with each class
+\end{itemize}
 
 \section{Implementation schedule}
 \textit{Provide a brief implementation schedule.}\par
