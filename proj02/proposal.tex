@@ -81,16 +81,30 @@ Preprocess using stemming. Strip out stop words. Feature extraction. Naive: pos,
 
 Dictionary: stemming, stop words. (not in gloss?)
 
+Dictionary: for each unigram/bigram/trigram, find unigram/bigram/trigram in each definition assoc with each class
+
 \section{Implementation schedule}
 \textit{Provide a brief implementation schedule.}\par
 
 Division of labor:
-\begin{itemize}
+\begin{itemize}[noitemsep]
 \item MJ: parse data, naive-bayes
 \item Ben: naive-bayes
 \item Andy: dictionary-based wsd
 \item Spandana: dictionary-based wsd
 \end{itemize}
 
+Extensions:\par
+Do three of four! (Spandana read it on Piazza)
+
+\begin{itemize}[noitemsep]
+\item Sat, March 8: most necessary preprocessing is done.
+\item Sun, March 9: corrections
+\item Tue, March 11: initial data structures for dictionary WSD and supervised wsd underway, some initial testing
+\item Fri, March 14: dictionary WSD implementation done, more testing
+\item Sun, March 16: supervised WSD implementation done, begin report writeup
+\item Mon, March 17: validation and testing for both systems, upload to Kaggle
+\item Tue, March 18: any corrections...\ and report to be completed.
+\end{itemize}
 
 \end{document}
