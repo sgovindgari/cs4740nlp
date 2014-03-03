@@ -40,8 +40,57 @@
   {Page \thepage}}
 
 \begin{document}
-\begin{center}\textbf{Project 2: Word sense Disambiguation -- Proposal}\end{center}
+\begin{center}\textbf{Project 2: Word Sense Disambiguation -- Proposal}\end{center}
 
-\lipsum[1-2]
+We plan on writing all our code in Python.
+
+\section{Our two WSD systems}
+
+\begin{itemize}
+\item \textit{What kinds of features are you planning to extract from the surrounding context for supervised WSD?}\par
+
+STRIP OUT STOP WORDS. Stemming?
+
+We are planning to extract: part-of-speech, tense, plurality, 
+
+take a parameter to go left or right. If negative, take all, otherwise
+
+weighted distance (1/d), or count raised to (1/d), other decay functions for distance.
+
+WSD POS: POS, next-word, next-word, next-word, etc (counts), prev-word, prev-word, etc (counts)
+
+scipy - sparse matrix, nltk
+
+Problem: tons of zeros. BUT NO! The probability of 0 is very very close to 1! YEAH:\par
+\[P(``the'' = 4 | class)\]
+
+\item \textit{What are you going to do for finding relevant words in the context for
+dictionary-based WSD?}\par
+\end{itemize}
+
+STRIP OUT STOP WORDS. Stemming?
+
+Python: import lxml\par
+Dictionary has def + examples. Data's in same format. Predict id given pos, gloss, examples. (use ALL of gloss) Examples may be training data. (strip out ``the'', ``and'', etc)
+
+Same approach with prev/next words. Stemming
+
+\textit{Provide a clear and brief explanation of your planned systems and algorithms. (Do not repeat the basic models that are already described in this document) Rather than writing up every single detail, try to explain the motivation of your design decisions by investigating the provided dataset and illustrating the intuition that you discovered from the real examples. Note that better features (typically identified by looking at the training data), the higher accuracies you will likely achieve.}
+
+Preprocess using stemming. Strip out stop words. Feature extraction. Naive: pos, $n$ words around the word, and counts. Weighted regression/averaging.
+
+Dictionary: stemming, stop words. (not in gloss?)
+
+\section{Implementation schedule}
+\textit{Provide a brief implementation schedule.}\par
+
+Division of labor:
+\begin{itemize}
+\item MJ: parse data, naive-bayes
+\item Ben: naive-bayes
+\item Andy: dictionary-based wsd
+\item Spandana: dictionary-based wsd
+\end{itemize}
+
 
 \end{document}
