@@ -1,0 +1,47 @@
+%!TEX TS-program = pdflatex or xelatex
+%!TEX encoding = UTF-8 Unicode
+
+\documentclass{article}
+\usepackage[letterpaper, margin=1in, left=0.75in, right=0.75in] {geometry}
+\usepackage{microtype} % micro appearance
+\usepackage[all]{nowidow} % no lone lines
+\usepackage{changepage} % changes layout mid-page
+\usepackage{enumitem} % enum (itemize, enumerate, description)
+\usepackage{ifthen}
+\usepackage{xfrac}
+\usepackage{fancyhdr} % headers
+\usepackage{amsmath} % matrices
+\usepackage{amssymb} % symbols
+\usepackage{relsize}
+\usepackage{gensymb} % symbols
+\usepackage{tikz} % graphics?
+\usepackage{bm} % bold math
+\usepackage{multicol} % multiple columns
+\usepackage{lipsum} % lipsum
+
+\pagestyle{fancy}
+
+\newcommand {\classname} {CS 4740/5740 -- Intro to Natural Language Processing}
+\newcommand {\duedate} {Wed, 2014--03--19}
+\newcommand {\hwtype} {Project}
+\newcommand {\hwnum} {2: Word Sense Dab.}
+\newcommand {\innermargin} {0.15in} % indentation amt of nested lst
+
+\let\tss\textsuperscript
+\let\oldunderline\underline
+\renewcommand\underline[1]{\oldunderline{\smash{#1}}}
+
+\fancyhead[L] {\ifthenelse {\thepage=1}
+  {bgs53 (Ben Shulman), sg754 (Spandana Govindgari),\\
+   ms969 (MJ Sun), amw275 (Andy Wang)}
+  {\hwtype\ \hwnum\ (bgs53, sg754, ms969, amw275)}}
+\fancyhead[R] {\ifthenelse {\thepage=1}
+  {\classname\\\hwtype\ \hwnum\ (due \duedate)}
+  {Page \thepage}}
+
+\begin{document}
+\begin{center}\textbf{Project 2: Report on Word sense Disambiguation}\end{center}
+
+\lipsum[1-4]
+
+\end{document}
