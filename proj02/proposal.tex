@@ -2,7 +2,7 @@
 %!TEX encoding = UTF-8 Unicode
 
 \documentclass{article}
-\usepackage[letterpaper, margin=1in, left=0.75in, right=0.75in] {geometry}
+\usepackage[letterpaper, top=1in, left=0.75in, right=0.75in, bottom=0.75in] {geometry}
 \usepackage{microtype} % micro appearance
 \usepackage[all]{nowidow} % no lone lines
 \usepackage{changepage} % changes layout mid-page
@@ -49,21 +49,23 @@ Our code will be written in Python, will use nltk and lxml libraries (among othe
 \begin{itemize}
 \item \textit{What kinds of features are you planning to extract from the surrounding context for supervised WSD?}\par
 
-For pre-processing we plan on stripping out stop words like the, are, our, we etc and stem the context words so that words like office and offices are treated the same (offic). The features we are going to extract after this pre-processing is done are: part-of-speech to narrow down, tense, plurality and example sentences. The number of previous and next context words we will be using is passed in as a parameter to go left or right. If negative, take all, otherwise, the context words are going to be a function of weighted distance (perhaps something like $1/d$) so that the word that is farther away from our target word has lesser weight than the word that is closer to it. After training, our feature vector will have the following form:
-\[\text{Lookup Table (Target word, Array of Vectors)}\]
-Each Vector will be of this form:
-\[\text{label - $\langle$POS, next-word, next-word, next-word, etc (counts), prev-word, prev-word, etc (counts)$\rangle$}\]
+For pre-processing, we plan on stripping out stop words like the, are, our, we etc and stem the context words so that words like office and offices are treated the same (offic). (This may help with speeding up computation, and raise WSD prediction accuracy.) The features we are going to extract after this pre-processing is done are: part-of-speech to narrow down, tense, plurality and example sentences.\par
+The number of previous and next context words to look forward or backward is passed in as a parameter. (If negative, take all.) The value that context words are considered for sense disambiguation is a function of weighted distance (perhaps something like $1/d$) so that words farther away from our target word have lesser weight than ones closer to it. After training, our feature vector will have the following form:\par
+\ \ \ \ \ \ Lookup Table (Target word, Array of Vectors)\par
+Each Vector will be of this form:\par
+\ \ \ \ \ \ label - $\langle$POS, next-word, next-word, next-word, etc (counts), prev-word, prev-word, etc (counts)$\rangle$\par
 We plan on using scipy which might help with performance since we will be building sparse matrices.
 
 \item \textit{What are you going to do for finding relevant words in the context for
 dictionary-based WSD?}\par
 
-Again we plan on stripping out stop words and use stemming to pre-process our dictionary examples and training data as well. Given the word, we store all the definitions and examples in a table with the key as the sense-id. This will be the signature to our \texttt{computeOverlap} function (Lesk algorithm). The function will also take context that will contain 5-10 words as the window (which will be inputted as a parameter). We will have a table that contains (\(contextword, senseId\) , \# of words that overlap, \# of consecutive words that overlap). Overlapping basically means the occurrence of exact/similar words after stemming in both the definitions of context words and target word. After we build this table, we will compute a score by weighing the consecutive overlaps more that distant overlaps. This parameter will be tuned based on validation and training set. Once the score is computed, we identify the sense-id by the highest ranking tuple.
+After stripping stop words and stemming the dictionary examples and training data, we store each word's list of definitions and examples in a table with the key as the sense-id. (Lookup tables are efficient.) This will be the signature to our \texttt{computeOverlap} function (Lesk algorithm). The function will also take context that will contain 5--10 words as the window (which will be inputted as a parameter). We will have a table that contains (\(contextword, senseId\) , \# of words that overlap, \# of consecutive words that overlap).\par
+We are then able to compute scores from the table by weighing the consecutive overlaps more that distant overlaps, \textit{a metric which we will determine later}. Perhaps consecutive overlaps will be weighted 2--3 times more? This parameter will be tuned based on validation and training set. We identify the sense-id by the highest ranking tuple. We think these dictionary structures, while potentially costly in memory, will offer fast lookups and perform well. (Again, we plan on using Python libraries on sparse structures to help with resource usage.)
 
 \item \textit{A brief explanation of systems and algorithms. Explain the motivation of your design decisions.}\par
 We have described most of our plans for the supervised and dictionary-based WSDs above. Our general approach is:
 \begin{itemize}[noitemsep,nolistsep]
-\item Strip out stop words except when they are vital to a definition. (like ``the'', ``and'', etc, words that generally should have no effect on scores. This may result in higher accuracy in predictions.)
+\item Strip out stop words except when they are vital to a definition. (They should have little effect on scores, and may result in higher accuracy in predictions.)
 \item Pre-process examples using stemming. (Morphological roots are sufficient.)
 \item Feature extraction (POS, $n$ words around the word, counts)
 \item Weighted regression/averaging. (as also described in the supervised approach)
@@ -73,7 +75,7 @@ We have described most of our plans for the supervised and dictionary-based WSDs
 
 \subsection*{Implementation schedule}
 
-\begin{itemize}[noitemsep]
+\begin{itemize}[noitemsep,nolistsep]
 \item Sat, March 8: most necessary pre-processing is done.
 \item Tue, March 11: initial data structures for dictionary WSD and supervised WSD underway, some initial testing
 \item Fri, March 14: dictionary WSD implementation done, more testing
@@ -84,7 +86,7 @@ We have described most of our plans for the supervised and dictionary-based WSDs
 \end{itemize}
 
 Rough division of labor:
-\begin{itemize}[noitemsep]
+\begin{itemize}[noitemsep,nolistsep]
 \item MJ \& Ben: Data parsing, Naive-Bayes
 \item Andy \& Spandana: Dictionary-based WSD
 \end{itemize}

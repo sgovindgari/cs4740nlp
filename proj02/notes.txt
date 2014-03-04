@@ -55,3 +55,5 @@ the common packages that your team used).
 - Prediction output (the csv files you submit to Kaggle)
 - The report (pdf into CMS, hardcopy at class)
 - Archive all of these except the proposal, and upload it to CMS.
+
+Overlap: occurrence of exact/similar words in the definitions of context words and target word.
