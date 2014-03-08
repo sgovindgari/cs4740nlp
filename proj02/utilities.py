@@ -78,8 +78,6 @@ def constructExamples(windowSize=2,separate=False,countFunction=functions['simpl
         pickle.dump(res,open(loc,'w'))
     return res
 
-cleanFile('training_data.data','training_clean.data')
-
 # pp = pprint.PrettyPrinter(indent=4)
 # pp.pprint(constructTrainingExamples(loc="temp.pickle")[:100])
 #                 
