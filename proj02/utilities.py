@@ -1,0 +1,85 @@
+import re,pickle,pprint
+
+#To run must download stopwords using nltk.download()
+from nltk.corpus import stopwords
+from nltk.stem.wordnet import WordNetLemmatizer
+
+lemma = WordNetLemmatizer()
+
+functions = dict()
+functions['existence'] = lambda word,i,count: 1
+functions['simple'] = lambda word,i,count: count + 1
+functions['linear'] = lambda word,i,count: count + 1.0/(i+1)
+
+#Cleans a list of words - removes stopwords and punctuation, lemmatizes any other words
+def clean(words):
+    return [lemma.lemmatize(word) for word in words if (re.match('.*\w+.*',word) != None) and (word not in stopwords.words('english'))]
+
+#For cleaning the data files - remove stopwords, punctuation and 
+def cleanFile(source, destination):
+    with open(source) as s:
+        with open(destination,'w') as d:
+            r = re.compile('\||%%')
+            j = 0
+            for line in s:
+                j += 1
+                [word,meaning,prev,actual,after] = r.split(line)
+                #Turn prev and after into a list of words and only include those that are within the window
+                prev = ' '.join(clean(prev.strip().lower().split(' ')))
+                after = ' '.join(clean(after.strip().lower().split(' ')))
+                d.write(word + "|" + meaning + "|" + prev + "%%" + actual + "%%" + after + "\n")
+                if j % 1000 == 0:
+                    print j
+
+#windowSize is how many on each side to consider
+#separate - consider the word "dog" coming after the word as a different feature from the word "dog" before the word
+#countFunction - different weighted functions
+#loc - location to save pickled examples to
+def constructExamples(windowSize=2,separate=False,countFunction=functions['simple'],loc=None):
+    data = ''
+    r = re.compile('\||%%')
+    res = []
+    with open('training_data.data') as f:
+        j = 0
+        for line in f:
+            j = j + 1
+            #Don't care about how the word is actually appearing
+            [word,meaning,prev,_,after] = r.split(line)
+            #Split POS from the word
+            [word,pos] = word.split('.')
+            #Turn prev and after into a list of words and only include those that are within the window
+            prev = prev.strip().lower().split(' ')[:windowSize]
+            after = after.strip().lower().split(' ')[:windowSize]
+            features = dict()
+            features['pos'] = pos.strip()
+            for i in range(windowSize):
+                if i < len(prev):
+                    prevEntry = prev[i]
+                    if separate:
+                        prevEntry = ('p',prev[i])
+                    if prevEntry in features:
+                        features[prevEntry] = countFunction(prev[i],i,features[prevEntry])
+                    else: 
+                        features[prevEntry] = countFunction(prev[i],i,0)
+                if i < len(after):
+                    afterEntry = after[i]
+                    if separate:
+                        afterEntry = ('a',after[i]) 
+                    if afterEntry in features:
+                        features[afterEntry] = countFunction(after[i],i,features[afterEntry])
+                    else: 
+                        features[afterEntry] = countFunction(after[i],i,0)
+            example = (word.strip(),int(meaning.strip()),features)
+            res.append(example)
+            if j % 1000 == 0:
+                print j
+    #Save the training examples object
+    if loc != None:
+        pickle.dump(res,open(loc,'w'))
+    return res
+
+cleanFile('training_data.data','training_clean.data')
+
+# pp = pprint.PrettyPrinter(indent=4)
+# pp.pprint(constructTrainingExamples(loc="temp.pickle")[:100])
+#                 
