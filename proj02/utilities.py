@@ -39,7 +39,7 @@ def constructExamples(windowSize=2,separate=False,countFunction=functions['simpl
     data = ''
     r = re.compile('\||%%')
     res = []
-    with open('training_data.data') as f:
+    with open('training_clean.data') as f:
         j = 0
         for line in f:
             j = j + 1
@@ -48,11 +48,15 @@ def constructExamples(windowSize=2,separate=False,countFunction=functions['simpl
             #Split POS from the word
             [word,pos] = word.split('.')
             #Turn prev and after into a list of words and only include those that are within the window
-            prev = prev.strip().lower().split(' ')[:windowSize]
-            after = after.strip().lower().split(' ')[:windowSize]
+            prev = prev.strip().lower().split(' ')
+            after = after.strip().lower().split(' ')
+            if windowSize != -1:
+                prev = prev[:windowSize]
+                after = after[:windowSize]
             features = dict()
             features['pos'] = pos.strip()
-            for i in range(windowSize):
+            length = windowSize if windowSize != -1 else max(len(prev),len(after))
+            for i in range(length):
                 if i < len(prev):
                     prevEntry = prev[i]
                     if separate:
@@ -79,5 +83,4 @@ def constructExamples(windowSize=2,separate=False,countFunction=functions['simpl
     return res
 
 # pp = pprint.PrettyPrinter(indent=4)
-# pp.pprint(constructTrainingExamples(loc="temp.pickle")[:100])
-#                 
+# pp.pprint(constructExamples(windowSize=-1,loc="temp.pickle")[:100])
