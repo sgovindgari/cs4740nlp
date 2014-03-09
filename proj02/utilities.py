@@ -7,7 +7,7 @@ from nltk.stem.wordnet import WordNetLemmatizer
 lemma = WordNetLemmatizer()
 
 functions = dict()
-functions['existence'] = lambda word,i,count: 1
+functions['boolean'] = lambda word,i,count: 1
 functions['simple'] = lambda word,i,count: count + 1
 functions['linear'] = lambda word,i,count: count + 1.0/(i+1)
 
@@ -35,16 +35,14 @@ def cleanFile(source, destination):
 #separate - consider the word "dog" coming after the word as a different feature from the word "dog" before the word
 #countFunction - different weighted functions
 #loc - location to save pickled examples to
-def constructExamples(windowSize=2,separate=False,countFunction=functions['simple'],loc=None):
+def constructSet(source='training_clean.data',windowSize=-1,separate=False,countFunction=functions['boolean'],loc=None):
     data = ''
     r = re.compile('\||%%')
     res = []
-    with open('training_clean.data') as f:
-        j = 0
+    with open(source) as f:
         for line in f:
-            j = j + 1
             #Don't care about how the word is actually appearing
-            [word,meaning,prev,_,after] = r.split(line)
+            [word,sense,prev,_,after] = r.split(line)
             #Split POS from the word
             [word,pos] = word.split('.')
             #Turn prev and after into a list of words and only include those that are within the window
@@ -73,10 +71,8 @@ def constructExamples(windowSize=2,separate=False,countFunction=functions['simpl
                         features[afterEntry] = countFunction(after[i],i,features[afterEntry])
                     else: 
                         features[afterEntry] = countFunction(after[i],i,0)
-            example = (word.strip(),int(meaning.strip()),features)
+            example = (word.strip(),int(sense.strip()),features)
             res.append(example)
-            if j % 1000 == 0:
-                print j
     #Save the training examples object
     if loc != None:
         pickle.dump(res,open(loc,'w'))
