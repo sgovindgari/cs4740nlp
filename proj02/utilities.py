@@ -3,6 +3,7 @@ import re,pickle,pprint
 #To run must download stopwords using nltk.download()
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
+from operator import *
 
 lemma = WordNetLemmatizer()
 
@@ -78,5 +79,5 @@ def constructSet(source='training_clean.data',windowSize=-1,separate=False,count
         pickle.dump(res,open(loc,'w'))
     return res
 
-# pp = pprint.PrettyPrinter(indent=4)
-# pp.pprint(constructExamples(windowSize=-1,loc="temp.pickle")[:100])
+def argmax(pairs):
+    return max(pairs, key=itemgetter(1))[0]

@@ -5,7 +5,7 @@ class NaiveBayes():
         self.senseCounts = dict()
         self.wordCounts = dict()
         self.featureCounts = dict()
-
+        self.featureList = []
         #Generating necessary counts
         for example in trainingSet:
             word = example[0]
@@ -37,20 +37,31 @@ class NaiveBayes():
         predictions = []
 
         #Fetch necessary features
-
-        for instance in testSet:
+        #TODO: This is complete but it struggles with the fact that it doesn't go over all features and also what if a featureCount is zero!?
+        #TODO: Feature counts don't hold counts for all features...
+        for example in testSet:
             word = example[0]
             features = example[2]
+            probs = []
             if word in self.wordCounts:
                 wc = self.wordCounts[word]
-                #TODO: complete
+                for sense in self.senseCounts[word]:
+                    sc = self.senseCounts[word][sense]
+                    prob = sc / float(wc)
+                    for key,value in features.items():
+                        if (key,value) in self.featureCounts[(word,sense)]:
+                            prob *= (self.featureCounts[(word,sense)][(key,value)] / sc)
+                        else:
+                            prob *= 0
+                    probs.append((sense,prob))
+                predictions.append(utilities.argmax(probs))
             else:
                 predictions.append(-1)
+        return predictions
 
 
 # pp = pprint.PrettyPrinter(indent=4)
 # pp.pprint(utilities.constructSet(windowSize=2,loc="temp.pickle")[:5])
-# nb = NaiveBayes(utilities.constructSet(windowSize=2)[:5])
-# pp.pprint(nb.senseCounts)
-# pp.pprint(nb.featureCounts)
-# pp.pprint(nb.wordCounts)
+nb = NaiveBayes(utilities.constructSet(windowSize=10))
+print nb.classify(utilities.constructSet(source='test_clean.data'))
+
