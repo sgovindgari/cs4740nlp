@@ -1,4 +1,4 @@
-import utilities, pprint
+import utilities, pprint,math
 
 class NaiveBayes():
     def __init__(self, trainingSet):
@@ -39,6 +39,7 @@ class NaiveBayes():
         #Fetch necessary features
         #TODO: This is complete but it struggles with the fact that it doesn't go over all features and also what if a featureCount is zero!?
         #TODO: Feature counts don't hold counts for all features...
+        #TODO: Smooth
         for example in testSet:
             word = example[0]
             features = example[2]
@@ -47,14 +48,19 @@ class NaiveBayes():
                 wc = self.wordCounts[word]
                 for sense in self.senseCounts[word]:
                     sc = self.senseCounts[word][sense]
-                    prob = sc / float(wc)
+                    prob = math.log(sc) - math.log(wc)
                     for key,value in features.items():
                         if (key,value) in self.featureCounts[(word,sense)]:
-                            prob *= (self.featureCounts[(word,sense)][(key,value)] / sc)
+                            prob += math.log(self.featureCounts[(word,sense)][(key,value)]) - math.log(sc)
                         else:
-                            prob *= 0
+                            #TODO: Can't return 0, if using logs, using logs will cause negative
+                            prob = 0.0
+                            break
                     probs.append((sense,prob))
-                predictions.append(utilities.argmax(probs))
+                res = utilities.argmax(probs)
+                if res != 1:
+                    print probs
+                predictions.append(res)
             else:
                 predictions.append(-1)
         return predictions
