@@ -53,7 +53,7 @@ def constructSet(source='training_clean.data',windowSize=-1,separate=False,count
                 prev = prev[:windowSize]
                 after = after[:windowSize]
             features = dict()
-            features['pos'] = pos.strip()
+            features['POS'] = pos.strip()
             length = windowSize if windowSize != -1 else max(len(prev),len(after))
             for i in range(length):
                 if i < len(prev):

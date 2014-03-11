@@ -5,7 +5,7 @@ class NaiveBayes():
         self.senseCounts = dict()
         self.wordCounts = dict()
         self.featureCounts = dict()
-        self.featureList = dict()
+        self.featureLists = dict()
         #Generating necessary counts
         for example in trainingSet:
             word = example[0]
@@ -24,8 +24,9 @@ class NaiveBayes():
                 self.senseCounts[word] = dict()
                 self.senseCounts[word][sense] = 1
             for key,value in features.items():
-                if key not in self.featureList:
-                    self.featureList[key] = key
+                if word not in self.featureLists:
+                    self.featureLists[word] = dict()
+                self.featureLists[word][key] = key
                 if (word, sense) in self.featureCounts:
                     if (key,value) in self.featureCounts[(word,sense)]:
                         self.featureCounts[(word,sense)][(key,value)] += 1
@@ -55,12 +56,13 @@ class NaiveBayes():
                 for sense in self.senseCounts[word]:
                     sc = self.senseCounts[word][sense]
                     prob = math.log(sc) - math.log(wc)
-                    for key in self.featureList:
+                    for key in self.featureLists[word]:
                         prob -= math.log(sc+1)
                         if key in features:
                             value = features[key]
                             if (key,value) in self.featureCounts[(word,sense)]:
                                 prob += math.log(self.featureCounts[(word,sense)][(key,value)] + 1)
+                        #Punishes training data for having words that DONT appear in the test example
                         else:
                             #using 1 only works for boolean
                             if (key,1) in self.featureCounts[(word,sense)]:
@@ -79,6 +81,6 @@ class NaiveBayes():
 
 # pp = pprint.PrettyPrinter(indent=4)
 # pp.pprint(utilities.constructSet(windowSize=2,loc="temp.pickle")[:5])
-nb = NaiveBayes(utilities.constructSet(windowSize=10))
-print nb.classify(utilities.constructSet(source='validation_clean.data',windowSize=10))
+nb = NaiveBayes(utilities.constructSet(windowSize=2))
+print nb.classify(utilities.constructSet(source='validation_clean.data',windowSize=2))
 
