@@ -98,6 +98,6 @@ def fixDoubles(dictionaryFileloc, outputFileloc):
                 r'examples="\1\2" />', \
                 dictContent)
         # handle 1 specific case of two senses.
-        dictContent = re.sub('sense id="1&&2"', 'sense id="1 and 2"', dictContent)
+        dictContent = re.sub('sense id="1&&2"', 'sense id="1,2"', dictContent)
         with open(outputFileloc,'w') as outputFile:
             outputFile.write(dictContent)
