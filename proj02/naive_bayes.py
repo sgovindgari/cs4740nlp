@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import utilities, pprint,math
 
 class NaiveBayes():
