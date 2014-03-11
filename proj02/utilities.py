@@ -50,7 +50,7 @@ def constructSet(source='training_clean.data',windowSize=-1,separate=False,count
             prev = prev.strip().lower().split(' ')
             after = after.strip().lower().split(' ')
             if windowSize != -1:
-                prev = prev[:windowSize]
+                prev = prev[len(prev)-windowSize:len(prev)]
                 after = after[:windowSize]
             features = dict()
             features['POS'] = pos.strip()

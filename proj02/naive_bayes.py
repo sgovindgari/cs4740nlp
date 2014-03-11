@@ -28,22 +28,23 @@ class NaiveBayes():
                     self.featureLists[word] = dict()
                 self.featureLists[word][key] = key
                 if (word, sense) in self.featureCounts:
-                    if (key,value) in self.featureCounts[(word,sense)]:
-                        self.featureCounts[(word,sense)][(key,value)] += 1
+                    if key in self.featureCounts[(word,sense)]:
+                        if value in self.featureCounts[(word,sense)][key]:
+                            self.featureCounts[(word,sense)][key][value] += 1
+                        else:
+                            self.featureCounts[(word,sense)][key][value] = 1
                     else:
-                        self.featureCounts[(word,sense)][(key,value)] = 1
+                        self.featureCounts[(word,sense)][key] = dict()
+                        self.featureCounts[(word,sense)][key][value] = 1
                 else:
                     self.featureCounts[(word,sense)] = dict()
-                    self.featureCounts[(word,sense)][(key,value)] = 1
+                    self.featureCounts[(word,sense)][key] = dict()
+                    self.featureCounts[(word,sense)][key][value] = 1
 
     def classify(self, testSet):
         predictions = []
 
-        #Fetch necessary features
-        #TODO: This is complete but it struggles with the fact that it doesn't go over all features and also what if a featureCount is zero!?
-        #TODO: Feature counts don't hold counts for all features...
         #TODO: Smooth - using add 1 for now I guess
-        #TODO: HALP
         actual = []
         correct = 0
         for example in testSet:
@@ -55,20 +56,22 @@ class NaiveBayes():
                 wc = self.wordCounts[word]
                 for sense in self.senseCounts[word]:
                     sc = self.senseCounts[word][sense]
-                    prob = math.log(sc) - math.log(wc)
+                    prob = sc/float(wc)
+                    # Only go through the features we have from training, ignore features that arise in test example
+                    # that don't appear in any training example as they will all have the same effect (sort of) on the probability
                     for key in self.featureLists[word]:
-                        prob -= math.log(sc+1)
+                        prob /= (sc+1)
+                        #feature appears in test example
                         if key in features:
                             value = features[key]
-                            if (key,value) in self.featureCounts[(word,sense)]:
-                                prob += math.log(self.featureCounts[(word,sense)][(key,value)] + 1)
-                        #Punishes training data for having words that DONT appear in the test example
+                            if key in self.featureCounts[(word,sense)] and value in self.featureCounts[(word,sense)][key]:
+                                prob *= (self.featureCounts[(word,sense)][key][value] + 1)
+                        #Punishes training data for having features that DONT appear in the test example
                         else:
-                            #using 1 only works for boolean
-                            if (key,1) in self.featureCounts[(word,sense)]:
-                                prob += math.log(sc - self.featureCounts[(word,sense)][(key,1)] + 1)
+                            if key in self.featureCounts[(word,sense)]:
+                                prob *= (sc-sum(self.featureCounts[(word,sense)][key].values())+1)
                             else:
-                                prob += math.log(sc+1)
+                                prob *= (sc+1)
                     probs.append((sense,prob))
                 res = utilities.argmax(probs)
                 correct = correct if res != example[1] else correct+1
@@ -81,6 +84,6 @@ class NaiveBayes():
 
 # pp = pprint.PrettyPrinter(indent=4)
 # pp.pprint(utilities.constructSet(windowSize=2,loc="temp.pickle")[:5])
-nb = NaiveBayes(utilities.constructSet(windowSize=2))
-print nb.classify(utilities.constructSet(source='validation_clean.data',windowSize=2))
+nb = NaiveBayes(utilities.constructSet(windowSize=0, source='training_clean.data'))
+print nb.classify(utilities.constructSet(source='validation_clean.data',windowSize=0))
 
