@@ -41,3 +41,4 @@ proj01/*.train
 proj01/*.test
 proj02/proposal.pdf
 proj02/report.pdf
+proj02/dictionary_processed.xml

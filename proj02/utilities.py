@@ -5,6 +5,9 @@ from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 from operator import *
 
+# for dictionary XML
+import re
+
 lemma = WordNetLemmatizer()
 
 functions = dict()
@@ -81,3 +84,20 @@ def constructSet(source='training_clean.data',windowSize=-1,separate=False,count
 
 def argmax(pairs):
     return max(pairs, key=itemgetter(1))[0]
+
+# preprocess dictionary XML: remove all '"' characters in examples
+# arguments:
+#   dictionaryFileloc is a string to the file to parse
+#   outputFileloc is the location to write the preprocessed output.
+def fixDoubles(dictionaryFileloc, outputFileloc):
+    with open(dictionaryFileloc) as f:
+        dictContent = f.read()
+        for i in range(20): # min 12 (trial and error)
+            dictContent = re.sub( \
+                'examples="(.*)"(.*)" />', \
+                r'examples="\1\2" />', \
+                dictContent)
+        # handle 1 specific case of two senses.
+        dictContent = re.sub('sense id="1&&2"', 'sense id="1 and 2"', dictContent)
+        with open(outputFileloc,'w') as outputFile:
+            outputFile.write(dictContent)
