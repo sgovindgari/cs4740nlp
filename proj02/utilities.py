@@ -40,7 +40,7 @@ def cleanFile(source, destination):
 #separate - consider the word "dog" coming after the word as a different feature from the word "dog" before the word
 #countFunction - different weighted functions
 #loc - location to save pickled examples to
-def constructSet(source='training_clean.data',windowSize=-1,separate=False,countFunction=functions['boolean'],loc=None):
+def constructSet(source='training_clean.data',windowSize=-1,useColocation=False,useCooccurrence=True,separate=False,countFunction=functions['boolean'],loc=None):
     data = ''
     r = re.compile('\||%%')
     res = []
@@ -62,35 +62,39 @@ def constructSet(source='training_clean.data',windowSize=-1,separate=False,count
             length = windowSize if windowSize != -1 else max(len(prev),len(after))
             for i in range(length):
                 if i < len(prev):
-                    #Compute co-occurence features for previous window
-                    prevEntry = prev[i]
-                    if separate:
-                        prevEntry = ('p',prev[i])
-                    if prevEntry in features:
-                        features[prevEntry] = countFunction(prev[i],i,features[prevEntry])
-                    else: 
-                        features[prevEntry] = countFunction(prev[i],i,0)
-                    #Compute co-locational features
-                    features[('prev',i+1)] = prev[i]
-                    text = word_tokenize(prev[i])
-                    tag = pos_tag(text)
-                    if len(tag) != 0:
-                        features[('prev-pos',i+1)] = tag[0][1]
+                    if useCooccurrence:
+                        #Compute co-occurrence features for previous window
+                        prevEntry = prev[i]
+                        if separate:
+                            prevEntry = ('p',prev[i])
+                        if prevEntry in features:
+                            features[prevEntry] = countFunction(prev[i],i,features[prevEntry])
+                        else: 
+                            features[prevEntry] = countFunction(prev[i],i,0)
+                    if useColocation:
+                        #Compute co-locational features
+                        features[('prev',i+1)] = prev[i]
+                        text = word_tokenize(prev[i])
+                        tag = pos_tag(text)
+                        if len(tag) != 0:
+                            features[('prev-pos',i+1)] = tag[0][1]
                 if i < len(after):
-                    #Compute co-occurence features for after window
-                    afterEntry = after[i]
-                    if separate:
-                        afterEntry = ('a',after[i]) 
-                    if afterEntry in features:
-                        features[afterEntry] = countFunction(after[i],i,features[afterEntry])
-                    else: 
-                        features[afterEntry] = countFunction(after[i],i,0)
-                    #Compute co-locational features
-                    features[('after',i+1)] = after[i]
-                    text = word_tokenize(after[i])
-                    tag = pos_tag(text)
-                    if len(tag) != 0:
-                        features[('after-pos',i+1)] = tag[0][1]
+                    if useCooccurrence:
+                        #Compute co-occurence features for after window
+                        afterEntry = after[i]
+                        if separate:
+                            afterEntry = ('a',after[i]) 
+                        if afterEntry in features:
+                            features[afterEntry] = countFunction(after[i],i,features[afterEntry])
+                        else: 
+                            features[afterEntry] = countFunction(after[i],i,0)
+                    if useColocation:
+                        #Compute co-locational features
+                        features[('after',i+1)] = after[i]
+                        text = word_tokenize(after[i])
+                        tag = pos_tag(text)
+                        if len(tag) != 0:
+                            features[('after-pos',i+1)] = tag[0][1]
             example = (word.strip(),int(sense.strip()),features)
             res.append(example)
     #Save the training examples object

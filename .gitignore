@@ -4,6 +4,9 @@
 *.settings
 *.DS_Store
 *.pyc
+*.data
+*.data
+*.pickle
 
 # Package Files #
 *.war

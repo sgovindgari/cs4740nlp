@@ -43,10 +43,9 @@ class NaiveBayes():
                     self.featureCounts[(word,sense)][key] = dict()
                     self.featureCounts[(word,sense)][key][value] = 1
 
-    def classify(self, testSet, softscore=False):
+    def classify(self, testSet, softscore=False,alpha=1):
         predictions = []
 
-        #TODO: Smooth - using add 1 for now I guess
         actual = []
         correct = 0
         for example in testSet:
@@ -69,18 +68,18 @@ class NaiveBayes():
                             if key in self.featureCounts[(word,sense)]:
                                 #Are there any of the value in this test example in our training examples
                                 if value in self.featureCounts[(word,sense)][key]:
-                                    prob *= ((self.featureCounts[(word,sense)][key][value] + 1) / float(sc+1))
+                                    prob *= ((self.featureCounts[(word,sense)][key][value] + alpha) / float(sc+alpha*len(self.featureLists[word])))
                                 #if not, use add one smoothing to avoid zero probability
                                 else:
-                                    prob *= (1.0/(sc+1))
+                                    prob *= (alpha/(sc+alpha*len(self.featureLists[word])))
                             #If it doesn't then using add 1 smoothing compute probability
                             else:
-                                prob *= (1.0/(sc+1))
+                                prob *= (alpha/(sc+alpha*len(self.featureLists[word])))
                         # feature is 0/null in example
                         else:
                             #if the feature has non-null/0 value in any of our test example
                             if key in self.featureCounts[(word,sense)]:
-                                prob *= ((sc-sum(self.featureCounts[(word,sense)][key].values())+1) / float(sc+1))
+                                prob *= ((sc-sum(self.featureCounts[(word,sense)][key].values())+alpha) / float(sc+alpha*len(self.featureLists[word])))
                             #The feature is null for all train examples
                             else:
                                 prob *= 1.0
@@ -105,6 +104,5 @@ class NaiveBayes():
 
 
 pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(utilities.constructSet(windowSize=5,source='temp_train.data'))
-nb = NaiveBayes(pickle.load(open('temp.pickle')))
-print nb.classify(utilities.constructSet(source='validation_clean.data',windowSize=2))
+nb = NaiveBayes(utilities.constructSet(source='training_stop.data',windowSize=-1))
+print nb.classify(utilities.constructSet(source='validation_stop.data',windowSize=-1),alpha=1)
