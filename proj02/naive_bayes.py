@@ -43,7 +43,7 @@ class NaiveBayes():
                     self.featureCounts[(word,sense)][key] = dict()
                     self.featureCounts[(word,sense)][key][value] = 1
 
-    def classify(self, testSet):
+    def classify(self, testSet, softscore=False):
         predictions = []
 
         #TODO: Smooth - using add 1 for now I guess
@@ -75,6 +75,16 @@ class NaiveBayes():
                             else:
                                 prob *= (sc+1)
                     probs.append((sense,prob))
+                if (softscore):
+                	# separate out the senses and the probabilities into 2 lists
+                	senses = list(zip(*probs)[0])
+                	prob_numbers = list(zip(*probs)[1])
+
+                	# normalize probabilities
+                	prob_sum = sum(prob_numbers)
+                	prob_numbers = [x/float(prob_sum) for x in prob_numbers]
+
+                	probs = zip(senses, prob_numbers)
                 res = utilities.argmax(probs)
                 correct = correct if res != example[1] else correct+1
                 predictions.append(res)
@@ -86,6 +96,6 @@ class NaiveBayes():
 
 # pp = pprint.PrettyPrinter(indent=4)
 # pp.pprint(utilities.constructSet(windowSize=2,loc="temp.pickle")[:5])
-nb = NaiveBayes(utilities.constructSet(windowSize=0, source='training_clean.data'))
-print nb.classify(utilities.constructSet(source='validation_clean.data',windowSize=0))
+nb = NaiveBayes(utilities.constructSet(windowSize=5, source='training_clean.data'))
+print nb.classify(utilities.constructSet(source='validation_clean.data',windowSize=5), softscore=False)
 
