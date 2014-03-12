@@ -117,7 +117,9 @@ def fixDoubles(dictionaryFileloc, outputFileloc):
                 'examples="(.*)"(.*)" />', \
                 r'examples="\1\2" />', \
                 dictContent)
-        # handle 1 specific case of two senses.
-        dictContent = re.sub('sense id="1&&2"', 'sense id="1,2"', dictContent)
+        # handle 1 specific case of two senses: remove it and fix num count
+        dictContent = re.sub('<lexelt item="drug.n" num="3">', \
+            '<lexelt item="drug.n" num="2">', dictContent)
+        dictContent = re.sub('<sense id="1&&2".* />\n', '', dictContent)
         with open(outputFileloc,'w') as outputFile:
             outputFile.write(dictContent)
