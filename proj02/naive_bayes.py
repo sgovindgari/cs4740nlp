@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import utilities, pprint,math
+import utilities, pprint, math, pickle
 
 class NaiveBayes():
     def __init__(self, trainingSet):
@@ -27,8 +27,8 @@ class NaiveBayes():
                 self.senseCounts[word][sense] = 1
             for key,value in features.items():
                 if word not in self.featureLists:
-                    self.featureLists[word] = dict()
-                self.featureLists[word][key] = key
+                    self.featureLists[word] = set()
+                self.featureLists[word].add(key)
                 if (word, sense) in self.featureCounts:
                     if key in self.featureCounts[(word,sense)]:
                         if value in self.featureCounts[(word,sense)][key]:
@@ -42,6 +42,7 @@ class NaiveBayes():
                     self.featureCounts[(word,sense)] = dict()
                     self.featureCounts[(word,sense)][key] = dict()
                     self.featureCounts[(word,sense)][key][value] = 1
+
 
     def classify(self, testSet):
         predictions = []
@@ -62,18 +63,28 @@ class NaiveBayes():
                     # Only go through the features we have from training, ignore features that arise in test example
                     # that don't appear in any training example as they will all have the same effect (sort of) on the probability
                     for key in self.featureLists[word]:
-                        prob /= (sc+1)
-                        #feature appears in test example
+                        #feature is non-null/0 in this example 
                         if key in features:
                             value = features[key]
-                            if key in self.featureCounts[(word,sense)] and value in self.featureCounts[(word,sense)][key]:
-                                prob *= (self.featureCounts[(word,sense)][key][value] + 1)
-                        #Punishes training data for having features that DONT appear in the test example
-                        else:
+                            #Does this sense of the word have this feature as non-null/0
                             if key in self.featureCounts[(word,sense)]:
-                                prob *= (sc-sum(self.featureCounts[(word,sense)][key].values())+1)
+                                #Are there any of the value in this test example in our training examples
+                                if value in self.featureCounts[(word,sense)][key]:
+                                    prob *= ((self.featureCounts[(word,sense)][key][value] + 1) / float(sc+1))
+                                #if not, use add one smoothing to avoid zero probability
+                                else:
+                                    prob *= (1.0/(sc+1))
+                            #If it doesn't then using add 1 smoothing compute probability
                             else:
-                                prob *= (sc+1)
+                                prob *= (1.0/(sc+1))
+                        # feature is 0/null in example
+                        else:
+                            #if the feature has non-null/0 value in any of our test example
+                            if key in self.featureCounts[(word,sense)]:
+                                prob *= ((sc-sum(self.featureCounts[(word,sense)][key].values())+1) / float(sc+1))
+                            #The feature is null for all train examples
+                            else:
+                                prob *= 1.0
                     probs.append((sense,prob))
                 res = utilities.argmax(probs)
                 correct = correct if res != example[1] else correct+1
@@ -84,8 +95,7 @@ class NaiveBayes():
         return predictions
 
 
-# pp = pprint.PrettyPrinter(indent=4)
-# pp.pprint(utilities.constructSet(windowSize=2,loc="temp.pickle")[:5])
-nb = NaiveBayes(utilities.constructSet(windowSize=0, source='training_clean.data'))
-print nb.classify(utilities.constructSet(source='validation_clean.data',windowSize=0))
-
+pp = pprint.PrettyPrinter(indent=4)
+pp.pprint(utilities.constructSet(windowSize=5,source='temp_train.data'))
+nb = NaiveBayes(pickle.load(open('temp.pickle')))
+print nb.classify(utilities.constructSet(source='validation_clean.data',windowSize=2))

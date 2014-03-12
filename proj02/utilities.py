@@ -3,6 +3,7 @@ import re,pickle,pprint
 #To run must download stopwords using nltk.download()
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
+from nltk import pos_tag, word_tokenize
 from operator import *
 
 # for dictionary XML
@@ -51,15 +52,17 @@ def constructSet(source='training_clean.data',windowSize=-1,separate=False,count
             [word,pos] = word.split('.')
             #Turn prev and after into a list of words and only include those that are within the window
             prev = prev.strip().lower().split(' ')
+            prev.reverse()
             after = after.strip().lower().split(' ')
             if windowSize != -1:
-                prev = prev[len(prev)-windowSize:len(prev)]
+                prev = prev[:windowSize]
                 after = after[:windowSize]
             features = dict()
             features['POS'] = pos.strip()
             length = windowSize if windowSize != -1 else max(len(prev),len(after))
             for i in range(length):
                 if i < len(prev):
+                    #Compute co-occurence features for previous window
                     prevEntry = prev[i]
                     if separate:
                         prevEntry = ('p',prev[i])
@@ -67,7 +70,14 @@ def constructSet(source='training_clean.data',windowSize=-1,separate=False,count
                         features[prevEntry] = countFunction(prev[i],i,features[prevEntry])
                     else: 
                         features[prevEntry] = countFunction(prev[i],i,0)
+                    #Compute co-locational features
+                    features[('prev',i+1)] = prev[i]
+                    text = word_tokenize(prev[i])
+                    tag = pos_tag(text)
+                    if len(tag) != 0:
+                        features[('prev-pos',i+1)] = tag[0][1]
                 if i < len(after):
+                    #Compute co-occurence features for after window
                     afterEntry = after[i]
                     if separate:
                         afterEntry = ('a',after[i]) 
@@ -75,6 +85,12 @@ def constructSet(source='training_clean.data',windowSize=-1,separate=False,count
                         features[afterEntry] = countFunction(after[i],i,features[afterEntry])
                     else: 
                         features[afterEntry] = countFunction(after[i],i,0)
+                    #Compute co-locational features
+                    features[('after',i+1)] = after[i]
+                    text = word_tokenize(after[i])
+                    tag = pos_tag(text)
+                    if len(tag) != 0:
+                        features[('after-pos',i+1)] = tag[0][1]
             example = (word.strip(),int(sense.strip()),features)
             res.append(example)
     #Save the training examples object
