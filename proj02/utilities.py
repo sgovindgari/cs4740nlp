@@ -40,7 +40,7 @@ def cleanFile(source, destination):
 #separate - consider the word "dog" coming after the word as a different feature from the word "dog" before the word
 #countFunction - different weighted functions
 #loc - location to save pickled examples to
-def constructSet(source='training_clean.data',windowSize=-1,useColocation=False,useCooccurrence=True,separate=False,countFunction=functions['boolean'],loc=None):
+def constructSet(source='training_clean.data',windowSize=-1,useColocation=False,useCooccurrence=True,countFunction=functions['boolean'],loc=None):
     data = ''
     r = re.compile('\||%%')
     res = []
@@ -65,8 +65,6 @@ def constructSet(source='training_clean.data',windowSize=-1,useColocation=False,
                     if useCooccurrence:
                         #Compute co-occurrence features for previous window
                         prevEntry = prev[i]
-                        if separate:
-                            prevEntry = ('p',prev[i])
                         if prevEntry in features:
                             features[prevEntry] = countFunction(prev[i],i,features[prevEntry])
                         else: 
@@ -82,8 +80,6 @@ def constructSet(source='training_clean.data',windowSize=-1,useColocation=False,
                     if useCooccurrence:
                         #Compute co-occurence features for after window
                         afterEntry = after[i]
-                        if separate:
-                            afterEntry = ('a',after[i]) 
                         if afterEntry in features:
                             features[afterEntry] = countFunction(after[i],i,features[afterEntry])
                         else: 
