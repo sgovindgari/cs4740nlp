@@ -1,4 +1,4 @@
-import re,pickle,pprint
+import re,pickle,pprint,numpy
 
 #To run must download stopwords using nltk.download()
 from nltk.corpus import stopwords
@@ -40,7 +40,9 @@ def cleanFile(source, destination):
 #separate - consider the word "dog" coming after the word as a different feature from the word "dog" before the word
 #countFunction - different weighted functions
 #loc - location to save pickled examples to
-def constructSet(source='training_clean.data',windowSize=-1,useColocation=False,useCooccurrence=True,countFunction=functions['boolean'],loc=None):
+def constructSet(source='training_clean.data',windowSize=-1,usePos=True,useColocation=True,useCooccurrence=True,countFunction=functions['boolean'],loc=None):
+    maxAfter = []
+    maxPrev = []
     data = ''
     r = re.compile('\||%%')
     res = []
@@ -54,11 +56,14 @@ def constructSet(source='training_clean.data',windowSize=-1,useColocation=False,
             prev = prev.strip().lower().split(' ')
             prev.reverse()
             after = after.strip().lower().split(' ')
+            maxAfter.append(len(after))
+            maxPrev.append(len(prev))
             if windowSize != -1:
                 prev = prev[:windowSize]
                 after = after[:windowSize]
             features = dict()
-            features['POS'] = pos.strip()
+            if usePos:
+                features['POS'] = pos.strip()
             length = windowSize if windowSize != -1 else max(len(prev),len(after))
             for i in range(length):
                 if i < len(prev):
@@ -96,6 +101,10 @@ def constructSet(source='training_clean.data',windowSize=-1,useColocation=False,
     #Save the training examples object
     if loc != None:
         pickle.dump(res,open(loc,'w'))
+
+    #Generate statistics about the data
+    # print "Previous::: mean: " + str(numpy.mean(maxPrev)) + " median: " + str(numpy.median(maxPrev)) + " max: " + str(max(maxPrev))
+    # print "After::: mean: " + str(numpy.mean(maxAfter)) + " median: " + str(numpy.median(maxAfter)) + " max: " + str(max(maxAfter))
     return res
 
 def argmax(pairs):

@@ -42,6 +42,58 @@
 \begin{document}
 \begin{center}\textbf{Project 2: Report on Word Sense Disambiguation}\end{center}
 
-\lipsum[1-4]
+\section{Introduction}
+
+For this project we have written our code in Python. We used several of python's included libraries as well as tools from NLTK. We used NLTK's WordNetLemmatizer for lemmatizing words in our data, NLTK's maximum entropy POS tagger based off the Penn TreeBank was used for part-of-speech tagging of data, finally we used NLTK's corpus of stopwords to eleminate stopwords from the data sets. To run our code, please reference our README.
+
+\section{Preprocessing}
+
+\subsection{Dataset Cleanup}
+
+To clean up the training, validation and test data we began by writing a function \texttt{cleanFile} which took a source file and wrote the cleaned version to a specified destination. For each line of the source file the function cleans the words before and words after the target word in the file. For those before and after words we have a \texttt{clean} function which for each word checks if the word is punctuation, or a stopword, if so the word is thrown out. Otherwise the word is lemmatized and retained. This is done using a single line of code as follows:
+
+{\small
+\begin{verbatim}
+return [lemma.lemmatize(word) for word in words if (re.match('.*\w+.*',word) != None) and (word not in stopwords.words('english'))]
+\end{verbatim}
+}
+
+\subsection{Dictionary Cleanup}
+
+\section{Naive Bayes}
+
+\subsection{Feature Vector Construction}
+
+To construct features we wrote a function: \texttt{constructSet}. This function took a source as well as parameters specifying window size; whether to use co-locational, co-occurrence features or both; whether to use the part of speech of the target word in the example as a feature; and what count function to use for co-occurrence features. Co-occurrence features could be counted using either a boolean count (does the word appear or does it not), or a simple count (how many times the word appears). For each line of the source file we would create an entry in a list. Each entry is a three tuple made up of a the target word followed by its sense, followed by a dictionary of features. The dictionary's keys are the feature and the value is the value of that feature in the example. 
+
+We extracted the target word, sense and examples by using a simple regex to get a list of the parts.
+
+part-of-speech of the target word was extracted from the first part of the example which is structured as: \texttt{<word>.<pos>}. TODO: COMPLETE
+\subsection{Model Construction}
+
+\subsection{Classification}
+
+\section{Dictionary-based}
+
+\section{Results}
+
+\subsection{Naive Bayes}
+
+\subsection{Dictionary-based}
+
+\section{Discussion}
+
+Some statistics: 
+Training set:
+Previous::: mean: 31.0285444998 median: 31.0 max: 120
+After::: mean: 29.7005520399 median: 29.0 max: 114
+
+Validation set:
+Previous::: mean: 31.436227224 median: 31.0 max: 83
+After::: mean: 31.1232583065 median: 31.0 max: 79
+
+Test Set:
+Previous::: mean: 31.7912200102 median: 31.0 max: 84
+After::: mean: 30.6061766207 median: 30.0 max: 104
 
 \end{document}
