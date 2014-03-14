@@ -7,6 +7,7 @@ import utilities, pprint, math
 from lxml import etree
 
 # read original dictionary.xml, fix errors, write to dictionary_processed.xml
+# provided dictionary file is meant only for the target words
 dictionarySource    = 'dictionary.xml'
 dictionaryProcessed = 'dictionary_processed.xml'
 
@@ -40,6 +41,12 @@ class DictionaryWSD():
         self.XMLSource = sourceXMLDict
         self.xml = etree.parse(self.XMLSource) # read the xml into memory
         self.dict = parseIntoDictionary(self.xml) # here's our lookup!
+        # table is a dict :
+        #     contextword -> (senseID, numOverlapWords, numConsecOverlapWords)
+        self.table = dict() # TODO populate
+
+    def computeOverlap(self, window=5):
+        pass # TODO
 
     def printexample(self):
         print 'Example:\n', 'begin :', self.dict['begin']

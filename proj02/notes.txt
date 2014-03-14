@@ -24,6 +24,16 @@ Supervised WSD
 Dictionary based WSD
 - Utilize the definitions given in dictionary 
 
+  implementation:
+    1. preprocess the xml
+       # utilities.fixDoubles(dictionarySource, dictionaryProcessed)
+    2. make the dictionary from dictionaryProcessed
+       - dictionary is constructed by the method parseIntoDictionary
+       - Dictionary structure: 
+         dictionary of word to tuple
+         dict :  word -> ('part-of-sp', subdict)
+         where subdict : senseid -> ('def', ['exampleslist'], [wordnet ints])
+
 Extensions
 - keep track of other most likely senses and pick them when certain conditions are satisfied 
 - Scoring approach that assumes the prediction of a single sense. Vote partially for each sense wrt confidence
