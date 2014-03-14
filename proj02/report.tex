@@ -66,12 +66,42 @@ return [lemma.lemmatize(word) for word in words if (re.match('.*\w+.*',word) != 
 
 To construct features we wrote a function: \texttt{constructSet}. This function took a source as well as parameters specifying window size; whether to use co-locational, co-occurrence features or both; whether to use the part of speech of the target word in the example as a feature; and what count function to use for co-occurrence features. Co-occurrence features could be counted using either a boolean count (does the word appear or does it not), or a simple count (how many times the word appears). For each line of the source file we would create an entry in a list. Each entry is a three tuple made up of a the target word followed by its sense, followed by a dictionary of features. The dictionary's keys are the feature and the value is the value of that feature in the example. 
 
-We extracted the target word, sense and examples by using a simple regex to get a list of the parts.
+We extracted the target word, sense and examples by using a simple regex to get a list of the parts. part-of-speech of the target word was extracted from the first part of the example which is structured as: \texttt{<word>.<pos>}. For each word within the window we created a co-occurrence feature in the example's feature vector where the key is the word and the value is the count of it (or simple boolean, did it appear or did it not). For each word in the window we also extracted co-locational features. For instance if the 5th word following the target word was "jaguar" a feature would be added to this example's feature vector. The key would be "(after,5) and the value would be the word. We also pulled the POS of that word creating a feature with key (after-pos,5) and value being the pos of the word, as tagged by our pos-tagger from NLTK.
 
-part-of-speech of the target word was extracted from the first part of the example which is structured as: \texttt{<word>.<pos>}. TODO: COMPLETE
 \subsection{Model Construction}
 
+In order to construct a naive bayes model (class \texttt{naive\_bayes} in our code) of the examples generated in the previous section we generated the appropriate counts necessary. In our naive bayes' constructor we iterate over all passed in examples. We maintain a list of word counts in \texttt{self.wordcounts} which is a dictionary mapping target words to how many examples are for that word. We also maintain \texttt{self.featureLists} which is a dictionary which maps target words to sets of all features for each target word, each set is created as we iterate through examples and gather all features from each example for each word. Further we maintain a dictionary of dictionaries holding sense counts. For each word we have an entry in \texttt{self.senseCounts} which holds a dictionary where the keys are the sense and the value are the number of times that sense appears in the training set. 
+
+Finally we create \texttt{self.featureCounts}, this is a dictionary with keys of (word,sense). Then for each key there is a dictionary with keys corresponding to each feature. These features values are dictionaries which have a key for each value for that feature that appears in the training set with the number stored in the dictionary being the count of the number of times the feature with the specific value has shown up for that (word,sense) pair in the training set. To illustrate this example, consider the case when we have two following feature vectors for the word "affect" with the sense "1":
+{\small
+\begin{verbatim}
+{"f1" : "dog", "f2" : 3, "f3" : "hello"}
+{"f1" : "dog", "f2" : 2, "f4" : "boat"}
+\end{verbatim}
+}
+In this case \texttt{self.featureCounts} would have one entry: ("affect","1"), this entry would look as follows:
+{\small
+\begin{verbatim}
+{
+ "f1" : { "dog" : 2 }
+ "f2" : { 2 : 1, 3 : 1 }
+ "f3" : { "hello" : 1 }
+ "f4" : { "boat" : 1 }
+}
+\end{verbatim}
+}
+
+It is important to note that we do not maintain count of features which are part of a specific word but do not appear in an example. For instance the second example in our previous case is missing the feature "f3" so in actuality it has a feature of "f3" with a value of null (0 if it was a boolean/number feature), but we do not count this as we can generate that count on the fly using the counts we maintain in \texttt{self.featureCounts} and \texttt{self.senseCounts}.
+
 \subsection{Classification}
+
+In order to classify a set of examples we wrote a function \texttt{classify} which takes a testSet (one processed by the function \texttt{constructSet} described previously). It also takes an alpha, the value used in smoothing; softscore, whether to use softscoring or not; and kaggle, whether to write a file compatible with kaggle storing results. In \texttt{classify} we go over each example and generate a probability for each sense the target word has in our training set. We generate the probabilities by going over each feature in our \texttt{self.featureLists} for the target word.
+
+We pull the value for that feature from our test example if it has one, if it doesn't then the value for that feature is null/0. We then find the corresponding entry in \texttt{self.featureCounts} if the feature is not null/0 in this example, if the entry does not exist (i.e. the value does not occur in the training set for this sense) then we add \texttt{math.log(alpha/float(sc+alpha*len(self.featureLists[word])))} to our log probability--sc is the sense count. If the entry does exist, replace alpha with the count in \texttt{self.featureCounts} plus alpha in the above formula. If the feature in the test example has null/0 value then we find how many examples in the training set correspond to that value by counting how many do not have that value and subtracting that number from the sense count, the code for that addition to log probability is as follows: \texttt{math.log((sc-sum(self.featureCounts[(word,sense)][key].values())+alpha) / float(sc+alpha*len(self.featureLists[word])))}. If there are no training examples with non-null/0 value then the numerator in the above code becomes \texttt{(sc+alpha)}.
+
+The log probability for each training example also has the log of \texttt{(sc/wc)} added to it, where sc is sense count and wc is word count for the target word. Thus for each example we calculate an approximation (the log of an approximation) of: $P(s_i)\mathlarger{\prod}_{j=1}^{n}P(f_j|s_i)$ for our model. We approximate these probabilities using $P(s_i) \approx count(s_i|w)/count(w)$ and $P(f_j|s_i) \approx count(f_j|s_i,w)/count(s_i|w)$. We use the log of probability to avoid underflow. Further we use add-alpha smoothing to avoid having counts of zero which are negative infinity in logs (or 0 for probability, meaning the sense would never be selected). This is especially important because the feature vectors are often very sparse.
+
+We do this for each sense of each target word example and take the argmax to produce a prediction. We do this for each example in the test set and then output a tuple of our accuracy and a list of tuples corresponding to \texttt{(actual\_class,predicted\_class)} for each example. 
 
 \section{Dictionary-based}
 
