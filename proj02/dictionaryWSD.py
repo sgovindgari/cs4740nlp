@@ -13,7 +13,7 @@ dictionaryProcessed = 'dictionary_processed.xml'
 
 # takes an xml tree generated from etree.parse,
 #   converts it into a nice dictionary!
-def parseIntoDictionary(xml):
+def parseIntoDictionary(xml, clean=True):
     # dictionary of word to tuple
     # dict :  word -> ('part-of-sp', subdict)
     # where subdict : senseid -> ('def', ['exampleslist'], [wordnet ints])
@@ -31,6 +31,10 @@ def parseIntoDictionary(xml):
             except: wordnet = []
             gloss = attr['gloss'].strip() # definition
             examples = attr['examples'].split(' | ') # ['hi','world']
+            if clean: # then gloss and each example get cleaned!
+                gloss = utilities.cleanString(gloss)
+                for i in range(len(examples)):
+                	examples[i] = utilities.cleanString(examples[i])
             senses[sid] = (gloss, examples, wordnet)
         dictionary[word] = (pos, senses)
     return dictionary
@@ -40,7 +44,8 @@ class DictionaryWSD():
     def __init__(self, sourceXMLDict=dictionaryProcessed):
         self.XMLSource = sourceXMLDict
         self.xml = etree.parse(self.XMLSource) # read the xml into memory
-        self.dict = parseIntoDictionary(self.xml) # here's our lookup!
+        # parseIntoDictionary, default with cleaning (lemmatize, rm stopwords)
+        self.dict = parseIntoDictionary(self.xml, True) # here's our lookup!
         # table is a dict :
         #     contextword -> (senseID, numOverlapWords, numConsecOverlapWords)
         self.table = dict() # TODO populate
