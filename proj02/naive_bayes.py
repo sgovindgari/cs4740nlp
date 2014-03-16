@@ -67,33 +67,33 @@ class NaiveBayes():
                         prob = math.log(sc/float(wc))
                     # Only go through the features we have from training, ignore features that arise in test example
                     # that don't appear in any training example as they will all have the same effect (sort of) on the probability
-                    for key in self.featureLists[word]:
-                        #feature is non-null/0 in this example 
-                        fp = 0.0
-                        if key in features:
-                            value = features[key]
-                            #Does this sense of the word have this feature as non-null/0
-                            if key in self.featureCounts[(word,sense)]:
-                                #Are there any of the value in this test example in our training examples
-                                if value in self.featureCounts[(word,sense)][key]:
-                                    fp = math.log((self.featureCounts[(word,sense)][key][value] + alpha) / float(sc+alpha*len(self.featureLists[word])))
-                                #if not, use add one smoothing to avoid zero probability
+                    if word in self.featureLists:
+                        for key in self.featureLists[word]:
+                            #feature is non-null/0 in this example 
+                            fp = 0.0
+                            if key in features:
+                                value = features[key]
+                                #Does this sense of the word have this feature as non-null/0
+                                if key in self.featureCounts[(word,sense)]:
+                                    #Are there any of the value in this test example in our training examples
+                                    if value in self.featureCounts[(word,sense)][key]:
+                                        fp = math.log((self.featureCounts[(word,sense)][key][value] + alpha) / float(sc+alpha*len(self.featureLists[word])))
+                                    #if not, use add one smoothing to avoid zero probability
+                                    else:
+                                        fp = math.log(alpha/float(sc+alpha*len(self.featureLists[word])))
+                                #If it doesn't then using add 1 smoothing compute probability
                                 else:
                                     fp = math.log(alpha/float(sc+alpha*len(self.featureLists[word])))
-                            #If it doesn't then using add 1 smoothing compute probability
+                            # feature is 0/null in example
                             else:
-                                fp = math.log(alpha/float(sc+alpha*len(self.featureLists[word])))
-                        # feature is 0/null in example
-                        else:
-                            #if the feature has non-null/0 value in any of our test example
-                            if key in self.featureCounts[(word,sense)]:
-                                fp = math.log((sc-sum(self.featureCounts[(word,sense)][key].values())+alpha) / float(sc+alpha*len(self.featureLists[word])))
-                            #The feature is null for all train examples
-                            else:
-                                fp = math.log((sc + alpha) / float(sc+alpha*len(self.featureLists[word])))
-                        #print key + ": " + str(fp)
-                        prob += fp
-
+                                #if the feature has non-null/0 value in any of our test example
+                                if key in self.featureCounts[(word,sense)]:
+                                    fp = math.log((sc-sum(self.featureCounts[(word,sense)][key].values())+alpha) / float(sc+alpha*len(self.featureLists[word])))
+                                #The feature is null for all train examples
+                                else:
+                                    fp = math.log((sc + alpha) / float(sc+alpha*len(self.featureLists[word])))
+                            #print key + ": " + str(fp)
+                            prob += fp
                     probs.append((sense,prob))
                 res = None
                 if softscore:
@@ -187,4 +187,4 @@ def softScoring(minSize=1, maxSize=120, stepSize=1):
 #testTrainingSize(2550,2550,1)
 softScoring(90, 100, 10)
 # testTrainingSize(1,150,5,'trainsize_soft.csv')
-        
+
