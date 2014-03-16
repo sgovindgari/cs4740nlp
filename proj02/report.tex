@@ -17,7 +17,9 @@
 \usepackage{tikz} % graphics?
 \usepackage{bm} % bold math
 \usepackage{multicol} % multiple columns
+\usepackage{pgfplots}
 \usepackage{lipsum} % lipsum
+\usepackage{hyperref}
 
 \pagestyle{fancy}
 
@@ -103,11 +105,43 @@ The log probability for each training example also has the log of \texttt{(sc/wc
 
 We do this for each sense of each target word example and take the argmax to produce a prediction. We do this for each example in the test set and then output a tuple of our accuracy and a list of tuples corresponding to \texttt{(actual\_class,predicted\_class)} for each example. 
 
+\subsection{Soft-scoring}
+
+TODO: COMPLETE
+
 \section{Dictionary-based}
 
-\section{Results}
+\section{Experimentation}
 
 \subsection{Naive Bayes}
+
+We tested our implementation of Naive Bayes in various ways using the validation data. The first testing we did was determine our baseline: simply predicting the most common sense for each word; this gave an accuracy of 81.14\%. Then we tested co-occurrence and co-locational features and the part-of-speech feature. Because the training data for each word is very biased and very minimal (for instance 'capital' occurs 278 total times: 258 for sense 1, 18 for sense 2, 1 for sense 3, 1 for sense 5) we stopped multiplying the probability for each sense by the probability of the sense occurring in the training set for that word. Thus we are assuming that the training data is not biased at all for our testing of features. We quickly realized that the POS feature had the same value for all training examples for each word, making our Naive Bayes simply choose the first feature every time, resulting in an accuracy of only 55.84\%. We tested co-occurrence features for window sizes from 1 to about 20, but stopped going beyond that because for all window sizes we got the same accuracy: 81.35\%, a slight improvement above the baseline, but very minimal. Our testing of co-location features were more fruitful, showing poor performance at the beginning, but improving quick as window size increased, eventually peaking at 82.21\% (see \hyperref[fig:col]{Figure 1}).
+
+\begin{figure}[h]\label{fig:col}
+\centering
+\begin{tikzpicture}
+  \begin{axis}[]
+    \addplot table [x index=0, y index=1, col sep=comma] {col.csv};
+  \end{axis}
+\end{tikzpicture}
+\caption{Size of window vs. accuracy for co-locational features}
+\end{figure}
+
+We also tested how the accuracy of our Naive Bayes model would change on the validation set as we increase the maximum possible number of training examples for each sense of each word. For this test we used a Naive Bayes model using only co-occurrence features with a window size of 10. We tested both soft-scoring and hard-scoring. We found that accuracy started fairly low for both and as training size increased, accuracy increased quickly for both scoring systems, with soft-scoring always slightly lower than hard (see \hyperref[fig:size]{Figure 2}).
+
+\begin{figure}[h]\label{fig:size}
+\centering
+\begin{tikzpicture}
+  \begin{axis}[
+  legend pos = outer north east,]
+    \addplot table [x index=0, y index=1, col sep=comma] {size.csv};
+    \addlegendentry{hard-scoring};
+    \addplot table [x index=0, y index=2, col sep=comma] {size.csv};
+    \addlegendentry{soft-scoring};
+  \end{axis}
+\end{tikzpicture}
+\caption{Maximum size of training set for a single sense vs. accuracy for a naive bayes model with window size 10 using only co-occurrence features.}
+\end{figure}
 
 \subsection{Dictionary-based}
 
@@ -125,5 +159,14 @@ After::: mean: 31.1232583065 median: 31.0 max: 79
 Test Set:
 Previous::: mean: 31.7912200102 median: 31.0 max: 84
 After::: mean: 30.6061766207 median: 30.0 max: 104
+
+sense counts for the word 'capital':
+{1: 258, 2: 18, 3: 1, 5: 1}
+
+'exchange':
+{1: 49, 2: 3, 3: 261, 4: 1, 5: 49}
+
+accuracy for col with windowsize 90: 0.822079314041 
+
 
 \end{document}
