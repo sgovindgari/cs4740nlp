@@ -64,11 +64,12 @@ class DictionaryWSD():
         # TODO - need a way to store different pos of a word and retrieve them accordingly
         list_of_senses = self.dict[word][1]
         for sense in list_of_senses:
+            print "!!!!", sense, list_of_senses[sense]
             overlap = self.computeOverlap(word, list_of_senses[sense], context)
+            print "!!!!", sense, "Overlap:", overlap
             if overlap > max_overlap:
-                    max_overlap = overlap
-                    best_sense = sense
-        
+                max_overlap = overlap
+                best_sense = sense
         print best_sense
         return best_sense
 
@@ -90,9 +91,9 @@ class DictionaryWSD():
        # for now splitting it as list form
        def_words = signature[0].split(' ')
        
-       #print "Pre words:\n", pre_words
-       #print "Post_words:\n", post_words
-       #print "Def words\n", def_words
+       print "  Pre words:", pre_words
+       print "  Post_words:", post_words
+       print "  Def words", def_words
 
        for word in def_words:
             for pre_word in pre_words:
