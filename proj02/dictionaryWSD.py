@@ -88,7 +88,7 @@ class DictionaryWSD():
 
        # for now splitting it as list form
        def_words = signature[0].split(' ')
-       dictionary = parseIntoDictionary(context)
+       
        print "Pre words:\n", pre_words
        print "Post_words:\n", post_words
        print "Def words\n", def_words
@@ -102,12 +102,12 @@ class DictionaryWSD():
        #print overlap
        return overlap
 
-    def checkSenseOverlap(self, word, context_word, dictionary):
+    def checkSenseOverlap(self, word, context_word):
         # for each word in sentence get the definition
         # check overlaps between definitions
         overlap = 0
         print "Context word:\n", context_word
-        get_def = dictionary[context_word][1]
+        get_def = self.dict[context_word][1]
         for sense in get_def: 
             # build a list of words containing meaning - Deal with when the word is not in wordNET
             lst = get_def[sense][0].split(' ')
