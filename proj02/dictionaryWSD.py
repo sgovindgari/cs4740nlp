@@ -50,11 +50,77 @@ class DictionaryWSD():
         #     contextword -> (senseID, numOverlapWords, numConsecOverlapWords)
         self.table = dict() # TODO populate
 
-    def computeOverlap(self, window=5):
-        pass # TODO
+    # precondition: sentence should be lemmatized before
+    #returns the best sense of a word
+    def Lesk(self, word, pos, sentence):
+        best_sense = -1
+        max_overlap = 0
+        # of words in a sentence
+        # assuming sentence is parsed already 
+        # TODO- discuss the state of sentence - is it parsed or not? 
+        context = sentence.split(' ')
+        # what to do if word doesnt exist?
+        # TODO - need a way to store different pos of a word and retrieve them accordingly
+        list_of_senses = self.dict[word][1]
+        for sense in list_of_senses:
+            overlap = self.computeOverlap(word, list_of_senses[sense], context)
+            if overlap > max_overlap:
+                    max_overlap = overlap
+                    best_sense = sense
+        
+        print best_sense
+        return best_sense
+
+    # returns the number of words in common between two sets
+    # signature = set of words in the gloss and examples of sense
+    def computeOverlap(self, target, signature, context, window=10):
+       # relevant words = words with same pos
+       overlap = 0
+       position = context.index(target)
+       window_pre = position-window
+       window_post = position+1+window
+       if window_pre < 0:
+            window_pre = 0
+       if window_post > len(context):
+            window_post = len(context)
+       pre_words = context[window_pre:position]
+       post_words = context[position+1:window_post]
+
+       # for now splitting it as list form
+       def_words = signature[0].split(' ')
+       dictionary = parseIntoDictionary(context)
+       print "Pre words:\n", pre_words
+       print "Post_words:\n", post_words
+       print "Def words\n", def_words
+
+       for word in def_words:
+            for pre_word in pre_words:
+                overlap = self.checkSenseOverlap(word, pre_word)
+            for post_word in post_words:
+                overlap = self.checkSenseOverlap(word, post_word)
+
+       #print overlap
+       return overlap
+
+    def checkSenseOverlap(self, word, context_word, dictionary):
+        # for each word in sentence get the definition
+        # check overlaps between definitions
+        overlap = 0
+        print "Context word:\n", context_word
+        get_def = dictionary[context_word][1]
+        for sense in get_def: 
+            # build a list of words containing meaning - Deal with when the word is not in wordNET
+            lst = get_def[sense][0].split(' ')
+            for wrd in lst:
+                if wrd == word:
+                    overlap = overlap+1
+        return overlap
 
     def printexample(self):
         print 'Example:\n', 'begin :', self.dict['begin']
+        #print 'sense: \n', self.dict['begin'][1]
+        for sense in self.dict['begin'][1]:
+            print "Sense:\n", self.dict['begin'][1][sense]
 
 # MAIN
 # preprocess dictionary XML:
@@ -63,3 +129,4 @@ utilities.fixDoubles(dictionarySource, dictionaryProcessed)
 
 dwsd = DictionaryWSD(dictionaryProcessed)
 dwsd.printexample()
+dwsd.Lesk('begin', 'v', 'begin attain freedom')
