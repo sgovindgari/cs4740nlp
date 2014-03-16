@@ -95,23 +95,24 @@ class NaiveBayes():
                         prob += fp
 
                     probs.append((sense,prob))
-                if (softscore):
-                	# separate out the senses and the probabilities into 2 lists
-                	senses = list(zip(*probs)[0])
-                	prob_numbers = list(zip(*probs)[1])
-
-                	# normalize probabilities
-                	prob_sum = sum(prob_numbers)
-                	prob_numbers = [x/float(prob_sum) for x in prob_numbers]
-
-                	probs = zip(senses, prob_numbers)
-                res = utilities.argmax(probs)
-                if (softscore):
-                    # adding the confidence prediction for soft-scoring
-                    for (sense, prob) in probs:
-                        if (sense == example[1]):
-                            correct += prob
+                res = None
+                if softscore:
+                # separate out the senses and the probabilities into 2 lists
+                    senses = list(zip(*probs)[0])
+                    prob_numbers = list(zip(*probs)[1])
+                    #Adjust probabilities by maximum log to avoid underflow if possible when normalizing. 
+                    m_log = max(prob_numbers)
+                    prob_numbers = [math.e**(x-m_log) for x in prob_numbers]
+                    # normalize probabilities
+                    prob_sum = sum(prob_numbers)
+                    prob_numbers = [x/prob_sum for x in prob_numbers]
+                    probs = zip(senses, prob_numbers)
+                    res = utilities.argmax(probs)
+                    probs = dict(probs)
+                    if example[1] in probs:
+                        correct += probs[example[1]]
                 else:
+                    res = utilities.argmax(probs)
                     correct = correct if res != example[1] else correct+1
                 predictions.append(res)
             else:
@@ -135,7 +136,6 @@ def testPos():
     with open('pos.csv','w') as f:
         nb = NaiveBayes(utilities.constructSet(source='training_clean.data',windowSize=0,useCooccurrence=False,useColocation=False,usePos=True))
         res = nb.classify(utilities.constructSet(source='validation_clean.data',windowSize=0,useCooccurrence=False,useColocation=False,usePos=True),biasTowardsCommon=False)
-        nb.classify(utilities.constructSet(source='test_clean.data',windowSize=0,useCooccurrence=False,useColocation=False,usePos=True),biasTowardsCommon=False)
         f.write(str(res[0]))
 
 def testCoOccurrence(maxSize=120,stepSize=1):
@@ -159,12 +159,12 @@ def testCoLocation(minSize=1,maxSize=83,stepSize=1):
             print res[0]
             print str(i) + ": " + str(time.time()-start)
 
-def testTrainingSize(minExamples=1,maxExamples=2536,stepSize=1):
-    with open('trainsize.csv','a') as f:
+def testTrainingSize(minExamples=1,maxExamples=2536,stepSize=1,destination='trainsize.csv'):
+    with open(destination,'a') as f:
         for i in range(minExamples,maxExamples+1,stepSize):
             start = time.time()
             nb = NaiveBayes(utilities.constructSet(source='training_clean.data',windowSize=10,useCooccurrence=True,useColocation=False,usePos=False),maxExamples=i)
-            res = nb.classify(utilities.constructSet(source='validation_clean.data',windowSize=10,useCooccurrence=True,useColocation=False,usePos=False),biasTowardsCommon=True)
+            res = nb.classify(utilities.constructSet(source='validation_clean.data',windowSize=10,useCooccurrence=True,useColocation=False,usePos=False),biasTowardsCommon=True,softscore=True)
             f.write(str(i) + "," + str(res[0]) + "\n")
             f.flush()
             print res[0]
@@ -185,4 +185,6 @@ def softScoring(minSize=1, maxSize=120, stepSize=1):
             print str(i) + ": " + str(time.time()-start)
 
 #testTrainingSize(2550,2550,1)
-softScoring(10, 100, 10)
+softScoring(90, 100, 10)
+# testTrainingSize(1,150,5,'trainsize_soft.csv')
+        

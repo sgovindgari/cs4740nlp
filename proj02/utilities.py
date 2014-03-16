@@ -1,13 +1,13 @@
 import re,pickle,pprint,numpy
 
-#To run must download stopwords using nltk.download()
+#To run must download stopwords and wordnet using nltk.download()
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk import pos_tag, word_tokenize
 from operator import *
 
 # for dictionary XML
-import re
+import re, string
 
 lemma = WordNetLemmatizer()
 
@@ -35,6 +35,19 @@ def cleanFile(source, destination):
                 d.write(word + "|" + meaning + "|" + prev + "%%" + actual + "%%" + after + "\n")
                 if j % 1000 == 0:
                     print j
+
+# for simply cleaning a string. no preconditions; string may be in original form.
+# input string, output string with lemmatizing, removed stopwords, punct
+def cleanString(strn):
+    # list of words, lowercase, remove all punctuation
+    # NOTE: this treats "they'll" as "theyll"
+    #strlist = strn.strip().lower().split(' ') # this does not remove punctuation
+    strlist = strn.strip().lower().translate(None, string.punctuation).split(' ')
+    strlistclean = clean(strlist) # caution: may be empty! (exist.v definition "be")
+    # use cleaned string except when cleaned result is empty
+    try: cleanstr = reduce(lambda a,b:a+' '+b, strlistclean)
+    except: cleanstr = reduce(lambda a,b:a+' '+b, strlist)
+    return cleanstr
 
 #windowSize is how many on each side to consider
 #separate - consider the word "dog" coming after the word as a different feature from the word "dog" before the word

@@ -33,6 +33,9 @@ Dictionary based WSD
          dictionary of word to tuple
          dict :  word -> ('part-of-sp', subdict)
          where subdict : senseid -> ('def', ['exampleslist'], [wordnet ints])
+    NOTE: using function utilities.cleanString
+          which would treat "they'll" as "theyll"
+          throughout the ENTIRE dictionary system. This is ok because it's consistent.
 
 Extensions
 - keep track of other most likely senses and pick them when certain conditions are satisfied 
