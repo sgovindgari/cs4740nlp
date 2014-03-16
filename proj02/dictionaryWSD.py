@@ -5,6 +5,8 @@ import utilities, pprint, math
 
 # xml parser!
 from lxml import etree
+# do we care if wordnet is 3.0 rather than 2.1? Check Piazza!
+from nltk.corpus import wordnet as wn
 
 # read original dictionary.xml, fix errors, write to dictionary_processed.xml
 # provided dictionary file is meant only for the target words
@@ -39,7 +41,6 @@ def parseIntoDictionary(xml, clean=True):
         dictionary[word] = (pos, senses)
     return dictionary
 
-# TODO: strip out stop words and do stemming!!
 class DictionaryWSD():
     def __init__(self, sourceXMLDict=dictionaryProcessed):
         self.XMLSource = sourceXMLDict
@@ -89,9 +90,9 @@ class DictionaryWSD():
        # for now splitting it as list form
        def_words = signature[0].split(' ')
        
-       print "Pre words:\n", pre_words
-       print "Post_words:\n", post_words
-       print "Def words\n", def_words
+       #print "Pre words:\n", pre_words
+       #print "Post_words:\n", post_words
+       #print "Def words\n", def_words
 
        for word in def_words:
             for pre_word in pre_words:
@@ -106,14 +107,22 @@ class DictionaryWSD():
         # for each word in sentence get the definition
         # check overlaps between definitions
         overlap = 0
-        print "Context word:\n", context_word
-        get_def = self.dict[context_word][1]
-        for sense in get_def: 
-            # build a list of words containing meaning - Deal with when the word is not in wordNET
-            lst = get_def[sense][0].split(' ')
-            for wrd in lst:
-                if wrd == word:
-                    overlap = overlap+1
+        if context_word in self.dict:
+            print "Context word:", context_word
+            get_def = self.dict[context_word][1]
+            for sense in get_def: 
+                lst = get_def[sense][0].split(' ')
+                for wrd in lst:
+                    if wrd == word:
+                        overlap += 1
+        else: # do WordNet lookup
+            print "Lookin' up", context_word, "in Wordnet..."
+            for synset in wn.synsets(context_word): # may be empty!
+                # clean definition
+                defin = utilities.cleanString(synset.definition).split(' ')
+                for wrd in defin:
+                    if wrd == word:
+                        overlap += 1
         return overlap
 
     def printexample(self):
@@ -128,5 +137,5 @@ class DictionaryWSD():
 utilities.fixDoubles(dictionarySource, dictionaryProcessed)
 
 dwsd = DictionaryWSD(dictionaryProcessed)
-dwsd.printexample()
+#dwsd.printexample()
 dwsd.Lesk('begin', 'v', 'begin attain freedom')
