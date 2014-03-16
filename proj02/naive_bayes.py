@@ -106,7 +106,13 @@ class NaiveBayes():
 
                 	probs = zip(senses, prob_numbers)
                 res = utilities.argmax(probs)
-                correct = correct if res != example[1] else correct+1
+                if (softscore):
+                    # adding the confidence prediction for soft-scoring
+                    for (sense, prob) in probs:
+                        if (sense == example[1]):
+                            correct += prob
+                else:
+                    correct = correct if res != example[1] else correct+1
                 predictions.append(res)
             else:
                 predictions.append(-1)
@@ -164,4 +170,19 @@ def testTrainingSize(minExamples=1,maxExamples=2536,stepSize=1):
             print res[0]
             print str(i) + ": " + str(time.time()-start)
 
-testTrainingSize(2550,2550,1)
+def softScoring(minSize=1, maxSize=120, stepSize=1):
+    with open('soft-score-comp.csv','a') as f:
+        for i in range(minSize, maxSize+1, stepSize):
+            start = time.time()
+            nb_coo = NaiveBayes(utilities.constructSet(source='training_clean.data', windowSize=i, useCooccurrence=True, useColocation=False, usePos=False))
+            res_coo = nb_coo.classify(utilities.constructSet(source='validation_clean.data', windowSize=i, useCooccurrence=True, useColocation=False, usePos=False), softscore=True, biasTowardsCommon=False)
+            nb_col = NaiveBayes(utilities.constructSet(source='training_clean.data', windowSize=i, useCooccurrence=False, useColocation=True, usePos=False))
+            res_col = nb_col.classify(utilities.constructSet(source='validation_clean.data', windowSize=i, useCooccurrence=False, useColocation=True, usePos=False), softscore=True, biasTowardsCommon=False)
+            nb_both = NaiveBayes(utilities.constructSet(source='training_clean.data', windowSize=i, useCooccurrence=True, useColocation=True, usePos=False))
+            res_both = nb_both.classify(utilities.constructSet(source='validation_clean.data', windowSize=i, useCooccurrence=True, useColocation=True, usePos=False), softscore=True, biasTowardsCommon=False)
+            f.write(str(i) + "," + str(res_coo[0]) + "," + str(res_col[0]) + "," + str(res_both[0]) + "\n")
+            f.flush()
+            print str(i) + ": " + str(time.time()-start)
+
+#testTrainingSize(2550,2550,1)
+softScoring(10, 100, 10)
