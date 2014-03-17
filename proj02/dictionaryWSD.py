@@ -62,20 +62,33 @@ class DictionaryWSD():
         context = sentence.split(' ')
         # what to do if word doesnt exist?
         # TODO - need a way to store different pos of a word and retrieve them accordingly
-        list_of_senses = self.dict[word][1]
+        list_of_senses = []
+        if word in self.dict:
+            list_of_senses = self.dict[word][1]
+        else:
+            lst_tup = dict()
+            i = 1
+            for synset in wn.synsets(word): # may be empty!
+                # clean definition - check this
+                lst_tup.update({i : (utilities.cleanString(synset.definition), [], [])})
+                i += 1
+            self.dict.update({word: (synset.pos, lst_tup)})
+            list_of_senses = self.dict[word][1]
+
+        print list_of_senses
         for sense in list_of_senses:
-            print "!!!!", sense, list_of_senses[sense]
+            #print "!!!!", sense, list_of_senses[sense]
             overlap = self.computeOverlap(word, list_of_senses[sense], context)
-            print "!!!!", sense, "Overlap:", overlap
+            #print "!!!!", sense, "Overlap:", overlap
             if overlap > max_overlap:
                 max_overlap = overlap
                 best_sense = sense
-        print best_sense
+        print "Best Sense is: ", best_sense
         return best_sense
 
     # returns the number of words in common between two sets
     # signature = set of words in the gloss and examples of sense
-    def computeOverlap(self, target, signature, context, window=10):
+    def computeOverlap(self, target, signature, context, window=10, extreme=False):
        # relevant words = words with same pos
        overlap = 0
        position = context.index(target)
@@ -91,46 +104,72 @@ class DictionaryWSD():
        # for now splitting it as list form
        def_words = signature[0].split(' ')
        
-       print "  Pre words:", pre_words
-       print "  Post_words:", post_words
-       print "  Def words", def_words
+       #print "  Pre words:", pre_words
+       #print "  Post_words:", post_words
+       #print "  Def words", def_words
 
        for word in def_words:
             for pre_word in pre_words:
-                overlap = self.checkSenseOverlap(word, pre_word)
+                overlap = self.checkSenseOverlap(word, pre_word, signature[0])
             for post_word in post_words:
-                overlap = self.checkSenseOverlap(word, post_word)
+                overlap = self.checkSenseOverlap(word, post_word, signature[0])
 
        #print overlap
        return overlap
 
-    def checkSenseOverlap(self, word, context_word):
+    # returns the number of consecutive overlaps given two parsed sentences
+    def consecutiveOverlaps(self, sent1, sent2):
+        sent2 = sent2.split(' ')
+        #print sent2
+        con_overlap = 0
+        for i in range(0, len(sent2)-1):
+            consecutive = sent2[i] + ' ' + sent2[i+1]
+            #print consecutive
+            if sent1.find(consecutive) != -1:
+                con_overlap += 1
+        #print con_overlap
+        return con_overlap
+
+
+    def checkSenseOverlap(self, word, context_word, signature):
         # for each word in sentence get the definition
         # check overlaps between definitions
         overlap = 0
+        con_overlap = 0
+        context_overlap = 0
+
+        if context_word == word:
+            context_overlap += 1
+
         if context_word in self.dict:
-            print "Context word:", context_word
+            #print "Context word:", context_word
             get_def = self.dict[context_word][1]
             for sense in get_def: 
+                con_overlap += self.consecutiveOverlaps(get_def[sense], signature)
                 lst = get_def[sense][0].split(' ')
                 for wrd in lst:
                     if wrd == word:
                         overlap += 1
         else: # do WordNet lookup
-            print "Lookin' up", context_word, "in Wordnet..."
+            #print "Lookin' up", context_word, "in Wordnet..."
             for synset in wn.synsets(context_word): # may be empty!
                 # clean definition
                 defin = utilities.cleanString(synset.definition).split(' ')
+                #print defin
+                con_overlap += self.consecutiveOverlaps(utilities.cleanString(synset.definition), signature)
                 for wrd in defin:
                     if wrd == word:
                         overlap += 1
+
+        # metric that rewards consecutive overlaps more than distant overlaps - We can have another metric with examples included
+        overlap = 0.5*con_overlap + 0.3*overlap + 0.2*context_overlap
         return overlap
 
     def printexample(self):
         print 'Example:\n', 'begin :', self.dict['begin']
         #print 'sense: \n', self.dict['begin'][1]
-        for sense in self.dict['begin'][1]:
-            print "Sense:\n", self.dict['begin'][1][sense]
+        #for sense in self.dict['begin'][1]:
+            #print "Sense:\n", self.dict['begin'][1][sense]
 
 # MAIN
 # preprocess dictionary XML:
@@ -139,4 +178,5 @@ utilities.fixDoubles(dictionarySource, dictionaryProcessed)
 
 dwsd = DictionaryWSD(dictionaryProcessed)
 #dwsd.printexample()
-dwsd.Lesk('begin', 'v', 'begin attain freedom')
+dwsd.Lesk('begin', 'v', 'begin to attain freedom')
+dwsd.Lesk('pine', 'n', 'pine cone')
