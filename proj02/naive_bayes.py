@@ -185,6 +185,7 @@ def softScoring(minSize=1, maxSize=120, stepSize=1):
             print str(i) + ": " + str(time.time()-start)
 
 #testTrainingSize(2550,2550,1)
-softScoring(90, 100, 10)
+#softScoring(1, 10, 1)
+softScoring(1, 10, 1)
 # testTrainingSize(1,150,5,'trainsize_soft.csv')
 
