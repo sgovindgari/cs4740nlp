@@ -147,32 +147,29 @@ We also tested how the accuracy of our Naive Bayes model would change on the val
 
 \section{Discussion}
 
-\subsection*{Data sets}
+The data provided to us, in particular the training set and validation set, made it a struggle for the supervised system to perform well. The task at hand essentially required a separate Naive Bayes model for each target word, meaning that data was sparse. The training set had a median of only 128.5 examples per word, and a mean of 222.81. The max wasn't that large, at 2,536 examples for one word, and the minimum was incredibly low at 19. This means that there were very few examples for each word. To make matters more difficult most of the data was very biased. For instance, 'capital' had 278 total examples: 258 for sense 1, 18 for sense 2, 1 for sense 3, and 1 for sense 5. Because of this bias in the data it made it very hard for Naive Bayes to create an accurate model of what words might be important in context for most senses of most target words. We believe this is the reason we struggled to score much above the baseline using our supervised model. 
 
-\subsection*{Naive Bayes}
+After analyzing our models we found that the most important class of features were the part-of-speech co-locational features. Using only these features we achieved an accuracy of 82.32\% on the validation set (window size 90). Second best were word co-locational features which achieved an accuracy of 81.89\% on the validation set (window size 90). Third best were co-occurrence features which had an accuracy of 81.35\% (window size 90) on the validation set. We believe that POS co-locational features were best because they generalized more than word co-locational features, as having a noun at the 5th position following the target word is more general than having 'cat' at that same position as a feature. 
 
-Some statistics: 
-Training set:
-Previous::: mean: 31.0285444998 median: 31.0 max: 120
-After::: mean: 29.7005520399 median: 29.0 max: 114
 
-Validation set:
-Previous::: mean: 31.436227224 median: 31.0 max: 83
-After::: mean: 31.1232583065 median: 31.0 max: 79
+%TODO: Discuss Dictionary and compare to supervised
 
-Test Set:
-Previous::: mean: 31.7912200102 median: 31.0 max: 84
-After::: mean: 30.6061766207 median: 30.0 max: 104
+%Some statistics: 
+%Training set:
+%Previous::: mean: 31.0285444998 median: 31.0 max: 120
+%After::: mean: 29.7005520399 median: 29.0 max: 114
 
-sense counts for the word 'capital':
-{1: 258, 2: 18, 3: 1, 5: 1}
+%Validation set:
+%Previous::: mean: 31.436227224 median: 31.0 max: 83
+%After::: mean: 31.1232583065 median: 31.0 max: 79
 
-'exchange':
-{1: 49, 2: 3, 3: 261, 4: 1, 5: 49}
+%Test Set:
+%Previous::: mean: 31.7912200102 median: 31.0 max: 84
+%After::: mean: 30.6061766207 median: 30.0 max: 104
 
-accuracy for col with windowsize 90: 0.822079314041 
+%'exchange':
+%{1: 49, 2: 3, 3: 261, 4: 1, 5: 49}
 
-0.818863879957 - no pos col features
-0.823151125402 only pos col featuers
+%accuracy for col with windowsize 90: 0.822079314041 
 
 \end{document}
