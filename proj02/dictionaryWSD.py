@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # may require package install
 
-import utilities, pprint, math
+import utilities, pprint, math, time
 
 # xml parser!
 from lxml import etree
@@ -97,9 +97,10 @@ class DictionaryWSD():
     def computeOverlap(self, target, signature, pre_words, post_words):
        # relevant words = words with same pos
        overlap = 0
+       sign0 = signature[0]
 
        # for now splitting it as list form
-       def_words = signature[0].split(' ')
+       def_words = sign0.split(' ')
 
        #print "  Pre words:", pre_words
        #print "  Post_words:", post_words
@@ -109,30 +110,30 @@ class DictionaryWSD():
             for pre_word in pre_words:
                 
                 # here it is with caching
-                if signature[0] not in self.overlapCache:
-                    self.overlapCache[signature[0]] = dict()
-                if word not in self.overlapCache[signature[0]]:
-                    self.overlapCache[signature[0]][word] = dict()
-                if pre_word not in self.overlapCache[signature[0]][word]:
-                    overlapval = self.checkSenseOverlap(word, pre_word, signature[0])
-                    self.overlapCache[signature[0]][word][pre_word] = overlapval
+                if sign0 not in self.overlapCache:
+                    self.overlapCache[sign0] = dict()
+                if word not in self.overlapCache[sign0]:
+                    self.overlapCache[sign0][word] = dict()
+                if pre_word not in self.overlapCache[sign0][word]:
+                    overlapval = self.checkSenseOverlap(word, pre_word, sign0)
+                    self.overlapCache[sign0][word][pre_word] = overlapval
                     overlap += overlapval
                 else:
-                    overlap += self.overlapCache[signature[0]][word][pre_word]
+                    overlap += self.overlapCache[sign0][word][pre_word]
                 
                 #overlap += self.checkSenseOverlap(word, pre_word, signature[0])
             for post_word in post_words:
                 # here it is with caching
-                if signature[0] not in self.overlapCache:
-                    self.overlapCache[signature[0]] = dict()
-                if word not in self.overlapCache[signature[0]]:
-                    self.overlapCache[signature[0]][word] = dict()
-                if post_word not in self.overlapCache[signature[0]][word]:
-                    overlapval = self.checkSenseOverlap(word, post_word, signature[0])
-                    self.overlapCache[signature[0]][word][post_word] = overlapval
+                if sign0 not in self.overlapCache:
+                    self.overlapCache[sign0] = dict()
+                if word not in self.overlapCache[sign0]:
+                    self.overlapCache[sign0][word] = dict()
+                if post_word not in self.overlapCache[sign0][word]:
+                    overlapval = self.checkSenseOverlap(word, post_word, sign0)
+                    self.overlapCache[sign0][word][post_word] = overlapval
                     overlap += overlapval
                 else:
-                    overlap += self.overlapCache[signature[0]][word][post_word]
+                    overlap += self.overlapCache[sign0][word][post_word]
                 #overlap += self.checkSenseOverlap(word, post_word, signature[0])
 
        #print overlap
@@ -210,10 +211,12 @@ dwsd = DictionaryWSD(dictionaryProcessed)
 #dwsd.Lesk('pine', 'n', 'pine cone')
 
 def processTestFile(filename, destination):
+    prevword = ""
     with open(destination, 'w') as d:
         f = open(filename)
         d.write("Id, Prediction\n")
         i = 0
+        start_time = time.time()
         for line in f:
             lst = line.split('|')
             #print lst
@@ -229,7 +232,10 @@ def processTestFile(filename, destination):
             post_words = gloss[2].strip().split(' ')
             post_words = post_words[-10:]
 
-            print "Target: ", word
+            if prevword != word:
+                prevword = word
+                print "Target: ", word, "at line", i, "of 3918 for test", time.time() - start_time
+
             #print "Context: ", context
             #print "POS: ", pos
 
@@ -240,4 +246,4 @@ def processTestFile(filename, destination):
 
         d.close()
 
-processTestFile('test_clean.data', 'test_prediction.data')
+processTestFile('kaggledictionary/kaggle_validate.data', 'kaggledictionary/kaggle_validatepredictions.data')
