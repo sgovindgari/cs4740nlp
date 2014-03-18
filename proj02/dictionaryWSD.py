@@ -50,6 +50,8 @@ class DictionaryWSD():
         # table is a dict :
         #     contextword -> (senseID, numOverlapWords, numConsecOverlapWords)
         self.table = dict() # TODO populate
+        # cache structure: signature[0] -> word -> pre_word -> int
+        self.overlapCache = dict() # cache for overlap lookups
 
     # precondition: sentence should be lemmatized before
     #returns the best sense of a word
@@ -105,9 +107,33 @@ class DictionaryWSD():
 
        for word in def_words:
             for pre_word in pre_words:
-                overlap += self.checkSenseOverlap(word, pre_word, signature[0])
+                
+                # here it is with caching
+                if signature[0] not in self.overlapCache:
+                    self.overlapCache[signature[0]] = dict()
+                if word not in self.overlapCache[signature[0]]:
+                    self.overlapCache[signature[0]][word] = dict()
+                if pre_word not in self.overlapCache[signature[0]][word]:
+                    overlapval = self.checkSenseOverlap(word, pre_word, signature[0])
+                    self.overlapCache[signature[0]][word][pre_word] = overlapval
+                    overlap += overlapval
+                else:
+                    overlap += self.overlapCache[signature[0]][word][pre_word]
+                
+                #overlap += self.checkSenseOverlap(word, pre_word, signature[0])
             for post_word in post_words:
-                overlap += self.checkSenseOverlap(word, post_word, signature[0])
+                # here it is with caching
+                if signature[0] not in self.overlapCache:
+                    self.overlapCache[signature[0]] = dict()
+                if word not in self.overlapCache[signature[0]]:
+                    self.overlapCache[signature[0]][word] = dict()
+                if post_word not in self.overlapCache[signature[0]][word]:
+                    overlapval = self.checkSenseOverlap(word, post_word, signature[0])
+                    self.overlapCache[signature[0]][word][post_word] = overlapval
+                    overlap += overlapval
+                else:
+                    overlap += self.overlapCache[signature[0]][word][post_word]
+                #overlap += self.checkSenseOverlap(word, post_word, signature[0])
 
        #print overlap
        return overlap
@@ -143,7 +169,6 @@ class DictionaryWSD():
             #print "Context word:", context_word
             get_def = self.dict[context_word][1]
 
-            print "checkSenseOverlap for..."
             for sense in get_def:
                 #print "In dictionary"
                 con_overlap += self.consecutiveOverlaps(get_def[sense][0], signature)
@@ -151,11 +176,9 @@ class DictionaryWSD():
                 for wrd in lst:
                     if wrd == word:
                         overlap += 1
-            print "end checkSenseOverlap for..."
         else: # do WordNet lookup
             #print "Lookin' up", context_word, "in Wordnet..."
             # may be empty! if so, automatically ignored
-            print "checkSenseOverlap for..."
             for synset in wn.synsets(context_word):
                 # clean definition
                 defin = utilities.cleanString(synset.definition).split(' ')
@@ -164,7 +187,6 @@ class DictionaryWSD():
                 for wrd in defin:
                     if wrd == word:
                         overlap += 1
-            print "end checkSenseOverlap for..."
 
         # metric that rewards consecutive overlaps more than distant overlaps - We can have another metric with examples included
         overlap = 0.5*con_overlap + 0.4*overlap + 0.1*context_overlap
