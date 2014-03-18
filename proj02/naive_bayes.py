@@ -120,11 +120,19 @@ class NaiveBayes():
         accuracy = correct/float(len(predictions))
         if kaggle:
             with open('kaggle_results','w') as f:
+                i = 1
+                f.write('Id,Prediction\n')
                 for prediction in predictions:
-                    f.write(str(prediction) + "\n")
+                    f.write(str(i) + "," + str(prediction) + "\n")
+                    i+=1
 
         return (accuracy,zip(actual,predictions))
 
+    def statistics(self):
+        print numpy.median(self.wordCounts.values())
+        print max(self.wordCounts.values())
+        print numpy.mean(self.wordCounts.values())
+        print min(self.wordCounts.values())
 
 # pp = pprint.PrettyPrinter(indent=4)
 # #print nb.featureLists
@@ -183,9 +191,3 @@ def softScoring(minSize=1, maxSize=120, stepSize=1):
             f.write(str(i) + "," + str(res_coo[0]) + "," + str(res_col[0]) + "," + str(res_both[0]) + "\n")
             f.flush()
             print str(i) + ": " + str(time.time()-start)
-
-#testTrainingSize(2550,2550,1)
-#softScoring(1, 10, 1)
-softScoring(1, 10, 1)
-# testTrainingSize(1,150,5,'trainsize_soft.csv')
-
