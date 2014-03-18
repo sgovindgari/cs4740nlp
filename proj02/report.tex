@@ -56,7 +56,7 @@ To clean up the training, validation and test data we began by writing a functio
 
 {\small
 \begin{verbatim}
-return [lemma.lemmatize(word) for word in words if (re.match('.*\w+.*',word) != None) and (word not in stopwords.words('english'))]
+return [lemma.lemmatize(word) for word in words if (re.match('.*\w+.*',word) != None) and (word not in stopword.words('english'))]
 \end{verbatim}
 }
 
@@ -110,6 +110,20 @@ When calculating soft-scoring for accuracy, we process the classification probab
 
 
 \section{Dictionary-based}
+
+\subsection{Dictionary Construction}
+In our Dictionary based WSD, we made use of both the given dictionary as well as WordNet 2.1 in order to derive meanings of words. The format of our dictionary was basically a lookup table with the key as the word and value as the tuple of (part of speech, sub-dictionary). The sub-dictionary was further a map with key as the senseID and value as another tuple of (definition, example list, and wordNet Senses). Whenever a word was not found in the dictionary we used WordNet to extract the senses and then updated our dictionary to contain this word. 
+
+\subsection{Implementation of Lesk Algorithm}
+To disambiguate words with dictionary approach, we used the Lesk algorithm that computed the number of overlaps between the definitions of the target word and context words. In order to find the best sense, we first get the definition of our target word by searching it in our dictionary. If the word is not found, we search WordNet and update dictionary accordingly. Once we know the list of senses, each sense is used in computeOverlap function to calculate the distant overlaps, consecutive overlaps as well as context overlaps. We made few optimizations to this function in order to pick relevant words from the context and calculate overlap which you can find in the section below. Each overlap score is compared to the maximum overlap and the best sense is returned which is attached to the maximum overlap. 
+
+\subsection{Optimizations to Lesk Algorithm}
+The optimizations we made to Lesk Algorithm mostly revolve around the computeOverlap function. Our function takes in the target word, sense definitions and examples and context words within a certain window to calculate overlaps. In order to find relevant words we kept our window to 10 words and further experimented by increasing and decreasing the window. We used three overlap measures to calculate the overlap rewarding each one appropriately. 
+
+The overlap score computes the number of individual words that overlap between the definitions of two words. The consecutive overlap score computes the number of consecutive overlaps that occur in between the definitions. And finally, context overlap as we call it is a measure of the number of words from the context that overlap with the definitions. We used the context overlap measure because we noticed that words used within context sometimes do overlap with the definition of the target word. With these three measures, our metric system to calculate the overlap score is as follows: 
+\begin{align}
+overlap = 0.6*consecutive\_overlaps + 0.4*overlap + 0.1*context\_overlap
+\end{align}
 
 \section{Experimentation}
 
