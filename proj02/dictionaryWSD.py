@@ -53,13 +53,10 @@ class DictionaryWSD():
 
     # precondition: sentence should be lemmatized before
     #returns the best sense of a word
-    def Lesk(self, word, pos, sentence):
+    def Lesk(self, word, pos, pre_words, post_words):
         best_sense = -1
         max_overlap = 0
-        # of words in a sentence
-        # assuming sentence is parsed already 
-        # TODO- discuss the state of sentence - is it parsed or not? 
-        context = sentence.split(' ')
+       
         # what to do if word doesnt exist?
         # TODO - need a way to store different pos of a word and retrieve them accordingly
         list_of_senses = []
@@ -75,31 +72,29 @@ class DictionaryWSD():
             self.dict.update({word: (synset.pos, lst_tup)})
             list_of_senses = self.dict[word][1]
 
-        print list_of_senses
+        #print list_of_senses
         for sense in list_of_senses:
-            #print "!!!!", sense, list_of_senses[sense]
-            overlap = self.computeOverlap(word, list_of_senses[sense], context)
+            #print "Senses:\n", sense, list_of_senses[sense]
+            overlap = self.computeOverlap(word, list_of_senses[sense], pre_words, post_words)
             #print "!!!!", sense, "Overlap:", overlap
             if overlap > max_overlap:
                 max_overlap = overlap
                 best_sense = sense
-        print "Best Sense is: ", best_sense
+        #print "Best Sense is: ", best_sense
+
+        # if no best sense is returned default to the sense that is most frequently used - top sense
+        if best_sense == -1:
+            #print "No sense found using common sense"
+            for sense in list_of_senses:
+                best_sense = sense
+                break
         return best_sense
 
     # returns the number of words in common between two sets
     # signature = set of words in the gloss and examples of sense
-    def computeOverlap(self, target, signature, context, window=10, extreme=False):
+    def computeOverlap(self, target, signature, pre_words, post_words):
        # relevant words = words with same pos
        overlap = 0
-       position = context.index(target)
-       window_pre = position-window
-       window_post = position+1+window
-       if window_pre < 0:
-            window_pre = 0
-       if window_post > len(context):
-            window_post = len(context)
-       pre_words = context[window_pre:position]
-       post_words = context[position+1:window_post]
 
        # for now splitting it as list form
        def_words = signature[0].split(' ')
@@ -119,6 +114,9 @@ class DictionaryWSD():
 
     # returns the number of consecutive overlaps given two parsed sentences
     def consecutiveOverlaps(self, sent1, sent2):
+        #print "Consecutive overlaps\n"
+        #print sent1
+        #print sent2
         sent2 = sent2.split(' ')
         #print sent2
         con_overlap = 0
@@ -144,8 +142,10 @@ class DictionaryWSD():
         if context_word in self.dict:
             #print "Context word:", context_word
             get_def = self.dict[context_word][1]
+            
             for sense in get_def: 
-                con_overlap += self.consecutiveOverlaps(get_def[sense], signature)
+                #print "In dictionary"
+                con_overlap += self.consecutiveOverlaps(get_def[sense][0], signature)
                 lst = get_def[sense][0].split(' ')
                 for wrd in lst:
                     if wrd == word:
@@ -155,14 +155,14 @@ class DictionaryWSD():
             for synset in wn.synsets(context_word): # may be empty!
                 # clean definition
                 defin = utilities.cleanString(synset.definition).split(' ')
-                #print defin
+                #print "Not in dictionary" 
                 con_overlap += self.consecutiveOverlaps(utilities.cleanString(synset.definition), signature)
                 for wrd in defin:
                     if wrd == word:
                         overlap += 1
 
         # metric that rewards consecutive overlaps more than distant overlaps - We can have another metric with examples included
-        overlap = 0.5*con_overlap + 0.3*overlap + 0.2*context_overlap
+        overlap = 0.5*con_overlap + 0.4*overlap + 0.1*context_overlap
         return overlap
 
     def printexample(self):
@@ -171,6 +171,7 @@ class DictionaryWSD():
         #for sense in self.dict['begin'][1]:
             #print "Sense:\n", self.dict['begin'][1][sense]
 
+
 # MAIN
 # preprocess dictionary XML:
 #   remove one instance of double sense, fix all '"' characters in examples
@@ -178,5 +179,37 @@ utilities.fixDoubles(dictionarySource, dictionaryProcessed)
 
 dwsd = DictionaryWSD(dictionaryProcessed)
 #dwsd.printexample()
-dwsd.Lesk('begin', 'v', 'begin to attain freedom')
-dwsd.Lesk('pine', 'n', 'pine cone')
+#dwsd.Lesk('begin', 'v', 'begin to attain freedom')
+#dwsd.Lesk('pine', 'n', 'pine cone')
+
+def processTestFile(filename, destination):
+    with open(destination, 'w') as d:
+        f = open(filename)
+        d.write("Id, Prediction\n")
+        i = 0
+        for line in f:
+            lst = line.split('|')
+            #print lst
+            word_pos = lst[0].strip().split('.')
+            word = word_pos[0]
+            pos = word_pos[1]
+            gloss = lst[2].strip().split('%%')
+            context = gloss[0] + gloss[1] + gloss[2]
+
+            pre_words = gloss[0].strip().split(' ')
+            pre_words = pre_words[-10:]
+
+            post_words = gloss[2].strip().split(' ')
+            post_words = post_words[-10:]
+
+            print "Target: ", word
+            #print "Context: ", context
+            #print "POS: ", pos
+
+            sense = dwsd.Lesk(word, pos, pre_words, post_words)
+            i = i +1
+            d.write("" + str(i) + ", " + str(sense) + "\n")
+            
+        d.close()
+
+processTestFile('test_clean.data', 'test_prediction.data')
