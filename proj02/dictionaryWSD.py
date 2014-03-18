@@ -56,7 +56,7 @@ class DictionaryWSD():
     def Lesk(self, word, pos, pre_words, post_words):
         best_sense = -1
         max_overlap = 0
-       
+
         # what to do if word doesnt exist?
         # TODO - need a way to store different pos of a word and retrieve them accordingly
         list_of_senses = []
@@ -73,7 +73,7 @@ class DictionaryWSD():
             list_of_senses = self.dict[word][1]
 
         #print list_of_senses
-        for sense in list_of_senses:
+        for sense in list_of_senses: # length list_of_senses is approx 5
             #print "Senses:\n", sense, list_of_senses[sense]
             overlap = self.computeOverlap(word, list_of_senses[sense], pre_words, post_words)
             #print "!!!!", sense, "Overlap:", overlap
@@ -98,16 +98,16 @@ class DictionaryWSD():
 
        # for now splitting it as list form
        def_words = signature[0].split(' ')
-       
+
        #print "  Pre words:", pre_words
        #print "  Post_words:", post_words
        #print "  Def words", def_words
 
        for word in def_words:
             for pre_word in pre_words:
-                overlap = self.checkSenseOverlap(word, pre_word, signature[0])
+                overlap += self.checkSenseOverlap(word, pre_word, signature[0])
             for post_word in post_words:
-                overlap = self.checkSenseOverlap(word, post_word, signature[0])
+                overlap += self.checkSenseOverlap(word, post_word, signature[0])
 
        #print overlap
        return overlap
@@ -142,24 +142,29 @@ class DictionaryWSD():
         if context_word in self.dict:
             #print "Context word:", context_word
             get_def = self.dict[context_word][1]
-            
-            for sense in get_def: 
+
+            print "checkSenseOverlap for..."
+            for sense in get_def:
                 #print "In dictionary"
                 con_overlap += self.consecutiveOverlaps(get_def[sense][0], signature)
                 lst = get_def[sense][0].split(' ')
                 for wrd in lst:
                     if wrd == word:
                         overlap += 1
+            print "end checkSenseOverlap for..."
         else: # do WordNet lookup
             #print "Lookin' up", context_word, "in Wordnet..."
-            for synset in wn.synsets(context_word): # may be empty!
+            # may be empty! if so, automatically ignored
+            print "checkSenseOverlap for..."
+            for synset in wn.synsets(context_word):
                 # clean definition
                 defin = utilities.cleanString(synset.definition).split(' ')
-                #print "Not in dictionary" 
+                #print "Not in dictionary"
                 con_overlap += self.consecutiveOverlaps(utilities.cleanString(synset.definition), signature)
                 for wrd in defin:
                     if wrd == word:
                         overlap += 1
+            print "end checkSenseOverlap for..."
 
         # metric that rewards consecutive overlaps more than distant overlaps - We can have another metric with examples included
         overlap = 0.5*con_overlap + 0.4*overlap + 0.1*context_overlap
@@ -206,10 +211,11 @@ def processTestFile(filename, destination):
             #print "Context: ", context
             #print "POS: ", pos
 
+            # algorithm bottleneck is HERE
             sense = dwsd.Lesk(word, pos, pre_words, post_words)
-            i = i +1
+            i += 1
             d.write("" + str(i) + ", " + str(sense) + "\n")
-            
+
         d.close()
 
 processTestFile('test_clean.data', 'test_prediction.data')
