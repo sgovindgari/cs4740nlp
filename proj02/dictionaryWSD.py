@@ -195,7 +195,7 @@ class DictionaryWSD():
         #for sense in self.dict['begin'][1]:
             #print "Sense:\n", self.dict['begin'][1][sense]
 
-def processTestFile(dwsd, filename, destination, window=5):
+def processTestFile(dwsd, filename, destination, window=5, softScoring=False):
     prevword = ""
     with open(destination, 'w') as d:
         f = open(filename)
@@ -228,9 +228,11 @@ def processTestFile(dwsd, filename, destination, window=5):
             # algorithm bottleneck is HERE
             scores = dwsd.Lesk(word, pos, pre_words, post_words,softScoring)
             sense = utilities.argmax(zip(scores.keys(),scores.values()))
-            trueSense = lst[1].strip()
+            trueSense = int(lst[1].strip())
             if softScoring:
+                print scores
                 if trueSense in scores:
+                    print scores[trueSense]
                     acc += scores[trueSense]
             else:
                 acc += 1
@@ -251,4 +253,4 @@ dwsd = DictionaryWSD(dictionaryProcessed)
 #dwsd.Lesk('pine', 'n', 'pine cone')
 
 #processTestFile(dwsd, 'test_clean1.csv', 'dictionary_test_prediction.csv', window=8)
-print processTestFile(dwsd, 'validation_clean.data', 'blah.data', window=5)
+print processTestFile(dwsd, 'validation_clean.data', 'blah.data', window=5, softScoring=True)
