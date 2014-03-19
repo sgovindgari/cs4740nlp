@@ -46,7 +46,7 @@
 
 \section{Introduction}
 
-For this project we have written our code in Python. We used several of python's included libraries as well as tools from NLTK. We used NLTK's WordNetLemmatizer for lemmatizing words in our data, NLTK's maximum entropy POS tagger based off the Penn TreeBank was used for part-of-speech tagging of data, finally we used NLTK's corpus of stopwords to eleminate stopwords from the data sets. To run our code, please reference our README.
+For this project we have written our code in Python. We used several of python's included libraries as well as tools from NLTK. We used NLTK's WordNetLemmatizer for lemmatizing words in our data, NLTK's maximum entropy POS tagger based off the Penn TreeBank was used for part-of-speech tagging of data. Finally we used NLTK's corpus of stopwords to eleminate stopwords from the data sets and NLTK's WordNet corpus for accessing more dictionary information. To run our code, please reference our README.
 
 \section{Preprocessing}
 
@@ -67,6 +67,8 @@ Data cleanup was also needed at various moments of computation for the dictionar
 For the dictionary-based system, our input file \texttt{dictionary.xml} needed to be slightly reformatted for the Python library \texttt{lxml} to accept and parse correctly. In \texttt{utilities.py}, the function \texttt{fixDoubles} preprocesses the dictionary, fixing the instances of double senses. For example, one of ``drug'''s senses references its previous senses 1 and 2: ``1\&\&2''. We simply dropped this dictionary entry as it would not affect the overall performance of our system without it. We also removed instances of double-quote characters in our examples, as that was messing up the XML parser, and those characters were not needed.
 
 \texttt{fixDoubles} generates \texttt{dictionary\_processed.xml}, which we read in using Python's lxml library.
+
+TODO: COMPLETE
 
 \section{Naive Bayes}
 
@@ -180,11 +182,11 @@ def consecutiveOverlaps(self, sent1, sent2):
         return con_overlap
 \end{verbatim}
 
-And finally, context overlap as we call it is a measure of the number of words from the context that overlap with the definitions. We used the context overlap measure because we noticed that words used within context sometimes do overlap with the definition of the target word. For example from our validation set, consider the target word capital and our preprocessed test sentence given by,
+And finally, context overlap as we call it is a measure of the number of words from the context that overlap with the definitions. We used the context overlap measure because we noticed that words used within context sometimes do overlap with the definition of the target word. For example from our validation set, consider the target word capital and our preprocessed test sentence:
 
-\begin{verbatim}
+\texttt{
 capital.n | 0 | Its plans to be acquired dashed , Comprehensive Care Corp. said it plans to sell most of its psychiatric and drug abuse facilities in California and some other assets to pay its debt and provide working capital . In all , the company hopes to repay \$ 45 million in debt through the sales , which will completely discharge its secured debt , the company said . In addition , the company has replaced its president and chief executive , naming W. James Nichol , head of the company 's contract health services , to succeed B. Lee Karns .
-\end{verbatim}
+}
 
 The definition of capital contains words like asset, wealth, business, resources etc. Notice here that the word asset that occurs in the definition also occurs within the context of the test sentence. In that case, the number of context overlaps increases by 1 and gets weighed in appropriately. Our algorithm predicts the ``asset'' for capital which is right in this context. The justification for this is that definition words TODO WHAT IS THIS?!!!!
 
@@ -243,23 +245,5 @@ After analyzing our models we found that the most important class of features we
 %TODO: Discuss Dictionary 
 
 The supervised approach uses training data to create a model of the probability of features drawn from those training examples (such as co-occurrence and co-locational features) to determine how well a test example fits the model for a certain sense. The dictionary approach uses already existing dictionaries to compare how well a test example's in-context words' definitions overlap with the definitions for the target word's senses to pick which sense is most likely. The supervised approach has the advantage of doing very well with large amounts of training data in comparison to a dictionary based approach which will typically not do as well, given that there is adequate training data for the Naive Bayes model. However, this makes Naive Bayes very susceptible to problems with training data. For instance, having a training set which is very biased towards one sense or another, or is not representative of real uses of a specific sense can make the model very inaccurate. Further often there is not enough data to provide a supervised learning approach an adequate representation of the general use of a sense. This means the model will be very specific for each sense and thus not generalizable. The dictionary approach solves this by using already existing dictionaries to determine likelihood thus not relying on getting adequate data. 
-
-%Some statistics: 
-%Training set:
-%Previous::: mean: 31.0285444998 median: 31.0 max: 120
-%After::: mean: 29.7005520399 median: 29.0 max: 114
-
-%Validation set:
-%Previous::: mean: 31.436227224 median: 31.0 max: 83
-%After::: mean: 31.1232583065 median: 31.0 max: 79
-
-%Test Set:
-%Previous::: mean: 31.7912200102 median: 31.0 max: 84
-%After::: mean: 30.6061766207 median: 30.0 max: 104
-
-%'exchange':
-%{1: 49, 2: 3, 3: 261, 4: 1, 5: 49}
-
-%accuracy for col with windowsize 90: 0.822079314041 
 
 \end{document}
