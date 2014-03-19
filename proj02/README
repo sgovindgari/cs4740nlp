@@ -1,0 +1,20 @@
+Naive Bayes:
+To create a naive bayes model, one must first construct a training set.
+To do this run constructSet() from utilities.py. constructSet takes in
+a source, windowSize (-1 for all words) and then booleans to determine whether
+to include certain features. usePos is True if POS features of the target word
+are included. useCooccurrence is true to include cooccurrence features and
+useColocation is true to include colocational features.
+
+The list returned by constructSet can then be passed into the naive_bayes
+constructor in naive_bayes.py. One can also pass in the maximum number
+of examples to consider in the parameter maxExamples.
+
+To classify a data set (generated using constructSet) one simply calls
+the classify method of the naive_bayes model. classify takes 5 parameters.
+The test set (list), the alpha to use in add-alpha smoothing, softscore
+to determine whether softscoring should be used, kaggle to determine if it
+should write a results file for kaggle and biasTowardsCommon--whether to'
+include P(s|w) in the probability calculations.
+
+Dictionary:

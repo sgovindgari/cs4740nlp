@@ -55,10 +55,8 @@ class DictionaryWSD():
 
     # precondition: sentence should be lemmatized before
     #returns the best sense of a word
-    def Lesk(self, word, pos, pre_words, post_words):
-        best_sense = -1
-        max_overlap = 0
-
+    def Lesk(self, word, pos, pre_words, post_words,softScoring=False,alpha=0.5):
+        scores = dict()
         # what to do if word doesnt exist?
         # TODO - need a way to store different pos of a word and retrieve them accordingly
         list_of_senses = []
@@ -79,18 +77,14 @@ class DictionaryWSD():
             #print "Senses:\n", sense, list_of_senses[sense]
             overlap = self.computeOverlap(word, list_of_senses[sense], pre_words, post_words)
             #print "!!!!", sense, "Overlap:", overlap
-            if overlap > max_overlap:
-                max_overlap = overlap
-                best_sense = sense
+            scores[sense] = overlap+alpha
         #print "Best Sense is: ", best_sense
-
-        # if no best sense is returned default to the sense that is most frequently used - top sense
-        if best_sense == -1:
-            #print "No sense found using common sense"
-            for sense in list_of_senses:
-                best_sense = sense
-                break
-        return best_sense
+        if softScoring:
+            values = []
+            total = sum(scores.values())
+            for key in scores:
+                scores[key] = scores[key] / float(total)
+        return scores
 
     # returns the number of words in common between two sets
     # signature = set of words in the gloss and examples of sense
@@ -210,11 +204,12 @@ dwsd = DictionaryWSD(dictionaryProcessed)
 #dwsd.Lesk('begin', 'v', 'begin to attain freedom')
 #dwsd.Lesk('pine', 'n', 'pine cone')
 
-def processTestFile(filename, destination):
+def processTestFile(filename, destination,softScoring=False):
     prevword = ""
     with open(destination, 'w') as d:
         f = open(filename)
         d.write("Id, Prediction\n")
+        acc = 0.0
         i = 0
         start_time = time.time()
         for line in f:
@@ -240,10 +235,18 @@ def processTestFile(filename, destination):
             #print "POS: ", pos
 
             # algorithm bottleneck is HERE
-            sense = dwsd.Lesk(word, pos, pre_words, post_words)
+            scores = dwsd.Lesk(word, pos, pre_words, post_words,softScoring)
+            sense = utilities.argmax(zip(scores.keys(),scores.values()))
+            trueSense = lst[1].strip()
+            if softScoring:
+                if trueSense in scores:
+                    acc += scores[trueSense]
+            else:
+                acc += 1
             i += 1
             d.write("" + str(i) + ", " + str(sense) + "\n")
 
         d.close()
+    return acc / float(i)
 
-processTestFile('kaggledictionary/kaggle_validate.data', 'kaggledictionary/kaggle_validatepredictions.data')
+print processTestFile('kaggledictionary/kaggle_validate.data', 'kaggledictionary/kaggle_validatepredictions.data')
