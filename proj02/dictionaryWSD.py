@@ -149,7 +149,7 @@ class DictionaryWSD():
         '''
         #print overlap
         #print context_overlap, def_overlap, consecutive_overlap
-        total_overlap = 5*context_overlap + def_overlap + 15*consecutive_overlap
+        total_overlap = 10*context_overlap + def_overlap + 15*consecutive_overlap
         return total_overlap
 
     def getOverlaps(self, def_words, context_word):
@@ -253,6 +253,6 @@ dwsd = DictionaryWSD(dictionaryProcessed)
 #dwsd.Lesk('pine', 'n', 'pine cone')
 
 #processTestFile(dwsd, 'test_clean1.csv', 'dictionary_test_prediction.csv', window=8)
-print processTestFile(dwsd, 'test_clean.data', 'dictionary_test_prediction.csv', window=5)
+print processTestFile(dwsd, 'test_clean.data', 'dictionary_test_prediction.csv', window=6)
 #processTestFile(dwsd, 'test_clean1.csv', 'dictionary_test_prediction.csv', window=8)
 #print processTestFile(dwsd, 'validation_clean.data', 'blah.data', window=5, softScoring=True)
