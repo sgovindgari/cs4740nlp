@@ -235,7 +235,8 @@ def processTestFile(dwsd, filename, destination, window=5, softScoring=False):
                     print scores[trueSense]
                     acc += scores[trueSense]
             else:
-                acc += 1
+                if sense == trueSense:
+                    acc += 1
             i += 1
             d.write("" + str(i) + "," + str(sense) + "\n")
 
