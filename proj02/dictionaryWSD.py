@@ -97,15 +97,31 @@ class DictionaryWSD():
     # signature = set of words in the gloss and examples of sense
     def computeOverlap(self, target, (defn,examples,wordnetints), pre_words, post_words):
         # relevant words = words with same pos
-        overlap = 0
+        context_overlap = 0
+        def_overlap = 0
+        consecutive_overlap = 0
 
-        # for now splitting it as list form
         def_words = defn.split(' ')
+        # put all examples into the definition too.
+        for example in examples:
+            def_words.extend(example.split(' '))
         #print target
         #print "  pre :", pre_words
         #print "  post:", post_words
         #print "  def :", def_words
 
+        for pre_word in pre_words:
+            wco, wo, wcono = self.getOverlaps(def_words, pre_word)
+            context_overlap += wco
+            def_overlap += wo
+            consecutive_overlap += wcono
+        for post_word in post_words:
+            wco, wo, wcono = self.getOverlaps(def_words, post_word)
+            context_overlap += wco
+            def_overlap += wo
+            consecutive_overlap += wcono
+
+        '''
         # figure out a better metric! use examples?!
         for word in def_words:
             for pre_word in pre_words:
@@ -136,63 +152,46 @@ class DictionaryWSD():
                     overlap += self.overlapCache[defn][word][post_word]
                 # no caching:
                 #overlap += self.checkSenseOverlap(word, post_word, defn)
-
+        '''
         #print overlap
-        return overlap
+        print context_overlap, def_overlap, consecutive_overlap
+        total_overlap = 5*context_overlap + def_overlap + 15*consecutive_overlap
+        return total_overlap
 
-    def checkSenseOverlap(self, word, context_word, signature):
-        # for each word in sentence get the definition
-        # check overlaps between definitions
-        overlap = 0
-        con_overlap = 0
-        context_overlap = 0
-
-        context_word = context_word.strip()
-        word = word.strip()
-        if context_word == word:
+    def getOverlaps(self, def_words, context_word):
+        context_overlap = 0 # if context_word in def_words
+        overlap = 0 # overlap of contextword def words and def_words
+        consecOverlap = 0
+        if context_word in def_words:
             context_overlap += 1
-
         if context_word in self.dict:
-            #print "Context word:", context_word
-            get_def = self.dict[context_word][1]
-
-            for sense in get_def:
-                #print "In dictionary"
-                con_overlap += self.consecutiveOverlaps(get_def[sense][0], signature)
-                lst = get_def[sense][0].split(' ')
+            (pos, subdict) = self.dict[context_word]
+            for sense in subdict:
+                (worddef, examples, wnints) = subdict[sense]
+                lst = worddef.split(' ')
+                consecOverlap += self.consecutiveOverlaps(def_words, lst)
                 for wrd in lst:
-                    if wrd.strip() == word:
+                    if wrd.strip() in def_words:
                         overlap += 1
-        else: # do WordNet lookup
-            #print "Lookin' up", context_word, "in Wordnet..."
-            # may be empty! if so, automatically ignored
+        else: # look up in wordnet
             for synset in wn.synsets(context_word):
-                # clean definition
                 defin = utilities.cleanString(synset.definition).split(' ')
-                #print "Not in dictionary"
-                con_overlap += self.consecutiveOverlaps(utilities.cleanString(synset.definition), signature)
+                consecOverlap += self.consecutiveOverlaps(def_words, defin)
                 for wrd in defin:
-                    if wrd.strip() == word:
+                    if wrd.strip() in def_words:
                         overlap += 1
-
-        # metric that rewards consecutive overlaps more than distant overlaps - We can have another metric with examples included
-        overlap = 5*con_overlap + overlap + 3*context_overlap
-        return overlap
+        return context_overlap, overlap, consecOverlap
 
     # returns the number of consecutive overlaps given two parsed sentences
+    # sent1 is string list, sent2 is string list
     def consecutiveOverlaps(self, sent1, sent2):
-        #print "Consecutive overlaps\n"
-        #print sent1
-        #print sent2
-        sent2 = sent2.split(' ')
-        #print sent2
+        sent1 = ' '.join(sent1)
         con_overlap = 0
         for i in range(0, len(sent2)-1):
             consecutive = sent2[i] + ' ' + sent2[i+1]
             #print consecutive
             if sent1.find(consecutive) != -1:
                 con_overlap += 1
-        #print con_overlap
         return con_overlap
 
     def printexample(self):
@@ -247,5 +246,5 @@ dwsd = DictionaryWSD(dictionaryProcessed)
 #dwsd.Lesk('begin', 'v', 'begin to attain freedom')
 #dwsd.Lesk('pine', 'n', 'pine cone')
 
-#processTestFile(dwsd, 'test_clean1.csv', 'dictionary_test_prediction.csv', window=8)
-processTestFile(dwsd, 'test_clean.data', 'dictionary_test_prediction.csv', window=5)
+processTestFile(dwsd, 'test_clean1.csv', 'dictionary_test_prediction.csv', window=8)
+#processTestFile(dwsd, 'test_clean.data', 'dictionary_test_prediction.csv', window=5)
