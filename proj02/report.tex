@@ -64,11 +64,17 @@ return [lemma.lemmatize(word) for word in words if
 Data cleanup was also needed at various moments of computation for the dictionary-based system. The function \texttt{cleanString} takes a string as input, and outputs a lemmatized, de-puncuated string without stopwords.
 
 \subsection{Dictionary Cleanup}
-For the dictionary-based system, our input file \texttt{dictionary.xml} needed to be slightly reformatted for the Python library \texttt{lxml} to accept and parse correctly. In \texttt{utilities.py}, the function \texttt{fixDoubles} preprocesses the dictionary, fixing the instances of double senses. For example, one of ``drug'''s senses references its previous senses 1 and 2: ``1\&\&2''. We simply dropped this dictionary entry as it would not affect the overall performance of our system without it. We also removed instances of double-quote characters in our examples, as that was messing up the XML parser, and those characters were not needed.
+For the dictionary-based system, our input file \texttt{dictionary.xml} needed to be slightly reformatted for the Python library \texttt{lxml} to accept and parse correctly. In \texttt{utilities.py}, the function \texttt{fixDoubles} preprocesses the dictionary, fixing the instances of double senses.
 
-\texttt{fixDoubles} generates \texttt{dictionary\_processed.xml}, which we read in using Python's lxml library.
+\begin{verbatim}
+  for i in range(20): # doing this multiple times for multiple '"'
+      dictContent = re.sub('examples="(.*)"(.*)" />', \
+          r'examples="\1\2" />', dictContent)
+\end{verbatim}
 
-TODO: COMPLETE
+One of ``drug'''s senses references its previous senses 1 and 2: ``1\&\&2''. We simply dropped this dictionary entry as it would not affect the overall performance of our system without it. We also removed instances of double-quote characters in our examples, as that was messing up the XML parser, and those characters were not needed.
+
+\texttt{fixDoubles} generates \texttt{dictionary\_processed.xml}, which we read in using Python's lxml library. Usage of this processed dictionary is described in the following Dictionary system-specific section.
 
 \section{Naive Bayes}
 
@@ -123,7 +129,6 @@ We do this for each sense of each target word example and take the argmax to pro
 
 \subsection{Soft-scoring}
 When calculating soft-scoring for accuracy, we process the classification probability scores of each word after they've been calculated using the Naive-Bayes model. In order to prevent underflow, we scale all the probability scores $pr$ of each word first by modifying them to become $e^{pr-maxProb}$ where $maxProb$ is the maximum probability for that word. We then normalize the scores to calculate the actual probability of each sense prediction. Then, during calculation of accuracy, instead of adding 1 for each correct prediction, we add the predicted probability for the golden standard sense.
-
 
 \section{Dictionary-based}
 
