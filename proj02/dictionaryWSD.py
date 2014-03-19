@@ -75,7 +75,7 @@ class DictionaryWSD():
         #print list_of_senses
         for sense in list_of_senses: # sense is int. length list_of_senses is approx 5
             #print "Senses:\n", sense, list_of_senses[sense]
-            overlap = self.computeOverlap(word, list_of_senses[sense], pre_words, post_words)
+            overlap = self.computeOverlap(word, pos, list_of_senses[sense], pre_words, post_words)
             #print "overlap for sense", sense, ":", overlap
             #print "!!!!", sense, "Overlap:", overlap
             scores[sense] = overlap+alpha
@@ -89,7 +89,7 @@ class DictionaryWSD():
 
     # returns the number of words in common between two sets
     # signature = set of words in the gloss and examples of sense
-    def computeOverlap(self, target, (defn,examples,wordnetints), pre_words, post_words):
+    def computeOverlap(self, target, pos, (defn,examples,wordnetints), pre_words, post_words):
         # relevant words = words with same pos
         context_overlap = 0
         def_overlap = 0
@@ -102,18 +102,27 @@ class DictionaryWSD():
                 lst = example.split(target)
                 example = lst[0] + lst[1]
                 def_words.extend(example.split(' '))
+        # put wordnet int senses into defn
+        for wnint in wordnetints:
+            wnstring = target + "." + pos + "."
+            if wnint < 10: wnstring += "0" + str(wnint)
+            else: wnstring += str(wnint)
+            try:
+                wndef = utilities.cleanString(wn.synset(wnstring).definition)
+                def_words.extend(wndef.split(' '))
+            except: pass
         #print target
         #print "  pre :", pre_words
         #print "  post:", post_words
         #print "  def :", def_words
 
         for pre_word in pre_words:
-            wco, wo, wcono = self.getOverlaps(def_words, pre_word)
+            wco, wo, wcono = self.getOverlaps(def_words, pre_word, pre_words)
             context_overlap += wco
             def_overlap += wo
             consecutive_overlap += wcono
         for post_word in post_words:
-            wco, wo, wcono = self.getOverlaps(def_words, post_word)
+            wco, wo, wcono = self.getOverlaps(def_words, post_word, post_words)
             context_overlap += wco
             def_overlap += wo
             consecutive_overlap += wcono
@@ -152,10 +161,10 @@ class DictionaryWSD():
         '''
         #print overlap
         #print context_overlap, def_overlap, consecutive_overlap
-        total_overlap = 10*context_overlap + def_overlap + 15*consecutive_overlap
+        total_overlap = 5*context_overlap + 1*def_overlap + 15*consecutive_overlap
         return total_overlap
 
-    def getOverlaps(self, def_words, context_word):
+    def getOverlaps(self, def_words, context_word, listwords):
         context_overlap = 0 # if context_word in def_words
         overlap = 0 # overlap of contextword def words and def_words
         consecOverlap = 0
@@ -256,6 +265,6 @@ dwsd = DictionaryWSD(dictionaryProcessed)
 #dwsd.Lesk('pine', 'n', 'pine cone')
 
 #processTestFile(dwsd, 'test_clean1.csv', 'dictionary_test_prediction.csv', window=8)
-print processTestFile(dwsd, 'test_clean.data', 'dictionary_test_prediction.csv', window=6)
+print processTestFile(dwsd, 'test_clean.data', 'dictionary_test_prediction_testjunk.csv', window=8)
 #processTestFile(dwsd, 'test_clean1.csv', 'dictionary_test_prediction.csv', window=8)
 #print processTestFile(dwsd, 'validation_clean.data', 'blah.data', window=5, softScoring=True)
