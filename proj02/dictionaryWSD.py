@@ -85,7 +85,7 @@ class DictionaryWSD():
             total = sum(scores.values())
             for key in scores:
                 scores[key] = scores[key] / float(total)
-        return scores
+        return scores, alpha
 
     # returns the number of words in common between two sets
     # signature = set of words in the gloss and examples of sense
@@ -96,12 +96,12 @@ class DictionaryWSD():
         consecutive_overlap = 0
 
         def_words = defn.split(' ')
-        # put all examples into the definition too.
-        for example in examples:
-            if example.find(target) != -1:
-                lst = example.split(target)
-                example = lst[0] + lst[1]
-                def_words.extend(example.split(' '))
+        # put all examples into the definition too. # CHANGE. no.
+        #for example in examples:
+        #    if example.find(target) != -1:
+        #        lst = example.split(target)
+        #        example = lst[0] + lst[1]
+        #        def_words.extend(example.split(' '))
         # put wordnet int senses into defn
         for wnint in wordnetints:
             wnstring = target + "." + pos + "."
@@ -161,7 +161,7 @@ class DictionaryWSD():
         '''
         #print overlap
         #print context_overlap, def_overlap, consecutive_overlap
-        total_overlap = 5*context_overlap + 1*def_overlap + 15*consecutive_overlap
+        total_overlap = 3*context_overlap + 5*def_overlap + 8*consecutive_overlap
         return total_overlap
 
     def getOverlaps(self, def_words, context_word, listwords):
@@ -207,6 +207,7 @@ class DictionaryWSD():
             #print "Sense:\n", self.dict['begin'][1][sense]
 
 def processTestFile(dwsd, filename, destination, window=5, softScoring=False):
+    tobreak = False
     prevword = ""
     with open(destination, 'w') as d:
         f = open(filename)
@@ -237,8 +238,13 @@ def processTestFile(dwsd, filename, destination, window=5, softScoring=False):
             #print "POS: ", pos
 
             # algorithm bottleneck is HERE
-            scores = dwsd.Lesk(word, pos, pre_words, post_words,softScoring)
+            scores, alpha = dwsd.Lesk(word, pos, pre_words, post_words,softScoring)
             sense = utilities.argmax(zip(scores.keys(),scores.values()))
+            if max(scores.values()) == alpha: # we got no overlap!
+                print sense, "original score but no overlap."
+                print zip(scores.keys(),scores.values())
+                sense = 1 # we should guess this by default.
+                #tobreak = True
             trueSense = int(lst[1].strip())
             if softScoring:
                 #print scores
@@ -250,6 +256,8 @@ def processTestFile(dwsd, filename, destination, window=5, softScoring=False):
                     acc += 1
             i += 1
             d.write("" + str(i) + "," + str(sense) + "\n")
+            if tobreak:
+                break # REMOVE AFTER DONE WITH
 
         d.close()
     return acc / float(i)
@@ -265,6 +273,6 @@ dwsd = DictionaryWSD(dictionaryProcessed)
 #dwsd.Lesk('pine', 'n', 'pine cone')
 
 #processTestFile(dwsd, 'test_clean1.csv', 'dictionary_test_prediction.csv', window=8)
-print processTestFile(dwsd, 'test_clean.data', 'dictionary_test_prediction_testjunk.csv', window=8)
+print processTestFile(dwsd, 'test_clean.data', 'dictionary_test_prediction_win20-3-5-8-nex-def1.csv', window=20)
 #processTestFile(dwsd, 'test_clean1.csv', 'dictionary_test_prediction.csv', window=8)
 #print processTestFile(dwsd, 'validation_clean.data', 'blah.data', window=5, softScoring=True)
