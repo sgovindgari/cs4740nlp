@@ -63,8 +63,8 @@ class DictionaryWSD():
         # TODO - need a way to store different pos of a word and retrieve them accordingly
         list_of_senses = []
         if word in self.dict:
-            list_of_senses = self.dict[word][1]
-        else:
+            wordpos, list_of_senses = self.dict[word]
+        else: # we don't know pos, senses, or definition. should not happen from test data
             lst_tup = dict()
             i = 1
             for synset in wn.synsets(word): # may be empty!
@@ -75,9 +75,10 @@ class DictionaryWSD():
             list_of_senses = self.dict[word][1]
 
         #print list_of_senses
-        for sense in list_of_senses: # length list_of_senses is approx 5
+        for sense in list_of_senses: # sense is int. length list_of_senses is approx 5
             #print "Senses:\n", sense, list_of_senses[sense]
             overlap = self.computeOverlap(word, list_of_senses[sense], pre_words, post_words)
+            #print "overlap for sense", sense, ":", overlap
             #print "!!!!", sense, "Overlap:", overlap
             if overlap > max_overlap:
                 max_overlap = overlap
@@ -94,50 +95,89 @@ class DictionaryWSD():
 
     # returns the number of words in common between two sets
     # signature = set of words in the gloss and examples of sense
-    def computeOverlap(self, target, signature, pre_words, post_words):
-       # relevant words = words with same pos
-       overlap = 0
-       sign0 = signature[0]
+    def computeOverlap(self, target, (defn,examples,wordnetints), pre_words, post_words):
+        # relevant words = words with same pos
+        overlap = 0
 
-       # for now splitting it as list form
-       def_words = sign0.split(' ')
+        # for now splitting it as list form
+        def_words = defn.split(' ')
+        #print target
+        #print "  pre :", pre_words
+        #print "  post:", post_words
+        #print "  def :", def_words
 
-       #print "  Pre words:", pre_words
-       #print "  Post_words:", post_words
-       #print "  Def words", def_words
-
-       for word in def_words:
+        # figure out a better metric! use examples?!
+        for word in def_words:
             for pre_word in pre_words:
-                
                 # here it is with caching
-                if sign0 not in self.overlapCache:
-                    self.overlapCache[sign0] = dict()
-                if word not in self.overlapCache[sign0]:
-                    self.overlapCache[sign0][word] = dict()
-                if pre_word not in self.overlapCache[sign0][word]:
-                    overlapval = self.checkSenseOverlap(word, pre_word, sign0)
-                    self.overlapCache[sign0][word][pre_word] = overlapval
+                if defn not in self.overlapCache:
+                    self.overlapCache[defn] = dict()
+                if word not in self.overlapCache[defn]:
+                    self.overlapCache[defn][word] = dict()
+                if pre_word not in self.overlapCache[defn][word]:
+                    overlapval = self.checkSenseOverlap(word, pre_word, defn)
+                    self.overlapCache[defn][word][pre_word] = overlapval
                     overlap += overlapval
                 else:
-                    overlap += self.overlapCache[sign0][word][pre_word]
-                
-                #overlap += self.checkSenseOverlap(word, pre_word, signature[0])
+                    overlap += self.overlapCache[defn][word][pre_word]
+                # no caching:
+                #overlap += self.checkSenseOverlap(word, pre_word, defn)
             for post_word in post_words:
                 # here it is with caching
-                if sign0 not in self.overlapCache:
-                    self.overlapCache[sign0] = dict()
-                if word not in self.overlapCache[sign0]:
-                    self.overlapCache[sign0][word] = dict()
-                if post_word not in self.overlapCache[sign0][word]:
-                    overlapval = self.checkSenseOverlap(word, post_word, sign0)
-                    self.overlapCache[sign0][word][post_word] = overlapval
+                if defn not in self.overlapCache:
+                    self.overlapCache[defn] = dict()
+                if word not in self.overlapCache[defn]:
+                    self.overlapCache[defn][word] = dict()
+                if post_word not in self.overlapCache[defn][word]:
+                    overlapval = self.checkSenseOverlap(word, post_word, defn)
+                    self.overlapCache[defn][word][post_word] = overlapval
                     overlap += overlapval
                 else:
-                    overlap += self.overlapCache[sign0][word][post_word]
-                #overlap += self.checkSenseOverlap(word, post_word, signature[0])
+                    overlap += self.overlapCache[defn][word][post_word]
+                # no caching:
+                #overlap += self.checkSenseOverlap(word, post_word, defn)
 
-       #print overlap
-       return overlap
+        #print overlap
+        return overlap
+
+    def checkSenseOverlap(self, word, context_word, signature):
+        # for each word in sentence get the definition
+        # check overlaps between definitions
+        overlap = 0
+        con_overlap = 0
+        context_overlap = 0
+
+        context_word = context_word.strip()
+        word = word.strip()
+        if context_word == word:
+            context_overlap += 1
+
+        if context_word in self.dict:
+            #print "Context word:", context_word
+            get_def = self.dict[context_word][1]
+
+            for sense in get_def:
+                #print "In dictionary"
+                con_overlap += self.consecutiveOverlaps(get_def[sense][0], signature)
+                lst = get_def[sense][0].split(' ')
+                for wrd in lst:
+                    if wrd.strip() == word:
+                        overlap += 1
+        else: # do WordNet lookup
+            #print "Lookin' up", context_word, "in Wordnet..."
+            # may be empty! if so, automatically ignored
+            for synset in wn.synsets(context_word):
+                # clean definition
+                defin = utilities.cleanString(synset.definition).split(' ')
+                #print "Not in dictionary"
+                con_overlap += self.consecutiveOverlaps(utilities.cleanString(synset.definition), signature)
+                for wrd in defin:
+                    if wrd.strip() == word:
+                        overlap += 1
+
+        # metric that rewards consecutive overlaps more than distant overlaps - We can have another metric with examples included
+        overlap = 5*con_overlap + overlap + 3*context_overlap
+        return overlap
 
     # returns the number of consecutive overlaps given two parsed sentences
     def consecutiveOverlaps(self, sent1, sent2):
@@ -155,82 +195,33 @@ class DictionaryWSD():
         #print con_overlap
         return con_overlap
 
-
-    def checkSenseOverlap(self, word, context_word, signature):
-        # for each word in sentence get the definition
-        # check overlaps between definitions
-        overlap = 0
-        con_overlap = 0
-        context_overlap = 0
-
-        if context_word == word:
-            context_overlap += 1
-
-        if context_word in self.dict:
-            #print "Context word:", context_word
-            get_def = self.dict[context_word][1]
-
-            for sense in get_def:
-                #print "In dictionary"
-                con_overlap += self.consecutiveOverlaps(get_def[sense][0], signature)
-                lst = get_def[sense][0].split(' ')
-                for wrd in lst:
-                    if wrd == word:
-                        overlap += 1
-        else: # do WordNet lookup
-            #print "Lookin' up", context_word, "in Wordnet..."
-            # may be empty! if so, automatically ignored
-            for synset in wn.synsets(context_word):
-                # clean definition
-                defin = utilities.cleanString(synset.definition).split(' ')
-                #print "Not in dictionary"
-                con_overlap += self.consecutiveOverlaps(utilities.cleanString(synset.definition), signature)
-                for wrd in defin:
-                    if wrd == word:
-                        overlap += 1
-
-        # metric that rewards consecutive overlaps more than distant overlaps - We can have another metric with examples included
-        overlap = 0.5*con_overlap + 0.4*overlap + 0.1*context_overlap
-        return overlap
-
     def printexample(self):
         print 'Example:\n', 'begin :', self.dict['begin']
         #print 'sense: \n', self.dict['begin'][1]
         #for sense in self.dict['begin'][1]:
             #print "Sense:\n", self.dict['begin'][1][sense]
 
-
-# MAIN
-# preprocess dictionary XML:
-#   remove one instance of double sense, fix all '"' characters in examples
-utilities.fixDoubles(dictionarySource, dictionaryProcessed)
-
-dwsd = DictionaryWSD(dictionaryProcessed)
-#dwsd.printexample()
-#dwsd.Lesk('begin', 'v', 'begin to attain freedom')
-#dwsd.Lesk('pine', 'n', 'pine cone')
-
-def processTestFile(filename, destination):
+def processTestFile(dwsd, filename, destination, window=5):
     prevword = ""
     with open(destination, 'w') as d:
         f = open(filename)
-        d.write("Id, Prediction\n")
+        d.write("Id,Prediction\n")
         i = 0
         start_time = time.time()
         for line in f:
             lst = line.split('|')
-            #print lst
+
             word_pos = lst[0].strip().split('.')
             word = word_pos[0]
             pos = word_pos[1]
             gloss = lst[2].strip().split('%%')
             context = gloss[0] + gloss[1] + gloss[2]
 
+            # pick up a number of pre- and post- words defined by int window
             pre_words = gloss[0].strip().split(' ')
-            pre_words = pre_words[-10:]
-
+            pre_words = pre_words[-window:]
             post_words = gloss[2].strip().split(' ')
-            post_words = post_words[-10:]
+            post_words = post_words[:window]
 
             if prevword != word:
                 prevword = word
@@ -242,8 +233,19 @@ def processTestFile(filename, destination):
             # algorithm bottleneck is HERE
             sense = dwsd.Lesk(word, pos, pre_words, post_words)
             i += 1
-            d.write("" + str(i) + ", " + str(sense) + "\n")
+            d.write("" + str(i) + "," + str(sense) + "\n")
 
         d.close()
 
-processTestFile('kaggledictionary/kaggle_validate.data', 'kaggledictionary/kaggle_validatepredictions.data')
+# MAIN
+# preprocess dictionary XML:
+#   remove one instance of double sense, fix all '"' characters in examples
+utilities.fixDoubles(dictionarySource, dictionaryProcessed)
+
+dwsd = DictionaryWSD(dictionaryProcessed)
+#dwsd.printexample()
+#dwsd.Lesk('begin', 'v', 'begin to attain freedom')
+#dwsd.Lesk('pine', 'n', 'pine cone')
+
+#processTestFile(dwsd, 'test_clean1.csv', 'dictionary_test_prediction.csv', window=8)
+processTestFile(dwsd, 'test_clean.data', 'dictionary_test_prediction.csv', window=5)
