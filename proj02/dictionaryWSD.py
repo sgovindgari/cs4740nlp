@@ -98,7 +98,10 @@ class DictionaryWSD():
         def_words = defn.split(' ')
         # put all examples into the definition too.
         for example in examples:
-            def_words.extend(example.split(' '))
+            if example.find(target) != -1:
+                lst = example.split(target)
+                example = lst[0] + lst[1]
+                def_words.extend(example.split(' '))
         #print target
         #print "  pre :", pre_words
         #print "  post:", post_words

@@ -18,3 +18,9 @@ should write a results file for kaggle and biasTowardsCommon--whether to'
 include P(s|w) in the probability calculations.
 
 Dictionary:
+
+To create a dictionary model one simply passes in the dictionary source into the
+dictionaryWSD constructor. Then to test a file one calls
+processTestFile() and passes in the dictionary model, then the filename
+(data to classify), then the destination (for kaggle data), the window size
+for context and whether to use softScoring.
