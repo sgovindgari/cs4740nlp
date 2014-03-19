@@ -55,10 +55,8 @@ class DictionaryWSD():
 
     # precondition: sentence should be lemmatized before
     #returns the best sense of a word
-    def Lesk(self, word, pos, pre_words, post_words):
-        best_sense = -1
-        max_overlap = 0
-
+    def Lesk(self, word, pos, pre_words, post_words,softScoring=False,alpha=0.5):
+        scores = dict()
         # what to do if word doesnt exist?
         # TODO - need a way to store different pos of a word and retrieve them accordingly
         list_of_senses = []
@@ -80,18 +78,14 @@ class DictionaryWSD():
             overlap = self.computeOverlap(word, list_of_senses[sense], pre_words, post_words)
             #print "overlap for sense", sense, ":", overlap
             #print "!!!!", sense, "Overlap:", overlap
-            if overlap > max_overlap:
-                max_overlap = overlap
-                best_sense = sense
+            scores[sense] = overlap+alpha
         #print "Best Sense is: ", best_sense
-
-        # if no best sense is returned default to the sense that is most frequently used - top sense
-        if best_sense == -1:
-            #print "No sense found using common sense"
-            for sense in list_of_senses:
-                best_sense = sense
-                break
-        return best_sense
+        if softScoring:
+            values = []
+            total = sum(scores.values())
+            for key in scores:
+                scores[key] = scores[key] / float(total)
+        return scores
 
     # returns the number of words in common between two sets
     # signature = set of words in the gloss and examples of sense
@@ -200,11 +194,12 @@ class DictionaryWSD():
         #for sense in self.dict['begin'][1]:
             #print "Sense:\n", self.dict['begin'][1][sense]
 
-def processTestFile(dwsd, filename, destination, window=5):
+def processTestFile(dwsd, filename, destination, window=5, softScoring=False):
     prevword = ""
     with open(destination, 'w') as d:
         f = open(filename)
         d.write("Id,Prediction\n")
+        acc = 0.0
         i = 0
         start_time = time.time()
         for line in f:
@@ -230,11 +225,22 @@ def processTestFile(dwsd, filename, destination, window=5):
             #print "POS: ", pos
 
             # algorithm bottleneck is HERE
-            sense = dwsd.Lesk(word, pos, pre_words, post_words)
+            scores = dwsd.Lesk(word, pos, pre_words, post_words,softScoring)
+            sense = utilities.argmax(zip(scores.keys(),scores.values()))
+            trueSense = int(lst[1].strip())
+            if softScoring:
+                print scores
+                if trueSense in scores:
+                    print scores[trueSense]
+                    acc += scores[trueSense]
+            else:
+                if sense == trueSense:
+                    acc += 1
             i += 1
             d.write("" + str(i) + "," + str(sense) + "\n")
 
         d.close()
+    return acc / float(i)
 
 # MAIN
 # preprocess dictionary XML:
@@ -248,3 +254,5 @@ dwsd = DictionaryWSD(dictionaryProcessed)
 
 processTestFile(dwsd, 'test_clean1.csv', 'dictionary_test_prediction.csv', window=8)
 #processTestFile(dwsd, 'test_clean.data', 'dictionary_test_prediction.csv', window=5)
+#processTestFile(dwsd, 'test_clean1.csv', 'dictionary_test_prediction.csv', window=8)
+#processTestFile(dwsd, 'validation_clean.data', 'blah.data', window=5, softScoring=True)

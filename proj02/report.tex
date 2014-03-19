@@ -46,7 +46,7 @@
 
 \section{Introduction}
 
-For this project we have written our code in Python. We used several of python's included libraries as well as tools from NLTK. We used NLTK's WordNetLemmatizer for lemmatizing words in our data, NLTK's maximum entropy POS tagger based off the Penn TreeBank was used for part-of-speech tagging of data, finally we used NLTK's corpus of stopwords to eliminate stopwords from the data sets. To run our code, please reference our README. (Where is our README?)
+For this project we have written our code in Python. We used several of python's included libraries as well as tools from NLTK. We used NLTK's WordNetLemmatizer for lemmatizing words in our data, NLTK's maximum entropy POS tagger based off the Penn TreeBank was used for part-of-speech tagging of data, finally we used NLTK's corpus of stopwords to eleminate stopwords from the data sets. To run our code, please reference our README.
 
 \section{Preprocessing}
 
@@ -73,7 +73,7 @@ We extracted the target word, sense and examples by using a simple regex to get 
 
 \subsection{Model Construction}
 
-In order to construct a Naive-Bayes model (class \texttt{naive\_bayes} in our code) of the examples generated in the previous section, we generated the appropriate counts necessary. In our naive bayes' constructor we iterate over all passed in examples. We maintain a list of word counts in \texttt{self.wordcounts} which is a dictionary mapping target words to how many examples are for that word. We also maintain \texttt{self.featureLists} which is a dictionary which maps target words to sets of all features for each target word, each set is created as we iterate through examples and gather all features from each example for each word. Further we maintain a dictionary of dictionaries holding sense counts. For each word we have an entry in \texttt{self.senseCounts} which holds a dictionary where the keys are the sense and the value are the number of times that sense appears in the training set. 
+In order to construct a naive bayes model (class \texttt{naive\_bayes} in our code) of the examples generated in the previous section, we generated the appropriate counts necessary. In our naive bayes' constructor we iterate over all passed in examples. We maintain a list of word counts in \texttt{self.wordcounts} which is a dictionary mapping target words to how many examples are for that word. We also maintain \texttt{self.featureLists} which is a dictionary which maps target words to sets of all features for each target word, each set is created as we iterate through examples and gather all features from each example for each word. Further we maintain a dictionary of dictionaries holding sense counts. For each word we have an entry in \texttt{self.senseCounts} which holds a dictionary where the keys are the sense and the value are the number of times that sense appears in the training set. 
 
 Finally we create \texttt{self.featureCounts}, this is a dictionary with keys of (word,sense). Then for each key there is a dictionary with keys corresponding to each feature. These features values are dictionaries which have a key for each value for that feature that appears in the training set with the number stored in the dictionary being the count of the number of times the feature with the specific value has shown up for that (word,sense) pair in the training set. To illustrate this, consider the case when we have two following feature vectors for the word ``affect'' with the sense ``1'':
 {\small
@@ -121,11 +121,9 @@ When calculating soft-scoring for accuracy, we process the classification probab
 \section{Dictionary-based}
 
 \subsection{Dictionary Construction}
-In our Dictionary based WSD, we made use of both the given dictionary as well as WordNet in order to derive meanings of words found in definitions. (We should note that we are using the default WordNet version 3.0, not 21. This turns out to be okay, since we are not using the provided wordnet sense integers.)
+In our Dictionary based WSD, we made use of both the given dictionary as well as WordNet in order to derive meanings of words. (We should note that we are using the default WordNet version 3.0, not 2.1, in our derivations. This turns out to be okay, since we are not using the provided wordnet sense integers.)
 
-The contents of the dictionary \texttt{dictionary.xml} is initially preprocessed by the function \texttt{fixDoubles} in \texttt{utilities.py}. We do this preprocessing to fix the instances of double senses. For example, one of ``drug'''s senses references its previous senses 1 and 2: ``1\&\&2''. We simply dropped this dictionary entry as it would not affect the overall performance of our system without it. We also removed instances of double-quote characters in our examples, as that was messing up the XML parser, and those characters were not needed.
-
-\texttt{fixDoubles} generates \texttt{dictionary\_processed.xml}, which we read in using Python's lxml library. From here, we transform the data into a dictionary, a lookup-table where the word is the key. The value, if the word is found, is the tuple of (part of speech, sub-dictionary). The sub-dictionary was further a map with key as the senseID and value as another tuple of (definition, example list, and wordNet Senses). Whenever a word was not found in the dictionary, we used WordNet to extract the word's senses and definitions, and then updated our dictionary to contain this word.
+The format of our dictionary is a lookup table with the key as the word and value as the tuple of (part of speech, sub-dictionary). The sub-dictionary was further a map with key as the senseID and value as another tuple of (definition, example list, and wordNet Senses). Whenever a word was not found in the dictionary, we used WordNet to extract the word's senses and definitions, and then updated our dictionary to contain this word.
 
 \subsection{Implementation of Lesk Algorithm}
 To disambiguate words with dictionary approach, we used the Lesk algorithm that computed the number of overlaps between the definitions of the target word and context words. In order to find the best sense, we first get the definition of our target word by searching it in our dictionary. If the word is not found, we search WordNet and update dictionary accordingly. Once we know the list of senses, each sense is used in computeOverlap function to calculate the \emph{distant overlaps, consecutive overlaps, and context overlaps}. We made a few optimizations to this function in order to pick relevant words from the context and calculate overlap which you can find in the section below. Each overlap score is compared to the maximum overlap and the best sense is returned which is attached to the maximum overlap.
@@ -137,6 +135,9 @@ The overlap score computes the number of individual words that overlap between t
 \begin{align}
 overlap = 0.5*consecutive\_overlaps + 0.4*overlap + 0.1*context\_overlap
 \end{align}
+
+\subsection{Soft-scoring}
+To do soft-scoring for our dictionary implementation we had to find a way to generate confidence in each sense. To do this we simply normalized our overlaps scores we calculated for each sense. To account for senses that might have zero overlap we used a small alpha smoothing parameter so they did not have zero probability under our soft-scoring model. We then compute accuracy in the same way as we did for the Naive Bayes model.
 
 \section{Experimentation}
 
