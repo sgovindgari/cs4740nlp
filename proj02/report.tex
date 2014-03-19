@@ -133,7 +133,7 @@ The optimizations we made to Lesk Algorithm mostly revolve around the \texttt{co
 
 The overlap score computes the number of individual words that overlap between the definitions of two words. The consecutive overlap score computes the number of consecutive overlaps that occur in between the definitions. And finally, context overlap as we call it is a measure of the number of words from the context that overlap with the definitions. We used the context overlap measure because we noticed that words used within context sometimes do overlap with the definition of the target word. With these three measures, our metric system to calculate the overlap score is as follows:
 \begin{align}
-overlap = 0.5*consecutive\_overlaps + 0.4*overlap + 0.1*context\_overlap
+overlap = 15*consecutive\_overlaps + 5*overlap + 1*context\_overlap
 \end{align}
 
 \subsection{Soft-scoring}

@@ -98,7 +98,10 @@ class DictionaryWSD():
         def_words = defn.split(' ')
         # put all examples into the definition too.
         for example in examples:
-            def_words.extend(example.split(' '))
+            if example.find(target) != -1:
+                lst = example.split(target)
+                example = lst[0] + lst[1]
+                def_words.extend(example.split(' '))
         #print target
         #print "  pre :", pre_words
         #print "  post:", post_words
@@ -148,7 +151,7 @@ class DictionaryWSD():
                 #overlap += self.checkSenseOverlap(word, post_word, defn)
         '''
         #print overlap
-        print context_overlap, def_overlap, consecutive_overlap
+        #print context_overlap, def_overlap, consecutive_overlap
         total_overlap = 5*context_overlap + def_overlap + 15*consecutive_overlap
         return total_overlap
 
@@ -229,9 +232,9 @@ def processTestFile(dwsd, filename, destination, window=5, softScoring=False):
             sense = utilities.argmax(zip(scores.keys(),scores.values()))
             trueSense = int(lst[1].strip())
             if softScoring:
-                print scores
+                #print scores
                 if trueSense in scores:
-                    print scores[trueSense]
+                    #print scores[trueSense]
                     acc += scores[trueSense]
             else:
                 if sense == trueSense:
@@ -252,7 +255,7 @@ dwsd = DictionaryWSD(dictionaryProcessed)
 #dwsd.Lesk('begin', 'v', 'begin to attain freedom')
 #dwsd.Lesk('pine', 'n', 'pine cone')
 
-processTestFile(dwsd, 'test_clean1.csv', 'dictionary_test_prediction.csv', window=8)
-#processTestFile(dwsd, 'test_clean.data', 'dictionary_test_prediction.csv', window=5)
 #processTestFile(dwsd, 'test_clean1.csv', 'dictionary_test_prediction.csv', window=8)
-#processTestFile(dwsd, 'validation_clean.data', 'blah.data', window=5, softScoring=True)
+print processTestFile(dwsd, 'test_clean.data', 'dictionary_test_prediction.csv', window=5)
+#processTestFile(dwsd, 'test_clean1.csv', 'dictionary_test_prediction.csv', window=8)
+#print processTestFile(dwsd, 'validation_clean.data', 'blah.data', window=5, softScoring=True)
