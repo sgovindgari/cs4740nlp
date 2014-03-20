@@ -47,7 +47,7 @@
 
 \section{Introduction}
 
-Our code is written in Python and uses several libraries, including NLTK. We used NLTK's WordNetLemmatizer for lemmatizing words in our data, NLTK's maximum entropy POS tagger based off the Penn TreeBank was used for part-of-speech tagging of data. Finally we used NLTK's corpus of stopwords to eleminate stopwords from the data sets and NLTK's WordNet corpus for accessing more dictionary information. To run our code, please reference our README.
+Our code is written in Python and uses several libraries, including NLTK. We used NLTK's WordNetLemmatizer for lemmatizing words in our data, NLTK's maximum entropy POS tagger based off the Penn TreeBank. Finally we also used NLTK's corpus of stopwords and NLTK's WordNet corpus for accessing more dictionary information. To run our code, please reference our README.
 
 \section{Preprocessing}
 
@@ -93,16 +93,12 @@ Finally we create \texttt{self.featureCounts}, this is a dictionary with keys of
 In this case \texttt{self.featureCounts} would have one entry: ("affect","1"), this entry would look as follows:
 {\small
 \begin{verbatim}
-{
- "f1" : { "dog" : 2 }
- "f2" : { 2 : 1, 3 : 1 }
- "f3" : { "hello" : 1 }
- "f4" : { "boat" : 1 }
+{ "f1" : { "dog" : 2 }, "f2" : { 2 : 1, 3 : 1 }, "f3" : { "hello" : 1 }, "f4" : { "boat" : 1 }
 }
 \end{verbatim}
 }
 
-It is important to note that we do not maintain count of features which are part of a specific word but do not appear in an example. For instance the second example in our previous case is missing the feature ``f3'' so in actuality it has a feature of ``f3'' with a value of null (0 if it was a boolean/number feature), but we do not count this as we can generate that count on the fly using the counts we maintain in \texttt{self.featureCounts} and \texttt{self.senseCounts}.
+It is important to note that we do not maintain count of features which are part of a specific word but do not appear in an example. For instance the second example in our previous case is missing the feature ``f3'' so in actuality it has a feature of ``f3'' with a value of null (0 if it was a boolean/number feature), but we do not count this as we can generate that count on the fly.
 
 \subsection{Classification}
 
@@ -124,8 +120,6 @@ We do this for each sense of each target word example and take the argmax to pro
 
 \subsection{Extension: Soft-scoring}
 When calculating soft-scoring for accuracy, we process the classification probability scores of each word after they've been calculated using the Naive-Bayes model. In order to prevent underflow, we scale all the probability scores $pr$ of each word first by modifying them to become $e^{pr-maxProb}$ where $maxProb$ is the maximum probability for that word. We then normalize the scores to calculate the actual probability of each sense prediction. Then, during calculation of accuracy, instead of adding 1 for each correct prediction, we add the predicted probability for the golden standard sense.
-
-(An implementation of soft-scoring for the Dictionary-based system is also done, although we do not report results here; the accuracy results are low.)
 
 \section{Dictionary-based}
 
@@ -186,6 +180,7 @@ We experimented with the values $k$, $m$, and $n$, and came to the conclusion th
 To do soft-scoring for our dictionary implementation we had to find a way to generate confidence in each sense. To do this we simply normalized our overlaps scores we calculated for each sense. To account for senses that might have zero overlap we used a small alpha smoothing parameter so they did not have zero probability under our soft-scoring model. We then compute accuracy in the same way as we did for the Naive Bayes model.
 
 \section{Experimentation}
+We are kaggle team abms.
 
 \subsection{Na\"{i}ve-Bayes}
 
@@ -194,16 +189,12 @@ We tested our implementation of Naive Bayes in various ways using the validation
 We also tested how the accuracy of our Naive Bayes model would change on the validation set as we increase the maximum possible number of training examples for each sense of each word. For this test we used a Naive Bayes model using only co-occurrence features with a window size of 10. We tested both soft-scoring and hard-scoring. We found that accuracy started fairly low for both and as training size increased, accuracy increased quickly for both scoring systems, with soft-scoring always slightly lower than hard (see \hyperref[fig:size]{Figure 2}).
 
 \subsection{Dictionary-based}
-There is no training data for this system; every dataset could be used to evaluate accuracy.
-
-\subsubsection{Baseline}
 
 The parameters we were able to manipulate for experimentation were the two optimizations: wordNet integers, adding in examples and changing weights for each of the overlaps. For the baseline, we predicted the best sense = 1 for all the words in both test and validation sets. Our reported accuracies:\par
 \textbf{Test: 0.54186}\par
 \textbf{Validation: 0.54126}\par
 
-\subsubsection{Validation data}
-For our validation data (cleaned at \texttt{validation\_clean.data}), here is a report of our results. Note: for all the data reported below, the weights $k = 3$, $m = 5$, $n = 8$, determined through experimentation to be fairly accurate. (These weights are the relative scales for contextual overlap, definition overlap, and consecutive overlap for each target word and its sense and context.)
+For the validation data, here is a report of our results. Note: for all the data reported below, the weights $k = 3$, $m = 5$, $n = 8$, determined through experimentation to be fairly accurate. (These weights are the relative scales for contextual overlap, definition overlap, and consecutive overlap for each target word and its sense and context.)
 
 {\footnotesize\begin{tabular}{|c|c|c|c|}\hline
 Window size & With examples & With WordNet defs & Accuracy\\\hline
@@ -219,14 +210,9 @@ Window size & With examples & With WordNet defs & Accuracy\\\hline
 
 A brief guide: window size is the number of words left of and right of the target word with which we are taking definitions to compute overlap with the target word definitions. ``With Examples'' means, in our system, we additionally take the provided examples in our dictionary and treating the words as part of the definition. ``With WordNet defs'' means, we use the WordNet integers corresponding to WordNet 2.1 senses and looking up additional definitions to include in our computation of overlap.
 
-Observations: It looks like including WordNet definitions helps improve our system tremendously, as much as a 10\% increase in accuracy. In both window sizes, using only WordNet, and no examples, produced the most accurate sense predictions. It looks like the inclusion of examples can help performance (probably due to the shortness of many dictionary definitions), although a mix of examples and WordNet may not be fruitful.
+Observations: It looks like including WordNet definitions helps improve our system tremendously, as much as a 10\% increase in accuracy. In both window sizes, using only WordNet, and no examples, produced the most accurate sense predictions. It looks like the inclusion of examples can help performance (probably due to the shortness of many dictionary definitions), although a mix of examples and WordNet may not be fruitful. One of our additional experiments was with a window size of 8, with $k = m = n = 1$: \textbf{0.4523}. This result supports the possibility of balanced weights for each overlap type. We will discuss why we could not match the baseline later.\bigskip
 
-One of our additional experiments was with a window size of 8, with $k = m = n = 1$: \textbf{0.4523}. This result supports the possibility of balanced weights for each overlap type.
-
-We will discuss why we could not match the baseline later.
-
-\subsubsection{Test data for Kaggle}
-For our test data to upload to Kaggle (at \texttt{test\_clean.data}), here is a comprehensive chart of our results. (For all, we did not use soft-scoring, as it did not perform up to par.)\par
+For our test data to upload to Kaggle, here is a comprehensive chart of our results. (For all, we did not use soft-scoring, as it did not perform up to par.)\par
 
 {\footnotesize\begin{tabular}{|c|c|c|c|c|c|}\hline
 Test & Window size & $k,m,n$ & Examples? & WordNet? & Accuracy\\\hline
@@ -253,11 +239,7 @@ Test & Window size & $k,m,n$ & Examples? & WordNet? & Accuracy\\\hline
 -- & 5 & 3,5,8 & N & Y & 0.44564\\
 -- & 5 & 3,5,8 & Y & Y & \textbf{0.45559}\\\hline\end{tabular}}
 
-We should note that one of our preliminary tests was simply returning the first sense for each word as ordered in the dictionary, regardless of any context or definition. This produced the high accuracy of \textbf{0.54186}.\par
-
-Some observations: a higher window size does not immediately translate to higher accuracy; however, WordNet definitions help tremendously. There is almost a divide between accuracies when WordNet definitions are used and are not used.\par
-
-Our initial choices for $k,m,n$, like 1,5,15, was motivated by the fact that consecutive overlaps are very significant and are a likely indicator for sense. However, our highest results where when we used fairly balanced weights for contextual, definition, and consecutive overlaps, like $k=3$, $m=5$, $n=8$.
+We should note that one of our preliminary tests was simply returning the first sense for each word as ordered in the dictionary, regardless of any context or definition. This produced the high accuracy of \textbf{0.54186}. Some observations: a higher window size does not immediately translate to higher accuracy; however, WordNet definitions help tremendously. There is almost a divide between accuracies when WordNet definitions are used and are not used. Our initial choices for $k,m,n$, like 1,5,15, was motivated by the fact that consecutive overlaps are very significant and are a likely indicator for sense. However, our highest results where when we used fairly balanced weights for contextual, definition, and consecutive overlaps, like $k=3$, $m=5$, $n=8$.
 
 \subsubsection{Conclusion}
 
@@ -278,9 +260,10 @@ After analyzing our models we found that the most important class of features we
 Running tests for the dictionary was a bit painstaking, considering that many tests (with a window size of 20) took as much as 40 minutes to complete. We realize that our implementation of simplified Lesk underperformed with respect to the baseline (discussed above), but our reasoning is that we still were not using WordNet to the best of our abilities, even when looking up definitions in WordNet 2.1.
 
 The supervised approach uses training data to create a model of the probability of features drawn from those training examples (such as co-occurrence and co-locational features) to determine how well a test example fits the model for a certain sense. The dictionary approach uses already existing dictionaries to compare how well a test example's in-context words' definitions overlap with the definitions for the target word's senses to pick which sense is most likely. The supervised approach has the advantage of doing very well with large amounts of training data in comparison to a dictionary based approach which will typically not do as well, given that there is adequate training data for the Naive Bayes model. However, this makes Naive Bayes very susceptible to problems with training data. For instance, having a training set which is very biased towards one sense or another, or is not representative of real uses of a specific sense can make the model very inaccurate. Further often there is not enough data to provide a supervised learning approach an adequate representation of the general use of a sense. This means the model will be very specific for each sense and thus not generalizable. The dictionary approach solves this by using already existing dictionaries to determine likelihood thus not relying on getting adequate data.
-
+\newpage
 \section{Figures}
 
+{\small
 \begin{figure}[h]\label{fig:col}
 \centering
 \begin{tikzpicture}
@@ -289,9 +272,9 @@ The supervised approach uses training data to create a model of the probability 
   \end{axis}
 \end{tikzpicture}
 \caption{Size of window vs. accuracy for co-locational features}
-\end{figure}
+\end{figure}}
 
-\begin{figure}[h]\label{fig:size}
+{\small \begin{figure}[h]\label{fig:size}
 \centering
 \begin{tikzpicture}
   \begin{axis}[
@@ -304,5 +287,5 @@ The supervised approach uses training data to create a model of the probability 
 \end{tikzpicture}
 \caption{Maximum size of training set for a single sense vs. accuracy for a naive bayes model with window size 10 using only co-occurrence features.}
 \end{figure}
-
+}
 \end{document}
