@@ -127,10 +127,10 @@ $P(s_i)\mathlarger{\prod}_{j=1}^{n}P(f_j|s_i)$ for our model. We approximate the
 
 We do this for each sense of each target word example and take the argmax to produce a prediction. We do this for each example in the test set and then output a tuple of our accuracy and a list of tuples corresponding to \texttt{(actual\_class,predicted\_class)} for each example. 
 
-\subsection{Soft-scoring}
+\subsection{Extension: Soft-scoring}
 When calculating soft-scoring for accuracy, we process the classification probability scores of each word after they've been calculated using the Naive-Bayes model. In order to prevent underflow, we scale all the probability scores $pr$ of each word first by modifying them to become $e^{pr-maxProb}$ where $maxProb$ is the maximum probability for that word. We then normalize the scores to calculate the actual probability of each sense prediction. Then, during calculation of accuracy, instead of adding 1 for each correct prediction, we add the predicted probability for the golden standard sense.
 
-(An implementation of soft-scoring for the Dictionary-based system is also done, with results we report later.)
+(An implementation of soft-scoring for the Dictionary-based system is also done, although we do not report results here; the accuracy results are low.)
 
 \section{Dictionary-based}
 
@@ -145,9 +145,9 @@ To disambiguate words with dictionary approach, we used the Lesk algorithm that 
 \subsection{Optimizations to Lesk Algorithm}
 The optimizations we made to Lesk Algorithm mostly revolve around the \texttt{computeOverlap} function. Our function takes in the target word, sense definitions from both wordNet as well as the given dictionary, examples and context words within a certain window to calculate overlaps. In order to find relevant words, we kept our window to a default 10 words and further experimented by increasing and decreasing the window. We used three overlap measures to calculate the overlap rewarding each one appropriately.
 
-The overlap score computes the number of individual words that overlap between the definitions of two words. This is calculated in the function \texttt{getOverlap}. Here we made three optimizations: adding in words given in examples to check overlaps and adding in WordNet definitions
+The overlap score computes the number of individual words that overlap between the definitions of two words. This is calculated in the function \texttt{getOverlap}. Here we made two optimizations: adding in words given in examples to check overlaps and adding in WordNet definitions.
 
-first optimization we did was to add words that occur in examples of our target word to the definition itself such that it is of the following form: 
+The first optimization we did was to add words that occur in examples of our target word to the definition itself such that it is of the following form: 
 
 \lbrack `available', `wealth', `asset', `take', `lot', `', `turn', `idea', `product', `accumulation', `', `led', \textbf{'rise'}, `wealthy', `nation', `asset', `available', `use', `production', `asset', `wealth', `form', `money', `property', `owned', `person', `business', `human', `resource', `economic', `value'\rbrack
 
@@ -325,9 +325,5 @@ After analyzing our models we found that the most important class of features we
 Running tests for the dictionary was a bit painstaking, considering that many tests (with a window size of 20) took as much as 40 minutes to complete. We realize that our implementation of simplified Lesk underperformed with respect to the baseline (discussed above), but our reasoning is that we still were not using WordNet to the best of our abilities, even when looking up definitions in WordNet 2.1.
 
 The supervised approach uses training data to create a model of the probability of features drawn from those training examples (such as co-occurrence and co-locational features) to determine how well a test example fits the model for a certain sense. The dictionary approach uses already existing dictionaries to compare how well a test example's in-context words' definitions overlap with the definitions for the target word's senses to pick which sense is most likely. The supervised approach has the advantage of doing very well with large amounts of training data in comparison to a dictionary based approach which will typically not do as well, given that there is adequate training data for the Naive Bayes model. However, this makes Naive Bayes very susceptible to problems with training data. For instance, having a training set which is very biased towards one sense or another, or is not representative of real uses of a specific sense can make the model very inaccurate. Further often there is not enough data to provide a supervised learning approach an adequate representation of the general use of a sense. This means the model will be very specific for each sense and thus not generalizable. The dictionary approach solves this by using already existing dictionaries to determine likelihood thus not relying on getting adequate data.
-
-\section{Kaggle csvs}
-Many of our csvs submitted to kaggle are included in our submission. They are generally of the name\par
-\texttt{dictionary\_test\_prediction\_winNUM-k-m-n-EXAMPLES-WORDNET.csv}.
 
 \end{document}
