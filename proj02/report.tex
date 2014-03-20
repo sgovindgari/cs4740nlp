@@ -2,7 +2,7 @@
 %!TEX encoding = UTF-8 Unicode
 
 \documentclass{article}
-\usepackage[letterpaper, margin=1in, left=0.75in, right=0.75in] {geometry}
+\usepackage[letterpaper, margin=0.75in] {geometry}
 \usepackage{microtype} % micro appearance
 \usepackage[all]{nowidow} % no lone lines
 \usepackage{changepage} % changes layout mid-page
@@ -20,6 +20,7 @@
 \usepackage{pgfplots}
 \usepackage{lipsum} % lipsum
 \usepackage{hyperref}
+\usepackage[compact]{titlesec}
 
 \pagestyle{fancy}
 
@@ -46,14 +47,13 @@
 
 \section{Introduction}
 
-For this project we have written our code in Python. We used several of python's included libraries as well as tools from NLTK. We used NLTK's WordNetLemmatizer for lemmatizing words in our data, NLTK's maximum entropy POS tagger based off the Penn TreeBank was used for part-of-speech tagging of data. Finally we used NLTK's corpus of stopwords to eleminate stopwords from the data sets and NLTK's WordNet corpus for accessing more dictionary information. To run our code, please reference our README.
+Our code is written in Python and uses several libraries, including NLTK. We used NLTK's WordNetLemmatizer for lemmatizing words in our data, NLTK's maximum entropy POS tagger based off the Penn TreeBank was used for part-of-speech tagging of data. Finally we used NLTK's corpus of stopwords to eleminate stopwords from the data sets and NLTK's WordNet corpus for accessing more dictionary information. To run our code, please reference our README.
 
 \section{Preprocessing}
 
 \subsection{Dataset Cleanup}
 
-To clean up the training, validation and test data we began by writing a function \texttt{cleanFile} which took a source file and wrote the cleaned version to a specified destination. For each line of the source file the function cleans the words before and words after the target word in the file. For those before and after words we have a \texttt{clean} function which for each word checks if the word is a punctuation, or a stopword, if so the word is thrown out. Otherwise the word is lemmatized and retained. This is done using a single line of code as follows:
-
+To clean up the training, validation and test data we began by writing a function \texttt{cleanFile} which took a source file and wrote the cleaned version to a specified destination. For each line of the source file the function cleans the words before and words after the target word in the file. For those before and after words we have a \texttt{clean} function which for each word checks if the word is a punctuation, or a stopword, if so the word is thrown out. Otherwise the word is lemmatized and retained:
 {\small
 \begin{verbatim}
 return [lemma.lemmatize(word) for word in words if
@@ -61,32 +61,27 @@ return [lemma.lemmatize(word) for word in words if
 \end{verbatim}
 }
 
-Data cleanup was also needed at various moments of computation for the dictionary-based system. The function \texttt{cleanString} takes a string as input, and outputs a lemmatized, de-puncuated string without stopwords.
-
 \subsection{Dictionary Cleanup}
 For the dictionary-based system, our input file \texttt{dictionary.xml} needed to be slightly reformatted for the Python library \texttt{lxml} to accept and parse correctly. In \texttt{utilities.py}, the function \texttt{fixDoubles} preprocesses the dictionary, fixing the instances of double senses.
-
-\begin{verbatim}
+{\small\begin{verbatim}
   for i in range(20): # doing this multiple times for multiple '"'
       dictContent = re.sub('examples="(.*)"(.*)" />', \
           r'examples="\1\2" />', dictContent)
-\end{verbatim}
+\end{verbatim}}
 
-One of ``drug'''s senses references its previous senses 1 and 2: ``1\&\&2''. We simply dropped this dictionary entry as it would not affect the overall performance of our system without it. We also removed instances of double-quote characters in our examples, as that was messing up the XML parser, and those characters were not needed.
+One of ``drug'''s senses references its previous senses 1 and 2: ``1\&\&2''. We simply dropped this dictionary entry as it would not drastically affect the overall performance of our system.
 
 \texttt{fixDoubles} generates \texttt{dictionary\_processed.xml}, which we read in using Python's lxml library. Usage of this processed dictionary is described in the following Dictionary system-specific section.
 
 \section{Naive Bayes}
 
 \subsection{Feature Vector Construction}
-
-To construct features we wrote a function: \texttt{constructSet}. This function took a source as well as parameters specifying window size; whether to use co-locational, co-occurrence features or both; whether to use the part of speech of the target word in the example as a feature; and what count function to use for co-occurrence features. Co-occurrence features could be counted using either a boolean count (does the word appear or does it not), or a simple count (how many times the word appears). For each line of the source file we would create an entry in a list. Each entry is a three tuple made up of the target word followed by its sense, followed by a dictionary of features. The dictionary's keys are the feature and the value is the value of that feature in the example. 
+In \texttt{naive\_bayes.py}, the function \texttt{constructSet} takes a source as well as parameters specifying window size; whether to use co-locational, co-occurrence features or both; whether to use the part of speech of the target word in the example as a feature; and what count function to use for co-occurrence features. Co-occurrence features could be counted using either a boolean count (does the word appear or does it not), or a simple count (how many times the word appears). For each line of the source file we would create an entry in a list. Each entry is tuple of \emph{(target word, sense, feature dictionary)}. The dictionary's keys are the feature and the value is the value of that feature in the example. 
 
 We extracted the target word, sense and examples by using a simple regex to get a list of the parts. Part-of-speech of the target word was extracted from the first part of the example which is structured as: \texttt{<word>.<pos>}. For each word within the window we created a co-occurrence feature in the example's feature vector where the key is the word and the value is the count of it (or simple boolean, did it appear or did it not). For each word in the window we also extracted co-locational features. For instance if the 5th word following the target word was ``jaguar'' a feature would be added to this example's feature vector. The key would be "(after,5) and the value would be the word. We also pulled the POS of that word creating a feature with key (after-pos,5) and value being the pos of the word, as tagged by our pos-tagger from NLTK.
 
 \subsection{Model Construction}
-
-In order to construct a naive bayes model (class \texttt{naive\_bayes} in our code) of the examples generated in the previous section, we generated the appropriate counts necessary. In our naive bayes' constructor we iterate over all passed in examples. We maintain a list of word counts in \texttt{self.wordcounts} which is a dictionary mapping target words to how many examples are for that word. We also maintain \texttt{self.featureLists} which is a dictionary which maps target words to sets of all features for each target word, each set is created as we iterate through examples and gather all features from each example for each word. Further we maintain a dictionary of dictionaries holding sense counts. For each word we have an entry in \texttt{self.senseCounts} which holds a dictionary where the keys are the sense and the value are the number of times that sense appears in the training set. 
+In order to construct a naive bayes model (class \texttt{naive\_bayes}) of the examples generated in the previous section, we generated the appropriate counts necessary. In our naive bayes' constructor we iterate over all passed in examples. We maintain a list of word counts in \texttt{self.wordcounts} which is a dictionary mapping target words to how many examples are for that word. We also maintain \texttt{self.featureLists} which is a dictionary which maps target words to sets of all features for each target word, each set is created as we iterate through examples and gather all features from each example for each word. Further we maintain a dictionary of dictionaries holding sense counts. For each word we have an entry in \texttt{self.senseCounts} which holds a dictionary where the keys are the sense and the value are the number of times that sense appears in the training set. 
 
 Finally we create \texttt{self.featureCounts}, this is a dictionary with keys of (word,sense). Then for each key there is a dictionary with keys corresponding to each feature. These features values are dictionaries which have a key for each value for that feature that appears in the training set with the number stored in the dictionary being the count of the number of times the feature with the specific value has shown up for that (word,sense) pair in the training set. To illustrate this, consider the case when we have two following feature vectors for the word ``affect'' with the sense ``1'':
 {\small
@@ -134,72 +129,55 @@ When calculating soft-scoring for accuracy, we process the classification probab
 
 \section{Dictionary-based}
 
-\subsection{Dictionary Construction}
+\subsection{Dictionary Construction and Lesk Algorithm implementation}
 In our Dictionary based WSD, we made use of both the given dictionary as well as WordNet in order to derive meanings of words. (We should note that we are using the default WordNet version 3.0, not 2.1, in our derivations. This turns out to be okay, since we are not using the provided wordnet sense integers.)
 
 In \texttt{utilities.py}, \texttt{fixDoubles} generates \texttt{dictionary\_processed.xml}, a preprocessed dictionary for which we can read in using Python's lxml library. From here, we transform the data into a dictionary, a lookup-table where the word is the key. The value, if the word is found, is the tuple of (part of speech, sub-dictionary). The sub-dictionary was further a map with key as the senseID and value as another tuple of (definition, example list, and wordNet Senses). Whenever a word was not found in the dictionary, we used WordNet to extract the word's senses and definitions, and then updated our dictionary to contain this word.
 
-\subsection{Implementation of Lesk Algorithm}
-To disambiguate words with dictionary approach, we used the Lesk algorithm that computed the number of overlaps between the definitions of the target word and context words. In order to find the best sense, we first get the definition of our target word by searching it in our dictionary. If the word is not found, we search WordNet and update dictionary accordingly. Once we know the list of senses, each sense is used in computeOverlap function to calculate the \emph{distant overlaps, consecutive overlaps, and context overlaps}. We made a few optimizations to this function in order to pick relevant words from the context and calculate overlap which you can find in the section below. Each overlap score is saved in a list and soft-scoring approach to determine the overlap score with alpha set to 0.5
+Once we know the list of senses, each sense is used in the \texttt{computeOverlap} function to calculate the \emph{distant overlaps, consecutive overlaps, and context overlaps}. We made a few optimizations to this function in order to pick relevant words from the context and calculate overlap which you can find in the section below.
 
-\subsection{Optimizations to Lesk Algorithm}
-The optimizations we made to Lesk Algorithm mostly revolve around the \texttt{computeOverlap} function. Our function takes in the target word, sense definitions from both wordNet as well as the given dictionary, examples and context words within a certain window to calculate overlaps. In order to find relevant words, we kept our window to a default 10 words and further experimented by increasing and decreasing the window. We used three overlap measures to calculate the overlap rewarding each one appropriately.
+The optimizations we made to Lesk Algorithm mostly revolve around the \texttt{computeOverlap} function. Our function takes in the target word, sense definitions from both wordNet as well as the given dictionary, examples and context words within a certain window to calculate overlaps. In order to find relevant words, we kept our window to a default 10 words and further experimented by increasing and decreasing the window. We used three overlap measures to calculate the overlap rewarding each one appropriately.\bigskip
 
 The overlap score computes the number of individual words that overlap between the definitions of two words. This is calculated in the function \texttt{getOverlap}. Here we made two optimizations: adding in words given in examples to check overlaps and adding in WordNet definitions.
 
 The first optimization we did was to add words that occur in examples of our target word to the definition itself such that it is of the following form: 
 
-\lbrack `available', `wealth', `asset', `take', `lot', `', `turn', `idea', `product', `accumulation', `', `led', \textbf{'rise'}, `wealthy', `nation', `asset', `available', `use', `production', `asset', `wealth', `form', `money', `property', `owned', `person', `business', `human', `resource', `economic', `value'\rbrack
+\lbrack `available', `wealth', `asset', `take', `lot', `', `turn', `idea', `product', `accumulation', `', `led', \textbf{'rise'}, \ldots \rbrack
 
 Now consider capital as a target word from the test set with the following preprocessed sentence to disambiguate from. \par
 
-capital = first nine month 1988 net 85 million 3.76 share mr. simmons said third-quarter result reflect continued improvement productivity operating margin said \textbf{capital} spending next year \textbf{rise} 45 million 35 million year
+\textit{first nine month 1988 net 85 million 3.76 share mr. simmons said third-quarter result reflect continued improvement productivity operating margin said \textbf{capital} spending next year \textbf{rise} 45 million 35 million year}
 \par
 Notice that the word ``rise'' that occurs in context overlaps with the word `rise" used in the definition words list that actually comes from an example. Therefore, it attaches the sense of ``wealth asset'' to capital which in this context of the test sentence is correct. From this we concluded that, words from the examples that are usually used around the target word if at all occur in our test sentence are highly likely to correspond to the same sense. This score is added as a part of def\_overlap score and weighted accordingly.
 
-The second optimization we did was to add WordNet definitions. We used the WordNet integers which were processed as a part of our original dictionary to determine the target word. We use this modified target word with appropriate WordNet sense to get a definition from WordNet. 
-
-\begin{verbatim}
+The second optimization we did was to add WordNet definitions. We used the WordNet integers which were processed as a part of our original dictionary to determine the target word. We use this modified target word with appropriate WordNet sense to get a definition from WordNet.
+{\small\begin{verbatim}
     wnstring = target + "." + pos + "."
         if wnint < 10: wnstring += "0" + str(wnint)
         else: wnstring += str(wnint)        # capital.n.02
         try:
             wndef = utilities.cleanString(wn.synset(wnstring).definition)
             def_words.extend(wndef.split(' '))
-\end{verbatim}
+\end{verbatim}}
 
-Another optimization we made here is to take into account the words used in examples as part of the definition words. For example consider the word begin, In our subdictionary, the examples are of the form: 
-$\lbrack$ Prices for these homes begin at \$250,000, The war began on a Thursday., She began to feel sick., When life began was there oxygen in the atmosphere?, The novel begins with a shipwreck at sea., It's beginning to look like rain., His property begins at the fence.$\rbrack$
-
-First we get the definition of the target word, begin and populate a list called \texttt{def\_words}. This list is then passed into \texttt{getOverlap} upon which examples containing target word which have been preprocessed are split into individual words and added to the list \texttt{def\_words}. So in the above example the list of words for which overlaps are checked is as follows: 
-\begin{align}
-begin = \lbrack start, initial, point, prices, homes, begin,......\rbrack
-\end{align}
-
-These words are checked for occurrence in the context words falling within the window and definitions of the corresponding context words to get context\_overlap and overlap values. The consecutive overlap score computes the number of consecutive overlaps that occur in between the definitions. This is done in the function \texttt{consecutiveOverlaps} which given two sentences in the form of string lists counts the number of consecutive words that occur in both. 
+The consecutive overlap score computes the number of consecutive overlaps that occur in between the definitions. This is done in the function \texttt{consecutiveOverlaps} which given two sentences in the form of string lists counts the number of consecutive words that occur in both.\par
+And finally, context overlap as we call it is a measure of the number of words from the context that overlap with the definitions.
+{\small\begin{verbatim}        if context_word in def_words:
+            context_overlap += 1
+\end{verbatim}}
+We used the context overlap measure because we noticed that words used within context sometimes do overlap with the definition of the target word. For example from our validation set, consider the target word capital and our preprocessed test sentence:
 
 \begin{verbatim}
-def consecutiveOverlaps(self, sent1, sent2):
-        sent1 = ' '.join(sent1)
-        con_overlap = 0
-        for i in range(0, len(sent2)-1):
-            consecutive = sent2[i] + ' ' + sent2[i+1]
-            if sent1.find(consecutive) != -1:
-                con_overlap += 1
-        return con_overlap
+capital.n | 0 | Its plans to be acquired dashed , Comprehensive Care Corp. said
+it plans to sell most of its psychiatric and drug abuse facilities in California
+and some other assets to pay its debt and provide working capital .
 \end{verbatim}
-
-And finally, context overlap as we call it is a measure of the number of words from the context that overlap with the definitions. We used the context overlap measure because we noticed that words used within context sometimes do overlap with the definition of the target word. For example from our validation set, consider the target word capital and our preprocessed test sentence:
-
-\texttt{
-capital.n | 0 | Its plans to be acquired dashed , Comprehensive Care Corp. said it plans to sell most of its psychiatric and drug abuse facilities in California and some other assets to pay its debt and provide working capital . In all , the company hopes to repay \$ 45 million in debt through the sales , which will completely discharge its secured debt , the company said . In addition , the company has replaced its president and chief executive , naming W. James Nichol , head of the company 's contract health services , to succeed B. Lee Karns .
-}
 
 The definition of capital contains words like asset, wealth, business, resources etc. Notice here that the word asset that occurs in the definition also occurs within the context of the test sentence. In that case, the number of context overlaps increases by 1 and gets weighed in appropriately. Our algorithm predicts the ``asset'' for capital which is correct in this context. The justification for this is that since a definition can be a simple expansion of the word, the words used in the definition are likely to be used around the context as well to give it further meaning. Another reason for the potential benefits of using context overlaps is if there is not enough data to work with, or if the definition is short and concise.
 
 With these three measures, our metric system to calculate the overlap score is as follows:
 \begin{align}
-\text{overlap} = k\times\text{context overlaps} + m\times\text{definition overlap} + n\times{consecutive overlap}
+\text{overlap} = k\times\text{context overlaps} + m\times\text{definition overlap} + n\times\text{consecutive overlap}
 \end{align}
 
 We experimented with the values $k$, $m$, and $n$, and came to the conclusion that fairly-balanced values (like 3, 5, 8 respectively) generates higher accuracy.
@@ -213,31 +191,7 @@ To do soft-scoring for our dictionary implementation we had to find a way to gen
 
 We tested our implementation of Naive Bayes in various ways using the validation data. The first testing we did was determine our baseline: simply predicting the most common sense for each word; this gave an accuracy of 81.14\%. Then we tested co-occurrence and co-locational features and the part-of-speech feature. Because the training data for each word is very biased and very minimal (for instance `capital' occurs 278 total times: 258 for sense 1, 18 for sense 2, 1 for sense 3, 1 for sense 5) we stopped multiplying the probability for each sense by the probability of the sense occurring in the training set for that word. Thus we are assuming that the training data is not biased at all for our testing of features. We quickly realized that the POS feature had the same value for all training examples for each word, making our Naive Bayes simply choose the first feature every time, resulting in an accuracy of only 55.84\%. We tested co-occurrence features for window sizes from 1 to about 20, but stopped going beyond that because for all window sizes we got the same accuracy: 81.35\%, a slight improvement above the baseline, but very minimal. Our testing of co-location features were more fruitful, showing poor performance at the beginning, but improving quick as window size increased, eventually peaking at 82.21\% (see \hyperref[fig:col]{Figure 1}).
 
-\begin{figure}[h]\label{fig:col}
-\centering
-\begin{tikzpicture}
-  \begin{axis}[]
-    \addplot table [x index=0, y index=1, col sep=comma] {col.csv};
-  \end{axis}
-\end{tikzpicture}
-\caption{Size of window vs. accuracy for co-locational features}
-\end{figure}
-
 We also tested how the accuracy of our Naive Bayes model would change on the validation set as we increase the maximum possible number of training examples for each sense of each word. For this test we used a Naive Bayes model using only co-occurrence features with a window size of 10. We tested both soft-scoring and hard-scoring. We found that accuracy started fairly low for both and as training size increased, accuracy increased quickly for both scoring systems, with soft-scoring always slightly lower than hard (see \hyperref[fig:size]{Figure 2}).
-
-\begin{figure}[h]\label{fig:size}
-\centering
-\begin{tikzpicture}
-  \begin{axis}[
-  legend pos = outer north east,]
-    \addplot table [x index=0, y index=1, col sep=comma] {size.csv};
-    \addlegendentry{hard-scoring};
-    \addplot table [x index=0, y index=2, col sep=comma] {size.csv};
-    \addlegendentry{soft-scoring};
-  \end{axis}
-\end{tikzpicture}
-\caption{Maximum size of training set for a single sense vs. accuracy for a naive bayes model with window size 10 using only co-occurrence features.}
-\end{figure}
 
 \subsection{Dictionary-based}
 There is no training data for this system; every dataset could be used to evaluate accuracy.
@@ -251,7 +205,7 @@ The parameters we were able to manipulate for experimentation were the two optim
 \subsubsection{Validation data}
 For our validation data (cleaned at \texttt{validation\_clean.data}), here is a report of our results. Note: for all the data reported below, the weights $k = 3$, $m = 5$, $n = 8$, determined through experimentation to be fairly accurate. (These weights are the relative scales for contextual overlap, definition overlap, and consecutive overlap for each target word and its sense and context.)
 
-\begin{tabular}{|c|c|c|c|}\hline
+{\footnotesize\begin{tabular}{|c|c|c|c|}\hline
 Window size & With examples & With WordNet defs & Accuracy\\\hline
 5 & N & N & 0.33112\\
 5 & Y & N & 0.36763\\
@@ -261,7 +215,7 @@ Window size & With examples & With WordNet defs & Accuracy\\\hline
 10 & Y & N & 0.35798\\
 10 & N & Y & 0.44587\\
 10 & Y & Y & 0.43301\\\hline
-\end{tabular}
+\end{tabular}}
 
 A brief guide: window size is the number of words left of and right of the target word with which we are taking definitions to compute overlap with the target word definitions. ``With Examples'' means, in our system, we additionally take the provided examples in our dictionary and treating the words as part of the definition. ``With WordNet defs'' means, we use the WordNet integers corresponding to WordNet 2.1 senses and looking up additional definitions to include in our computation of overlap.
 
@@ -274,7 +228,7 @@ We will discuss why we could not match the baseline later.
 \subsubsection{Test data for Kaggle}
 For our test data to upload to Kaggle (at \texttt{test\_clean.data}), here is a comprehensive chart of our results. (For all, we did not use soft-scoring, as it did not perform up to par.)\par
 
-\begin{tabular}{|c|c|c|c|c|c|}\hline
+{\footnotesize\begin{tabular}{|c|c|c|c|c|c|}\hline
 Test & Window size & $k,m,n$ & Examples? & WordNet? & Accuracy\\\hline
 \textit{Baseline} & -- & -- & -- & -- & \textit{0.54186}\\
 -- & 5 & 1,5,15 & N & N & 0.35681\\
@@ -297,8 +251,7 @@ Test & Window size & $k,m,n$ & Examples? & WordNet? & Accuracy\\\hline
 -- & 5 & 3,5,8 & N & N & 0.35911\\
 -- & 5 & 3,5,8 & Y & N & 0.38617\\
 -- & 5 & 3,5,8 & N & Y & 0.44564\\
--- & 5 & 3,5,8 & Y & Y & \textbf{0.45559}\\\hline
-\end{tabular}
+-- & 5 & 3,5,8 & Y & Y & \textbf{0.45559}\\\hline\end{tabular}}
 
 We should note that one of our preliminary tests was simply returning the first sense for each word as ordered in the dictionary, regardless of any context or definition. This produced the high accuracy of \textbf{0.54186}.\par
 
@@ -325,5 +278,31 @@ After analyzing our models we found that the most important class of features we
 Running tests for the dictionary was a bit painstaking, considering that many tests (with a window size of 20) took as much as 40 minutes to complete. We realize that our implementation of simplified Lesk underperformed with respect to the baseline (discussed above), but our reasoning is that we still were not using WordNet to the best of our abilities, even when looking up definitions in WordNet 2.1.
 
 The supervised approach uses training data to create a model of the probability of features drawn from those training examples (such as co-occurrence and co-locational features) to determine how well a test example fits the model for a certain sense. The dictionary approach uses already existing dictionaries to compare how well a test example's in-context words' definitions overlap with the definitions for the target word's senses to pick which sense is most likely. The supervised approach has the advantage of doing very well with large amounts of training data in comparison to a dictionary based approach which will typically not do as well, given that there is adequate training data for the Naive Bayes model. However, this makes Naive Bayes very susceptible to problems with training data. For instance, having a training set which is very biased towards one sense or another, or is not representative of real uses of a specific sense can make the model very inaccurate. Further often there is not enough data to provide a supervised learning approach an adequate representation of the general use of a sense. This means the model will be very specific for each sense and thus not generalizable. The dictionary approach solves this by using already existing dictionaries to determine likelihood thus not relying on getting adequate data.
+
+\section{Figures}
+
+\begin{figure}[h]\label{fig:col}
+\centering
+\begin{tikzpicture}
+  \begin{axis}[]
+    \addplot table [x index=0, y index=1, col sep=comma] {col.csv};
+  \end{axis}
+\end{tikzpicture}
+\caption{Size of window vs. accuracy for co-locational features}
+\end{figure}
+
+\begin{figure}[h]\label{fig:size}
+\centering
+\begin{tikzpicture}
+  \begin{axis}[
+  legend pos = outer north east,]
+    \addplot table [x index=0, y index=1, col sep=comma] {size.csv};
+    \addlegendentry{hard-scoring};
+    \addplot table [x index=0, y index=2, col sep=comma] {size.csv};
+    \addlegendentry{soft-scoring};
+  \end{axis}
+\end{tikzpicture}
+\caption{Maximum size of training set for a single sense vs. accuracy for a naive bayes model with window size 10 using only co-occurrence features.}
+\end{figure}
 
 \end{document}
