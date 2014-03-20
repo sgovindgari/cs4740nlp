@@ -241,6 +241,8 @@ We also tested how the accuracy of our Naive Bayes model would change on the val
 
 TODO
 
+with bigger window, consecutive weighs more
+
 \section{Discussion}
 
 The data provided to us, in particular the training set and validation set, made it a struggle for the supervised system to perform well. The task at hand essentially required a separate Naive Bayes model for each target word, meaning that data was sparse. The training set had a median of only 128.5 examples per word, and a mean of 222.81. The max wasn't that large, at 2,536 examples for one word, and the minimum was incredibly low at 19. This means that there were very few examples for each word. To make matters more difficult most of the data was very biased. For instance, `capital' had 278 total examples: 258 for sense 1, 18 for sense 2, 1 for sense 3, and 1 for sense 5. Because of this bias in the data it made it very hard for Naive Bayes to create an accurate model of what words might be important in context for most senses of most target words. We believe this is the reason we struggled to score much above the baseline using our supervised model. 

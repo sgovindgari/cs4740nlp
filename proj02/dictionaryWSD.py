@@ -97,11 +97,11 @@ class DictionaryWSD():
 
         def_words = defn.split(' ')
         # put all examples into the definition too. # CHANGE. no.
-        #for example in examples:
-        #    if example.find(target) != -1:
-        #        lst = example.split(target)
-        #        example = lst[0] + lst[1]
-        #        def_words.extend(example.split(' '))
+        for example in examples:
+            if example.find(target) != -1:
+                lst = example.split(target)
+                example = lst[0] + lst[1]
+                def_words.extend(example.split(' '))
         # put wordnet int senses into defn
         for wnint in wordnetints:
             wnstring = target + "." + pos + "."
@@ -273,6 +273,12 @@ dwsd = DictionaryWSD(dictionaryProcessed)
 #dwsd.Lesk('pine', 'n', 'pine cone')
 
 #processTestFile(dwsd, 'test_clean1.csv', 'dictionary_test_prediction.csv', window=8)
-print processTestFile(dwsd, 'test_clean.data', 'dictionary_test_prediction_win20-3-5-8-nex-def1.csv', window=20)
+print processTestFile(dwsd, 'validation_clean.data', 'csvs/test_p_win10-3-5-8-yex-ywi.data', window=10)
 #processTestFile(dwsd, 'test_clean1.csv', 'dictionary_test_prediction.csv', window=8)
 #print processTestFile(dwsd, 'validation_clean.data', 'blah.data', window=5, softScoring=True)
+
+#10
+#nexnwi .32904
+#yexnwi .35798
+#nexywi .44587
+#ywxywi .43301
