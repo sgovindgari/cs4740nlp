@@ -1,3 +1,17 @@
+Links
+http://www.nltk.org/_modules/nltk/tag/hmm.html
+http://www.cs.columbia.edu/~mcollins/courses/nlp2011/notes/hmms.pdf
+http://mallet.cs.umass.edu/mallet-tutorial.pdf
+http://mallet.cs.umass.edu/fst.php
+http://svmlight.joachims.org/svm_struct.html
+http://www.nltk.org/book/ch05.html
+http://www.cs.cornell.edu/people/pabo/movie-review-data/
+http://streamhacker.com/2010/06/16/text-classification-sentiment-analysis-eliminate-low-information-features/
+http://streamhacker.com/2012/11/22/text-classification-sentiment-analysis-nltk-scikitlearn/
+http://streamhacker.com/2010/05/10/text-classification-sentiment-analysis-naive-bayes-classifier/
+http://text-processing.com/docs/sentiment.html
+http://text-processing.com/demo/sentiment/ -- Already implemented project
+
 Goal - implement HMM 
 or experiment with existing package/toolkit sequence tagging algorithm
 
