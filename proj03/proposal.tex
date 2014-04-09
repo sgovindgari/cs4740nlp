@@ -47,14 +47,17 @@ Our code will be written in Python.
 \subsection*{Our sequence-tagging system}
 
 \textit{Describe your sequence-tagging system.}\par
-\lipsum[4]
 
 \begin{itemize}
 \item \textit{Which model are you planning to implement?}\par
 
-We are not initially going to implement MEMMs as our sequence tagging system; we will implement HMMs.
+We are not initially going to implement MEMMs as our sequence tagging system; we will implement HMMs. We do not plan on using HMM libraries, but instead will write our own.
+
+For our baseline we will use the following algorithm. From the training data we will record how many times each word occurs in a positive, neutral or negative sentence. Using that we can estimate the probability of a sentence's sentiment. For each word in the sentence we pull its probability for each sentiment and multiply it into the probability for each sentiment. Thus we perform the following equation to classify the sentence, where $S$ is the set of sentiments and the sentence has $n$ tokens: $argmax_{s \in S}\mathlarger{\prod_{i=1}^n} P(s|w_i)$.
 
 \item \textit{Explain the algorithmic key points of your model. (Hidden variables \& observed variables for our setting, model parameters)}\par
+
+Our hidden variables are the sentiments (-1, 0, 1). Our observed variables are the feature vectors of sentences. Our HMM Model will take in a set of tags (sentiments), a transition probability matrix, an emission matrix, the start state and what n-gram model to use. By n-gram model we mean, is the transmission matrix bi-gram, tri-gram, etc.
 
 \item \textit{Brainstorm which features you would incorporate to learn emission prob-
 abilities. Support your design decisions based on the real examples given
