@@ -1,0 +1,55 @@
+Goal - implement HMM 
+or experiment with existing package/toolkit sequence tagging algorithm
+
+Amazon review dataset
+Training - 196
+Test - 98
+
+Review format
+
+title
+sentiment <space> text
+
+Implementation
+Each review = sequence of sentences
+Each sentence tagged with sentiment
+
+Using an exisiting toolkit
+- Run experiments
+- Think up in front what kind of experiments to run
+- Reserve some training for validation
+- Describe details of experimental designs in the report
+- Develop baseline systems (random guess, identify certain words frequently used for each sentiment, perform prediction on whether test includes these words)
+
+Extensions
+- One extension is mandatory
+- More than one - counted as bonus
+
+- Experiment with different n-gram feature sets
+- Experiment with different smoothing methods
+- Compare one sequence tagging method with another
+- Vary feature settings to see how they affect performance of different methods
+- Implement secondary sequence tagging system 
+- Improve sentence level prediction task by incorporating document level sentiments
+
+Proposal
+- Describe sequence tagging system
+- Implementation plan
+- Which model are you planning to implement?
+- Explain algorithmic key points (hidden variables, observed, corresponding model parameters)
+- Which features should you incorporate?
+- Support design decisions with real examples
+- State which extension 
+
+Report
+- Problem Setting
+- Sequence Tagging Model
+- Extensions
+- Individual Member Contributions
+
+Grading
+Proposal - 10
+Implementation - 50
+Report - 40
+Required ext - 10
+Option - 10
