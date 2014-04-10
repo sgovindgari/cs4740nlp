@@ -63,6 +63,13 @@ Our hidden variables are the sentiments (-1, 0, 1). Our observed variables are t
 abilities. Support your design decisions based on the real examples given
 in the dataset.}\par
 
+Since there are so many sentences out there, and the chance of seeing the exact sentence is so small, we need to represent the sentences in very general but meaningful ways to maximize the usefulness of the HMM. One system of representing sentences is to count the number of positive, negative, and neutral words in the sentence and have these 3 counts as the feature vector. Weather a word is positive, negative, or neutral is calculated by counting the percentage of times that word appears in a negative sentence, positive sentence, and neutral sentence and pick the sentiment that the word appear most in.
+
+An extension of this is to use sentiment lexicons to label the sentiment of each word instead of calculating the sentiment from the training data. The one lexicon we're looking at: SentiWordNet, assigns sentiments to each sense of of each word, since we want to avoid the complexity of doing sense calculations, we can choose the most frequent sentiment associated with the word across all of its senses.
+
+An additional feature can be a positivity score for the sentence. Some lexicons give positivity and negativity scores. We can add the positivity score of each word subtracted by the negativity score of each word to obtain a general score of the sentence and use that as an additional feature.
+
+All these metrics will have to be bucketed to limit the size of the feature set since we do not have a lot of data. The size of the bucket will be a parameter that we can tune with a validation set. Smoothing will probably also help with zeros in the feature space.
 \end{itemize}
 
 \subsection*{Schedule}
