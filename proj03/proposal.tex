@@ -51,36 +51,30 @@ Our code will be written in Python.
 \begin{itemize}
 \item \textit{Which model are you planning to implement?}\par
 
-We are not initially going to implement MEMMs as our sequence tagging system; we will implement HMMs. We do not plan on using HMM libraries, but instead will write our own.
+We are not initially going to implement MEMMs as our sequence tagging system; we will implement HMMs. We do not plan on using HMM libraries, but instead will write our own. [elaborate on data structure and provide code?]
 
-For our baseline we will use the following algorithm. From the training data we will record how many times each word occurs in a positive, neutral or negative sentence. Using that we can estimate the probability of a sentence's sentiment. For each word in the sentence we pull its probability for each sentiment and multiply it into the probability for each sentiment. Thus we perform the following equation to classify the sentence, where $S$ is the set of sentiments and the sentence has $n$ tokens: $argmax_{s \in S}\mathlarger{\prod_{i=1}^n} P(s|w_i)$.
+We plan on having two baselines. One will use the following algorithm: from the training data we will record how many times each word occurs in a positive, neutral or negative sentence. Using that we can estimate the probability of a sentence's sentiment. For each word in the sentence we pull its probability for each sentiment and multiply it into the probability for each sentiment. Thus we perform the following equation to classify the sentence, where $S$ is the set of sentiments and the sentence has $n$ tokens:
+\[argmax_{s \in S}{\prod_{i=1}^n} P(s|w_i).\]
+
+The other baseline can simply be choosing positive / negative / neutral randomly given any sentence, possibly based on the frequency of positive / neg / neutral items we have in training.
 
 \item \textit{Explain the algorithmic key points of your model. (Hidden variables \& observed variables for our setting, model parameters)}\par
 
 Our hidden variables are the sentiments (-1, 0, 1). Our observed variables are the feature vectors of sentences. Our HMM Model will take in a set of tags (sentiments), a transition probability matrix, an emission matrix, the start state and what n-gram model to use. By n-gram model we mean, is the transmission matrix bi-gram, tri-gram, etc.
 
-\item \textit{Brainstorm which features you would incorporate to learn emission prob-
-abilities. Support your design decisions based on the real examples given
+\item \textit{Brainstorm which features you would incorporate to learn emission probabilities. Support your design decisions based on the real examples given
 in the dataset.}\par
 
-Since there are so many sentences out there, and the chance of seeing the exact sentence is so small, we need to represent the sentences in very general but meaningful ways to maximize the usefulness of the HMM. One system of representing sentences is to count the number of positive, negative, and neutral words in the sentence and have these 3 counts as the feature vector. Weather a word is positive, negative, or neutral is calculated by counting the percentage of times that word appears in a negative sentence, positive sentence, and neutral sentence and pick the sentiment that the word appear most in.
+Since there are so many possible sentences, and the chance of seeing an exact sentence is very small, we need to represent the sentences in general but meaningful ways to maximize the usefulness of the HMM. One representation of sentences is to count the number of positive, negative, and neutral words in the sentence and have these 3 counts as a \emph{feature vector}. Whether a word is positive, negative, or neutral is calculated by \emph{counting the percentage of times that word appears} in a negative sentence, positive sentence, and neutral sentence and pick the sentiment that the word appear most in.
 
-An extension of this is to use sentiment lexicons to label the sentiment of each word instead of calculating the sentiment from the training data. The one lexicon we're looking at: SentiWordNet, assigns sentiments to each sense of of each word, since we want to avoid the complexity of doing sense calculations, we can choose the most frequent sentiment associated with the word across all of its senses.
+An extension of this is to use sentiment lexicons to label the sentiment of each word instead of calculating the sentiment from the training data. The one lexicon we're looking at, SentiWordNet, assigns sentiments to each sense of of each word, since we want to avoid the complexity of doing sense calculations, we can choose the most frequent sentiment associated with the word across all of its senses.
 
 An additional feature can be a positivity score for the sentence. Some lexicons give positivity and negativity scores. We can add the positivity score of each word subtracted by the negativity score of each word to obtain a general score of the sentence and use that as an additional feature.
 
 All these metrics will have to be bucketed to limit the size of the feature set since we do not have a lot of data. The size of the bucket will be a parameter that we can tune with a validation set. Smoothing will probably also help with zeros in the feature space.
 \end{itemize}
 
-\subsection*{Schedule}
-
-\begin{itemize}[noitemsep,nolistsep]
-\item date: event
-\end{itemize}
-
-Rough division of labor:
-\begin{itemize}[noitemsep,nolistsep]
-\item name: task
-\end{itemize}
+\subsection*{Progress so far}
+Currently, we have parsed \texttt{training\_data.txt} into memory using Python and NLTK. Our parser, \texttt{getReviewList}, in \texttt{parseReviews.py}, returns a list of reviews whose sentences have been lemmatized and have English stopwords removed. [provide code?]
 
 \end{document}
