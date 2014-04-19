@@ -37,6 +37,66 @@ def getReviewList(datafile, defaultToZero = False):
                 lines.append((sentiment, sentence))
     return reviews
 
-reviewList = getReviewList(trainingData, defaultToZero = False)
-print reviewList
-print len(reviewList)
+# returns a dictionary that maps every word in the reviews to
+# a word sentiment: -1, 0, 1
+def wordSentimentMapBasic(reviews):
+    sentMap = {}
+    for review in reviews:
+        for line in review[1]:
+            sent = line[0]
+            wordList = line[1].split()
+            for word in wordList:
+                counts = sentMap.get(word, [0,0,0])
+                if sent == -1:
+                    counts[0] += 1
+                if sent == 0:
+                    counts[1] += 1
+                if sent == 1:
+                    counts[2] += 1
+                sentMap[word] = counts
+    for (word, sentCount) in sentMap.iteritems():
+        if (sentCount[0] > sentCount[1] and sentCount[0] > sentCount[2]):
+            sent = -1
+        elif (sentCount[2] > sentCount[0] and sentCount[2] > sentCount[1]):
+            sent = 1
+        else:
+            sent = 0
+        sentMap[word] = sent
+    return sentMap
+
+# writes out the reviews as features to the file destination
+def writeOutReviewFeatures(reviews, sentMap, destination):
+    with open(destination, 'w') as d:
+        for review in reviews:
+            name = review[0]
+            d.write(name + "\n")
+            for line in review[1]:
+                sent = line[0]
+                wordList = line[1].split()
+                sentList = []
+                for word in wordList:
+                    sent = sentMap.get(word, 0)
+                    sentList.append(sent)
+                features = [0.,0.,0.]
+                for sent in sentList:
+                    if sent == -1:
+                        features[0] += 1
+                    if sent == 0:
+                        features[1] += 1
+                    if sent == 1:
+                        features[2] += 1
+                totalCount = sum(features)
+                features = [x/totalCount for x in features]
+                d.write(str(sent)+" ")
+                for i in range(len(features)):
+                    d.write(str(i)+":"+str(features[i])+" ")
+                d.write("\n")
+            d.write("\n")
+
+
+trainReviews = getReviewList(trainingData, defaultToZero = False)
+testReviews = getReviewList(testData, defaultToZero = False)
+sentMap = wordSentimentMapBasic(trainReviews)
+#print reviews
+writeOutReviewFeatures(testReviews, sentMap, "data/basic_features_test.txt")
+
