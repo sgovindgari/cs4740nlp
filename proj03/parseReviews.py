@@ -5,11 +5,11 @@ import utilities # custom cleaning functions
 trainingData = 'data/training_data.txt'
 testData     = 'data/test_data_no_true_labels.txt'
 
-def strToSentiment(str, defaultToZero = False):
+def strToSentiment(string, defaultToZero = False):
     if defaultToZero: return 0
-    if str == 'pos': return 1
-    if str == 'neu': return 0
-    if str == 'neg': return -1
+    if string == 'pos': return 1
+    if string == 'neu': return 0
+    if string == 'neg': return -1
     else: return 0 # is this going to be our procedure?
 
 # collects reviews in the datafile into a list.

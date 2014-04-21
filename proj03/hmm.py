@@ -150,7 +150,7 @@ class HMM():
             trace.append(list(lookup)[len(lookup)-1])
             lookup = entry[1]
         trace = list(reversed(trace))
-        pp.pprint(table)
+        # pp.pprint(table)
         return trace
         # pp.pprint(table)
         
