@@ -1,5 +1,5 @@
 #TODO: Smoothing
-import itertools, pprint, operator
+import itertools, pprint, operator, math
 from copy import copy
 
 
@@ -57,14 +57,17 @@ class HMM():
                     if sentence_key in self.output_counts[state]:
                         self.output_counts[state][sentence_key] += 1
                     else:
-                        self.output_counts[state][sentence_key] = 1
+                        self.output_counts[state][sentence_key] = 2 ##add 1 smoothing
                 else:
                     self.output_counts[state] = dict()
-                    self.output_counts[state][sentence_key] = 1
+                    self.output_counts[state][sentence_key] = 2 ##add 1 smoothing
                 self.states.add(state)
                 prev.append(str(sentence[0]))
                 if len(prev) >= self.n:
                     prev.pop(0)
+        for state in self.states:
+            if state != 'start':
+                self.output_counts[state]['<unk>'] = 1
         #Generate probabilities
         self.output_probabilities = dict()
         self.transition_probabilities = dict()
@@ -82,12 +85,19 @@ class HMM():
         return new_row
 
     #source is a file with the same format 
-    def tag(self, source):
+    def tag(self, source, kaggle = False):
         #dictionary of dictionaries
         test_data = self.parse_file(source)
+        predictions = []
         for doc in test_data:
             tags = self.viterbi(doc)
-            print tags
+            predictions.append(tags)
+        if kaggle:
+            with open('kaggle_hmm_our','w') as f:
+                for seq in predictions:
+                    for tag in seq:
+                        f.write(str(tag) + '\n')
+        return predictions
 
     #doc is a list of observations to tag
     def viterbi(self, doc):
@@ -109,13 +119,13 @@ class HMM():
             trans = 0
             if state in self.transition_probabilities[tuple(prev)]:
                 trans = self.transition_probabilities[tuple(prev)][state]
-            output = 0
+            output = self.output_probabilities[state]['<unk>']
             if tuple(doc[0][1]) in self.output_probabilities[state]:
                 output = self.output_probabilities[state][tuple(doc[0][1])]
             if self.n == 2:
-                table[0][tuple([state])] = (trans * output, tuple(prev))
+                table[0][tuple([state])] = ((math.log(trans) + math.log(output)), tuple(prev))
             else:
-                table[0][('start',state)] = (trans * output, tuple(prev))
+                table[0][('start',state)] = ((math.log(trans) + math.log(output)), tuple(prev))
 
         #fill the rest of table
         for i in range(1,len(doc)):
@@ -127,10 +137,11 @@ class HMM():
                     trans = 0
                     if prev in self.transition_probabilities and state in self.transition_probabilities[prev]:
                         trans = self.transition_probabilities[prev][state]
-                    output = 0
+                    output = self.output_probabilities[state]['<unk>']
                     if tuple(doc[i][1]) in self.output_probabilities[state]:
                         output = self.output_probabilities[state][tuple(doc[i][1])]
-                    lst.append((table[i-1][prev][0] * trans * output, prev))
+                    if table[i-1][prev][0] != 0.0:
+                        lst.append(((table[i-1][prev][0] + math.log(trans) + math.log(output)), prev))
 
                 (prob, prev) = max(lst)
                 trace = prev
@@ -141,19 +152,19 @@ class HMM():
                 table[i][tuple(prev)] = (prob,trace)
 
         #trace the table to get the result
-        start = max(table[len(table)-1].iteritems(), key=operator.itemgetter(1))
+        start = max((v,table[len(table)-1][v]) for v in table[len(table)-1] if table[len(table)-1][v][0] < 0)
         trace = []
         trace.append(list(start[0])[len(start[0])-1])
         lookup = start[1][1]
+        # pp.pprint(table)
         for i in range(len(table)-2,-1,-1):
             entry = table[i][lookup]
             trace.append(list(lookup)[len(lookup)-1])
             lookup = entry[1]
         trace = list(reversed(trace))
-        # pp.pprint(table)
-        return trace
-        # pp.pprint(table)
-        
+        print trace
+        # print trace
+        return trace        
 
-a = HMM('train.data', 2)
-a.tag('test.data')
+a = HMM('data/basic_features_train.txt', 2)
+a.tag('data/basic_features_train.txt', True)

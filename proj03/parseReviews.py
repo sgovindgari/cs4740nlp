@@ -71,7 +71,7 @@ def writeOutReviewFeatures(reviews, sentMap, destination):
             name = review[0]
             d.write(name + "\n")
             for line in review[1]:
-                sent = line[0]
+                sentence_label = line[0]
                 wordList = line[1].split()
                 sentList = []
                 for word in wordList:
@@ -87,16 +87,20 @@ def writeOutReviewFeatures(reviews, sentMap, destination):
                         features[2] += 1
                 totalCount = sum(features)
                 features = [x/totalCount for x in features]
-                d.write(str(sent)+" ")
+                d.write(str(sentence_label)+" ")
                 for i in range(len(features)):
-                    d.write(str(i)+":"+str(features[i])+" ")
+                    space = ' '
+                    if i == len(features) - 1:
+                        space = ''
+                    d.write(str(i)+":"+str(features[i])+space)
                 d.write("\n")
             d.write("\n")
 
 
-trainReviews = getReviewList(trainingData, defaultToZero = False)
-testReviews = getReviewList(testData, defaultToZero = False)
-sentMap = wordSentimentMapBasic(trainReviews)
-#print reviews
-writeOutReviewFeatures(testReviews, sentMap, "data/basic_features_test.txt")
+# trainReviews = getReviewList(trainingData, defaultToZero = False)
+# testReviews = getReviewList(testData, defaultToZero = False)
+# sentMap = wordSentimentMapBasic(trainReviews)
+# #print reviews
+# writeOutReviewFeatures(testReviews, sentMap, "data/basic_features_test.txt")
+# writeOutReviewFeatures(trainReviews, sentMap, "data/basic_features_train.txt")
 
