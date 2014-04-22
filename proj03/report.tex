@@ -47,10 +47,29 @@
 
 \section{Introduction}
 
-Our code is written in Python.
+Our code is written in Python and Java.
 
-\section{More stuff}
+\section{Preprocessing}
+\section{Feature Extraction}
+\section{Baseline}
+\section{Hidden Markov Model}
 
-\lipsum[4]
+We chose to implement our own Hidden Markov Model (HMM) along with experimenting with existing systems. To implement our HMM we created an HMM class in python.
+
+\subsection{Model Construction}
+The constructor of the HMM takes a \texttt{source}, an \texttt{n} and an \texttt{alpha}. \texttt{source} is a string of the filename to use as training data. \texttt{n} is what n-gram the model will be (bigram, trigram, etc.) and \texttt{alpha} is the alpha-smoothing value to use. The constructor then parses the file to read create a list of reviews, \texttt{self.training\_data}. Each review in the resulting list is another list of tuples of the form \texttt{(sentiment,feature vector)}. Using this resulting data we generate a set of states, transition counts and output counts.
+
+To generate the counts we use two dictionaries of dictionaries. The first is \texttt{self.output\_counts} which in each "row" has a state and each column is the sentence vector, thus \texttt{self.output\_counts[state][vector]} stores the number of times that vector appeared for that state. \texttt{transition\_counts} mean while, where each "row" is the previously seen \texttt{n-1} states and the column is the state being transitioned to. Thus \texttt{self.transition\_counts[previous][state]} stores the number of times state follows the \texttt{(n-1)-tuple} of previous states. As we go we also generate a set of all states: \texttt{self.states}.
+
+We iterate over \texttt{self.training\_data} to generate the counts. For each review we iterate over the sentence tuples and for each sentence we add one to \texttt{self.output\_counts[state][vector]} for that sentence's vector and state. We also add one to the entry in  \texttt{self.transition\_counts[previous][state]} where \texttt{previous} is a tuple of the \texttt{(n-1)} previous states and \texttt{state} is the state for the sentence. We begin with the tuple \texttt{(start,)} as previous for the first sentence of each review. In order to account for potentially unseen vectors we create an entry in each state row for unknown with a count of 1. We chose not to use techniques such as replacing the first occurrence of each vector with an "unknown" one as we did in the first project due to the sparseness and small size of the training data. 
+
+Using these counts we then generate the probability tables corresponding to the count tables by computing the conditional probability for each row by iterating over each row of each table.
+ 
+\subsection{Classification and Viterbi}
+
+
+\section{Experimentation}
+\section{Discussion}
+
 
 \end{document}

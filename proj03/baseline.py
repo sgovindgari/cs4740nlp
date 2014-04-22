@@ -47,7 +47,7 @@ class Baseline():
         for sentiment in self.sentiment_counts:
             self.sentiment_probabilities[sentiment] = self.sentiment_counts[sentiment] / total
 
-    def classify(self, source, kaggle = False):
+    def classify(self, source, kaggle = None):
         data = parseReviews.getReviewList(source, defaultToZero = False)
         predictions = []
         for review in data:
@@ -60,13 +60,11 @@ class Baseline():
                     if word in self.word_probabilities:
                         for p in self.word_probabilities[word]:
                             probs[p] += math.log(self.word_probabilities[word][p])
-                print probs
-                print max(probs.iteritems(), key=operator.itemgetter(1))
                 tags.append(max(probs.iteritems(), key=operator.itemgetter(1))[0])
-            # print tags
+            print tags
             predictions.append(tags)
-        if kaggle:
-            with open('kaggle_baseline','w') as f:
+        if kaggle != None:
+            with open(kaggle,'w') as f:
                 for seq in predictions:
                     for tag in seq:
                         f.write(str(tag) + '\n')

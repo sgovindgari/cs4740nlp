@@ -4,11 +4,13 @@ from copy import copy
 
 
 class HMM():
-    def __init__(self, source, n):
+    def __init__(self, source, n, alpha = 1):
         # source is a file  where each document is separated by a new line and each line is a feature vector and label
         self.n = n
+        self.alpha = alpha
         self.training_data = self.parse_file(source)
         self.construct_model()
+        
 
 
     #Takes the source and parses it into a list of lists
@@ -22,7 +24,6 @@ class HMM():
             sentences = doc.split('\n')
             sentence_list = []
             for i in range(1,len(sentences)):
-                #TODO: Parse each sentence
                 res = sentences[i].split(' ')
                 vector = []
                 for attr in range(1,len(res)):
@@ -57,17 +58,17 @@ class HMM():
                     if sentence_key in self.output_counts[state]:
                         self.output_counts[state][sentence_key] += 1
                     else:
-                        self.output_counts[state][sentence_key] = 2 ##add 1 smoothing
+                        self.output_counts[state][sentence_key] = 1+self.alpha ##add 1 smoothing
                 else:
                     self.output_counts[state] = dict()
-                    self.output_counts[state][sentence_key] = 2 ##add 1 smoothing
+                    self.output_counts[state][sentence_key] = 1+self.alpha ##add 1 smoothing
                 self.states.add(state)
                 prev.append(str(sentence[0]))
                 if len(prev) >= self.n:
                     prev.pop(0)
         for state in self.states:
             if state != 'start':
-                self.output_counts[state]['<unk>'] = 1
+                self.output_counts[state]['<unk>'] = self.alpha
         #Generate probabilities
         self.output_probabilities = dict()
         self.transition_probabilities = dict()
@@ -85,15 +86,15 @@ class HMM():
         return new_row
 
     #source is a file with the same format 
-    def tag(self, source, kaggle = False):
+    def tag(self, source, kaggle = None):
         #dictionary of dictionaries
         test_data = self.parse_file(source)
         predictions = []
         for doc in test_data:
             tags = self.viterbi(doc)
             predictions.append(tags)
-        if kaggle:
-            with open('kaggle_hmm_our','w') as f:
+        if kaggle != None:
+            with open(kaggle,'w') as f:
                 for seq in predictions:
                     for tag in seq:
                         f.write(str(tag) + '\n')
@@ -106,7 +107,7 @@ class HMM():
         #initialize table
         new_column = dict()
         for i in range(1,self.n):
-            for perm in itertools.permutations(self.states,i):
+            for perm in itertools.product(self.states,repeat = i):
                 for column in table:
                     column[perm] = (0,None)
         prev = ['start']
@@ -126,9 +127,9 @@ class HMM():
                 table[0][tuple([state])] = ((math.log(trans) + math.log(output)), tuple(prev))
             else:
                 table[0][('start',state)] = ((math.log(trans) + math.log(output)), tuple(prev))
-
         #fill the rest of table
         for i in range(1,len(doc)):
+            # print i
             for state in self.states:
                 lst = []
                 if state == 'start':
@@ -142,7 +143,6 @@ class HMM():
                         output = self.output_probabilities[state][tuple(doc[i][1])]
                     if table[i-1][prev][0] != 0.0:
                         lst.append(((table[i-1][prev][0] + math.log(trans) + math.log(output)), prev))
-
                 (prob, prev) = max(lst)
                 trace = prev
                 prev = list(prev)
@@ -166,5 +166,5 @@ class HMM():
         # print trace
         return trace        
 
-a = HMM('data/basic_features_train.txt', 2)
-a.tag('data/basic_features_train.txt', True)
+a = HMM('data/basic_features_train.txt', 3)
+a.tag('data/basic_features_train.txt', 'kaggle_hmm_trigram')
