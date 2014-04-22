@@ -86,7 +86,7 @@ class HMM():
         return new_row
 
     #source is a file with the same format 
-    def tag(self, source, kaggle = None):
+    def classify(self, source, kaggle = None):
         #dictionary of dictionaries
         test_data = self.parse_file(source)
         predictions = []
@@ -167,4 +167,4 @@ class HMM():
         return trace        
 
 a = HMM('data/basic_features_train.txt', 3)
-a.tag('data/basic_features_train.txt', 'kaggle_hmm_trigram')
+a.classify('data/basic_features_train.txt', 'kaggle_hmm_trigram')
