@@ -65,7 +65,8 @@ def wordSentimentMapBasic(reviews):
     return sentMap
 
 # writes out the reviews as features to the file destination
-def writeOutReviewFeatures(reviews, sentMap, destination):
+# if bucket_size != 0, then bucket the results
+def writeOutReviewFeatures(reviews, sentMap, destination, bucket_size = 0):
     with open(destination, 'w') as d:
         for review in reviews:
             name = review[0]
@@ -87,6 +88,8 @@ def writeOutReviewFeatures(reviews, sentMap, destination):
                         features[2] += 1
                 totalCount = sum(features)
                 features = [x/totalCount for x in features]
+                if (bucket_size != 0):
+                    features = [int(x/bucket_size) for x in features]
                 d.write(str(sentence_label)+" ")
                 for i in range(len(features)):
                     space = ' '
@@ -105,11 +108,14 @@ def writeForMallet(filename, featurefile, destination):
                     y = y.strip()
                     print("{0}\t{1}".format(x, y))                  
 
-#writeForMallet("data/training_data.txt", "data/basic_features_train.txt", "data/mallet_file.txt")
-# trainReviews = getReviewList(trainingData, defaultToZero = False)
-# testReviews = getReviewList(testData, defaultToZero = False)
-# sentMap = wordSentimentMapBasic(trainReviews)
+
+
+trainReviews = getReviewList(trainingData, defaultToZero = False)
+testReviews = getReviewList(testData, defaultToZero = True)
+sentMap = wordSentimentMapBasic(trainReviews)
+
 # #print reviews
-# writeOutReviewFeatures(testReviews, sentMap, "data/basic_features_test.txt")
-# writeOutReviewFeatures(trainReviews, sentMap, "data/basic_features_train.txt")
+for i in [0.01, 0.05, 0.1, 0.2]:
+    writeOutReviewFeatures(trainReviews, sentMap, "data/basic_features_train_bucket" + str(i) + ".txt", bucket_size = i)
+    writeOutReviewFeatures(testReviews, sentMap, "data/basic_features_test_bucket" + str(i) + ".txt", bucket_size = i)
 

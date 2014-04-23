@@ -4,14 +4,13 @@ from copy import copy
 
 
 class HMM():
-    def __init__(self, source, n, alpha = 1):
+    def __init__(self, source, n, alpha = 1, beta = 1):
         # source is a file  where each document is separated by a new line and each line is a feature vector and label
         self.n = n
         self.alpha = alpha
+        self.beta = beta
         self.training_data = self.parse_file(source)
         self.construct_model()
-        
-
 
     #Takes the source and parses it into a list of lists
     def parse_file(self, source):
@@ -36,7 +35,7 @@ class HMM():
         #Generate Counts
         self.output_counts = dict()
         self.transition_counts = dict()
-        self.states = set()
+        self.states = set(['0','1','-1','start'])
         self.states.add('start')
 
         for doc in self.training_data:
@@ -46,22 +45,26 @@ class HMM():
                 vector = sentence[1]
                 sentence_key = tuple(vector)
                 prev_key = tuple(prev)
-                if prev_key in self.transition_counts:
-                    if state in self.transition_counts[prev_key]:
-                        self.transition_counts[prev_key][state] += 1
+                for state2 in self.states:
+                    if state2 in self.output_counts:
+                        if sentence_key in self.output_counts[state]:
+                            pass
+                        else:
+                            self.output_counts[state2][sentence_key] = self.alpha ##add 1 smoothing
                     else:
-                        self.transition_counts[prev_key][state] = 1
-                else:
-                    self.transition_counts[prev_key] = dict()
-                    self.transition_counts[prev_key][state] = 1
-                if state in self.output_counts:
-                    if sentence_key in self.output_counts[state]:
+                        self.output_counts[state2] = dict()
+                        self.output_counts[state2][sentence_key] = self.alpha ##add 1 smoothing
+                    if prev_key in self.transition_counts:
+                        if state2 in self.transition_counts[prev_key]:
+                            pass
+                        else:
+                            self.transition_counts[prev_key][state2] = self.beta
+                    else:
+                        self.transition_counts[prev_key] = dict()
+                        self.transition_counts[prev_key][state2] = self.beta
+                    if state2 == state:
                         self.output_counts[state][sentence_key] += 1
-                    else:
-                        self.output_counts[state][sentence_key] = 1+self.alpha ##add 1 smoothing
-                else:
-                    self.output_counts[state] = dict()
-                    self.output_counts[state][sentence_key] = 1+self.alpha ##add 1 smoothing
+                        self.transition_counts[prev_key][state] += 1
                 self.states.add(state)
                 prev.append(str(sentence[0]))
                 if len(prev) >= self.n:
@@ -95,9 +98,12 @@ class HMM():
             predictions.append(tags)
         if kaggle != None:
             with open(kaggle,'w') as f:
+                f.write('Id,answer\n')
+                i = 0
                 for seq in predictions:
                     for tag in seq:
-                        f.write(str(tag) + '\n')
+                        i += 1
+                        f.write(str(i) + ',' + str(tag) + '\n')
         return predictions
 
     #doc is a list of observations to tag
@@ -166,5 +172,5 @@ class HMM():
         # print trace
         return trace        
 
-a = HMM('data/basic_features_train.txt', 3)
-a.classify('data/basic_features_train.txt', 'kaggle_hmm_trigram')
+a = HMM('data/basic_features_train.txt', 4)
+a.classify('data/basic_features_test.txt', 'kaggle_hmm_test.csv')
