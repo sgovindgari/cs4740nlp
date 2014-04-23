@@ -52,6 +52,43 @@ Our code is written in Python and Java.
 \section{Preprocessing}
 \section{Feature Extraction}
 \section{Baseline}
+
+For our baseline we created a baseline class in \texttt{baseline.py}.
+
+\subsection{Model Construction}
+
+This class' constructor takes a source file where each review is separated by a newline, each sentence is tokenized and each on a separate line. Each sentence begins with its sentiment. Each review in the source file has its title on a line before its sentences. It also takes an \texttt{alpha} which is the add-alpha smoothing to use.
+
+The constructor reads in the source file and then it maintains two counts as it goes over the file. It maintains \texttt{self.sentiment\_counts} which is a dictionary that holds the number of times each sentiment has appeared in the training set. It also maintains \texttt{self.word\_counts} which is a table (dictionary of dictionaries) with a row for each sentiment and a column for each token encountered. 
+
+The constructor than iterates over all the sentences in the training set recording the number of times each sentiment occurs using \texttt{self.sentiment\_counts}. For each word in a sentence with sentiment \texttt{s} we add 1 to the value stored in \texttt{self.word\_counts[s][word]}. 
+
+After going over all the training data the constructor then generates probabilities from the two tables. It generates entries for \texttt{self.sentiment\_probabilities} by simply using \texttt{self.sentiment\_counts} to calculate the probability of each sentiment occurring. Then for each column of the table, \texttt{self.word\_counts} we calculate the conditional probabilities $P(word|s)$ for all words and all sentiments and store them in \texttt{self.word\_probabilities}. After this our model has been constructed.
+
+\subsection{Classification}
+
+To classify a test set, one uses the \texttt{classify} function in the class. The function takes a \texttt{source} of the same form that the training data was. For each sentence in the test data we tag it with a sentiment using the following formula: $argmax_{s\in S}P(s)\mathlarger{\prod}_{w\in Sentence} P(w|s)$. In our code we use log probabilities to avoid underflow. Here is the code we use to tag each sentence:
+
+\begin{verbatim}
+                probs = dict()
+                for sentiment in self.sentiment_probabilities:
+                    probs[sentiment] = math.log(self.sentiment_probabilities[sentiment])
+                for word in entry[1]:
+                    if word in self.word_probabilities:
+                        for p in self.word_probabilities[word]:
+                            probs[p] += math.log(self.word_probabilities[word][p])
+                tags.append(max(probs.iteritems(), key=operator.itemgetter(1))[0]
+\end{verbatim}
+
+We then write our predictions to a kaggle file, if define, as follows:
+\begin{verbatim}
+        if kaggle != None:
+            with open(kaggle,'w') as f:
+                for seq in predictions:
+                    for tag in seq:
+                        f.write(str(tag) + '\n')
+\end{verbatim}
+%TODO: Update this to most recent kaggle writing code
 \section{Hidden Markov Model}
 
 We chose to implement our own Hidden Markov Model (HMM) along with experimenting with existing systems. To implement our HMM we created an HMM class in python.
@@ -94,6 +131,7 @@ If we are writing our results to a kaggle-formatted file we do the following in 
                     for tag in seq:
                         f.write(str(tag) + '\n')
 \end{verbatim}
+%TODO: Update this to most recent kaggle writing code
 
 \subsection*{Extension: n-gram HMM}
 
@@ -101,7 +139,6 @@ To support beyond a simple bigram HMM we implemented n-gram HMMs. The changes re
 
 We also had to change our viterbi algorithm to support n-grams. Much of how this works is detailed in the previous section, but instead of simply having the table have a row for every state we need to keep track of more than 1 previous state. Instead we keep track of n-1 previous states, for instance for a trigram we would have a row for ('start',1), (0,1), etc. Thus we don't actuall fill in every entry in a column for every column, we only fill in one per state, for instance (1,0), (1,1) and (0,2) would be filled because for each state we only take one maximum probability over all rows of the table and add that probability as one entry in the next column of the table. 
 
-%TODO: Add some code segments to this section
 
 \section{Experimentation}
 \section{Discussion}
