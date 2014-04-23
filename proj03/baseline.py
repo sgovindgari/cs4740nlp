@@ -65,9 +65,12 @@ class Baseline():
             predictions.append(tags)
         if kaggle != None:
             with open(kaggle,'w') as f:
+                f.write('Id,answer\n')
+                i = 0
                 for seq in predictions:
                     for tag in seq:
-                        f.write(str(tag) + '\n')
+                        i += 1
+                        f.write(str(i) + ',' + str(tag) + '\n')
         return predictions
 
 
