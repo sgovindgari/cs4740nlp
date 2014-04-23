@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
 import utilities # custom cleaning functions
+from sentiwordnet import SentiWordNetCorpusReader, SentiSynset
+
+swn = SentiWordNetCorpusReader('SentiWordNet_3.0.0_20130122.txt')
 
 trainingData = 'data/training_data.txt'
 testData     = 'data/test_data_no_true_labels.txt'
@@ -55,13 +58,7 @@ def wordSentimentMapBasic(reviews):
                     counts[2] += 1
                 sentMap[word] = counts
     for (word, sentCount) in sentMap.iteritems():
-        if (sentCount[0] > sentCount[1] and sentCount[0] > sentCount[2]):
-            sent = -1
-        elif (sentCount[2] > sentCount[0] and sentCount[2] > sentCount[1]):
-            sent = 1
-        else:
-            sent = 0
-        sentMap[word] = sent
+        sentMap[word] = sentArgmax(sentCount[0], sentCount[1], sentCount[2])
     return sentMap
 
 # writes out the reviews as features to the file destination
@@ -76,8 +73,8 @@ def writeOutReviewFeatures(reviews, sentMap, destination, bucket_size = 0):
                 wordList = line[1].split()
                 sentList = []
                 for word in wordList:
-                    sent = sentMap.get(word, 0)
-                    sentList.append(sent)
+                    if word in sentMap:
+                        sentList.append(sentMap[word])
                 features = [0.,0.,0.]
                 for sent in sentList:
                     if sent == -1:
@@ -87,7 +84,8 @@ def writeOutReviewFeatures(reviews, sentMap, destination, bucket_size = 0):
                     if sent == 1:
                         features[2] += 1
                 totalCount = sum(features)
-                features = [x/totalCount for x in features]
+                if (totalCount != 0):
+                    features = [x/totalCount for x in features]
                 if (bucket_size != 0):
                     features = [int(x/bucket_size) for x in features]
                 d.write(str(sentence_label)+" ")
@@ -99,13 +97,80 @@ def writeOutReviewFeatures(reviews, sentMap, destination, bucket_size = 0):
                 d.write("\n")
             d.write("\n")
 
+def writeOutSentiWordNetFeatures(reviews, destination, binary=True, bucket_size = 0):
+    with open(destination, 'w') as d:
+        for review in reviews:
+            name = review[0]
+            d.write(name + "\n")
+            for line in review[1]:
+                sentence_label = line[0]
+                wordList = line[1].split()
+                sentList = []
+                for word in wordList:
+                    sent = getSentiWordNetScores(word)
+                    if binary:
+                        sent = sentArgmax(sent[0], sent[1], sent[2])
+                    sentList.append(sent)
+                features = [0., 0., 0.]
+                for sent in sentList:
+                    if binary:
+                        if sent == -1:
+                            features[0] += 1
+                        if sent == 0:
+                            features[1] += 1
+                        if sent == 1:
+                            features[2] += 1
+                    else:
+                        features[0] += sent[0]
+                        features[1] += sent[1]
+                        features[2] += sent[2]
+                totalCount = sum(features)
+                if (totalCount != 0):
+                    features = [x/totalCount for x in features]
+                if (bucket_size != 0):
+                    features = [int(x/bucket_size) for x in features]
+                d.write(str(sentence_label)+" ")
+                for i in range(len(features)):
+                    space = ' '
+                    if i == len(features) - 1:
+                        space = ''
+                    d.write(str(i)+":"+str(features[i])+space)
+                d.write("\n")
+            d.write("\n")
 
+def getSentiWordNetScores(word):
+    synsets = swn.senti_synsets(word)
+    neg = neu = pos = 0
+    if (len(synsets) == 0):
+        return (neg, neu, pos)
+
+    for synset in synsets:
+        neg += synset.neg_score
+        neu += synset.obj_score
+        pos += synset.pos_score
+
+    return (neg, neu, pos)
+
+def sentArgmax(negScore, neuScore, posScore):
+    if (negScore > neuScore and negScore > posScore):
+        sent = -1
+    elif (posScore > negScore and posScore > neuScore):
+        sent = 1
+    else:
+        sent = 0
+    return sent
 
 trainReviews = getReviewList(trainingData, defaultToZero = False)
 testReviews = getReviewList(testData, defaultToZero = True)
 sentMap = wordSentimentMapBasic(trainReviews)
 # #print reviews
+writeOutReviewFeatures(trainReviews, sentMap, "data/basic_features_discard_unseen_train.txt")
+writeOutReviewFeatures(testReviews, sentMap, "data/basic_features_discard_unseen_test.txt")
 for i in [0.01, 0.05, 0.1, 0.2]:
-    writeOutReviewFeatures(trainReviews, sentMap, "data/basic_features_train_bucket" + str(i) + ".txt", bucket_size = i)
-    writeOutReviewFeatures(testReviews, sentMap, "data/basic_features_test_bucket" + str(i) + ".txt", bucket_size = i)
+    writeOutReviewFeatures(trainReviews, sentMap, "data/basic_features_discard_unseen_bucket" + str(i) + "_train.txt", bucket_size=i)
+    writeOutReviewFeatures(testReviews, sentMap, "data/basic_features_discard_unseen_bucket" + str(i) + "_test.txt", bucket_size=i)
+    writeOutSentiWordNetFeatures(trainReviews, "data/sentiWordNet_features_binary_bucket" + str(i) + "_train.txt", binary=True, bucket_size = i)
+    writeOutSentiWordNetFeatures(testReviews, "data/sentiWordNet_features_binary_bucket" + str(i) + "_test.txt", binary=True, bucket_size = i)
+    writeOutSentiWordNetFeatures(trainReviews, "data/sentiWordNet_features_score_bucket" + str(i) + "_train.txt", binary=False, bucket_size = i)
+    writeOutSentiWordNetFeatures(testReviews, "data/sentiWordNet_features_score_bucket" + str(i) + "_test.txt", binary=False, bucket_size = i)
 
