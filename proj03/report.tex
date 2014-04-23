@@ -84,9 +84,12 @@ We then write our predictions to a kaggle file, if define, as follows:
 \begin{verbatim}
         if kaggle != None:
             with open(kaggle,'w') as f:
+                f.write('Id,answer\n')
+                i = 0
                 for seq in predictions:
                     for tag in seq:
-                        f.write(str(tag) + '\n')
+                        i += 1
+                        f.write(str(i) + ',' + str(tag) + '\n')
 \end{verbatim}
 %TODO: Update this to most recent kaggle writing code
 \section{Hidden Markov Model}
@@ -94,7 +97,7 @@ We then write our predictions to a kaggle file, if define, as follows:
 We chose to implement our own Hidden Markov Model (HMM) along with experimenting with existing systems. To implement our HMM we created an HMM class in python.
 
 \subsection{Model Construction}
-The constructor of the HMM takes a \texttt{source}, an \texttt{n} and an \texttt{alpha}. \texttt{source} is a string of the filename to use as training data. \texttt{n} is what n-gram the model will be (bigram, trigram, etc.) and \texttt{alpha} is the alpha-smoothing value to use. The constructor then parses the file to read create a list of reviews, \texttt{self.training\_data}. Each review in the resulting list is another list of tuples of the form \texttt{(sentiment,feature vector)}. Using this resulting data we generate a set of states, transition counts and output counts.
+The constructor of the HMM takes a \texttt{source}, an \texttt{n}, a \texttt{beta} and an \texttt{alpha}. \texttt{source} is a string of the filename to use as training data. \texttt{n} is what n-gram the model will be (bigram, trigram, etc.), \texttt{alpha} is the add-k smoothing value to use for output counts and \texttt{beta} is the add-k smoothing value to use for transition counts. The constructor then parses the file to read create a list of reviews, \texttt{self.training\_data}. Each review in the resulting list is another list of tuples of the form \texttt{(sentiment,feature vector)}. Using this resulting data we generate a set of states, transition counts and output counts.
 
 To generate the counts we use two dictionaries of dictionaries. The first is \texttt{self.output\_counts} which in each "row" has a state and each column is the sentence vector, thus \texttt{self.output\_counts[state][vector]} stores the number of times that vector appeared for that state. \texttt{transition\_counts} mean while, where each "row" is the previously seen \texttt{n-1} states and the column is the state being transitioned to. Thus \texttt{self.transition\_counts[previous][state]} stores the number of times state follows the \texttt{(n-1)-tuple} of previous states. As we go we also generate a set of all states: \texttt{self.states}.
 
@@ -127,9 +130,12 @@ If we are writing our results to a kaggle-formatted file we do the following in 
 \begin{verbatim}
         if kaggle != None:
             with open(kaggle,'w') as f:
+                f.write('Id,answer\n')
+                i = 0
                 for seq in predictions:
                     for tag in seq:
-                        f.write(str(tag) + '\n')
+                        i += 1
+                        f.write(str(i) + ',' + str(tag) + '\n')
 \end{verbatim}
 %TODO: Update this to most recent kaggle writing code
 
