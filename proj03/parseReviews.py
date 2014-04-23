@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from itertools import izip
 import utilities # custom cleaning functions
 from sentiwordnet import SentiWordNetCorpusReader, SentiSynset
 
@@ -151,6 +151,15 @@ def getSentiWordNetScores(word):
 
     return (neg, neu, pos)
 
+#File formatting for Mallet - TODO
+def writeForMallet(filename, featurefile, destination):
+    with open(destination, 'w') as d:
+        with open(filename) as f, open(featurefile) as  fe:
+                for x, y in izip(f, fe):
+                    x = x.strip()
+                    y = y.strip()
+                    print("{0}\t{1}".format(x, y))                  
+
 def sentArgmax(negScore, neuScore, posScore):
     if (negScore > neuScore and negScore > posScore):
         sent = -1
@@ -163,6 +172,7 @@ def sentArgmax(negScore, neuScore, posScore):
 trainReviews = getReviewList(trainingData, defaultToZero = False)
 testReviews = getReviewList(testData, defaultToZero = True)
 sentMap = wordSentimentMapBasic(trainReviews)
+
 # #print reviews
 writeOutReviewFeatures(trainReviews, sentMap, "data/basic_features_discard_unseen_train.txt")
 writeOutReviewFeatures(testReviews, sentMap, "data/basic_features_discard_unseen_test.txt")
