@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from itertools import izip
 import utilities # custom cleaning functions
 
 trainingData = 'data/training_data.txt'
@@ -96,7 +96,16 @@ def writeOutReviewFeatures(reviews, sentMap, destination):
                 d.write("\n")
             d.write("\n")
 
+#File formatting for Mallet - TODO
+def writeForMallet(filename, featurefile, destination):
+    with open(destination, 'w') as d:
+        with open(filename) as f, open(featurefile) as  fe:
+                for x, y in izip(f, fe):
+                    x = x.strip()
+                    y = y.strip()
+                    print("{0}\t{1}".format(x, y))                  
 
+#writeForMallet("data/training_data.txt", "data/basic_features_train.txt", "data/mallet_file.txt")
 # trainReviews = getReviewList(trainingData, defaultToZero = False)
 # testReviews = getReviewList(testData, defaultToZero = False)
 # sentMap = wordSentimentMapBasic(trainReviews)
