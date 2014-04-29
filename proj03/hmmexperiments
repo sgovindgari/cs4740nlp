@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+
+echo 'rm -rf expoutput/'
+rm -rf expoutput/
+echo 'mkdir -p expoutput/'
+mkdir -p expoutput/
+
+# test ngrams up to 6.
+# alpha = 1..4, beta = 1..5
+for ng in 2 3 4 5 6
+do
+	for alph in 1 2 3 4
+	do
+		echo "generating for n = $ng , alpha = $alph for beta = 1..5"
+		for bet in 1 2 3 4 5
+		do
+			python ./hmm.py $ng $alph $bet
+		done
+	done
+done

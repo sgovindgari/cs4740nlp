@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 #TODO: Smoothing
-import itertools, pprint, operator, math
+import sys, itertools, pprint, operator, math
 from copy import copy
 
 class HMM():
@@ -169,9 +169,20 @@ class HMM():
             trace.append(list(lookup)[len(lookup)-1])
             lookup = entry[1]
         trace = list(reversed(trace))
-        print trace
         # print trace
         return trace        
 
-a = HMM('data/basic_features_train.txt', n = 4, alpha = 1, beta = 1)
-a.classify('data/basic_features_test.txt', 'kaggle_hmm_test.csv')
+if len(sys.argv) != 4:
+    print "provide arguments for n, alpha, and beta."
+    print "for example: ./hmm.py 4 1 1"
+    print sys.argv
+    sys.exit(0)
+
+inN     = int(sys.argv[1])
+inAlpha = int(sys.argv[2])
+inBeta  = int(sys.argv[3])
+outfile = 'expoutput/kaggle_hmm_test-'
+outfile += sys.argv[1] + '-' + sys.argv[2] + '-' + sys.argv[3] + '.csv'
+
+a = HMM('data/basic_features_train.txt', n = inN, alpha = inAlpha, beta = inBeta)
+a.classify('data/basic_features_test.txt', outfile)
