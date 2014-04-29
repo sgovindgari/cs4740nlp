@@ -1,5 +1,6 @@
-import parseReviews, math, itertools, operator
+#!/usr/bin/env python
 
+import parseReviews, math, itertools, operator
 
 #Baseline model
 class Baseline():
@@ -73,7 +74,9 @@ class Baseline():
                         i += 1
         return predictions
 
-
-
 b = Baseline('data/training_data.txt', alpha = 0.1)
+<<<<<<< HEAD
 b.classify('data/test_data_no_true_labels.txt', 'kaggle_baseline.csv')
+=======
+b.classify('data/test_data_no_true_labels.txt')
+>>>>>>> f609cd81cd97aab25ebcbfd51f8fa0ae9d61a4f5

@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from nltk.probability import ELEProbDist, FreqDist
 from nltk import NaiveBayesClassifier
 from collections import defaultdict
