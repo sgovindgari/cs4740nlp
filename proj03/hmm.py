@@ -19,6 +19,9 @@ class HMM():
         with open(source) as f:
             content = f.read()
         docs = content.split('\n\n')
+        # rm last entry if empty
+        if docs[-1] == '':
+            docs = docs[:-1]
         doc_list = []
         for doc in docs:
             sentences = doc.split('\n')
@@ -172,17 +175,24 @@ class HMM():
         # print trace
         return trace        
 
-if len(sys.argv) != 4:
-    print "provide arguments for n, alpha, and beta."
-    print "for example: ./hmm.py 4 1 1"
+if len(sys.argv) != 5:
+    print "Provide 4 arguments for trainfile, n, alpha, and beta."
+    print "For example: ./hmm.py [trainfile] 4 1 1"
+    print "This script will attempt to find the corresponding testfile."
+    print "Copyleft ABMS 2014-04 :)"
     print sys.argv
     sys.exit(0)
 
-inN     = int(sys.argv[1])
-inAlpha = int(sys.argv[2])
-inBeta  = int(sys.argv[3])
-outfile = 'expoutput/kaggle_hmm_test-'
-outfile += sys.argv[1] + '-' + sys.argv[2] + '-' + sys.argv[3] + '.csv'
+# LET'S GO!!!
+inTrainTxt = str(sys.argv[1])
+inTestTxt  = inTrainTxt[:-9] + 'test.txt' # assumed location
 
-a = HMM('data/basic_features_train.txt', n = inN, alpha = inAlpha, beta = inBeta)
-a.classify('data/basic_features_test.txt', outfile)
+inN        = int(sys.argv[2])
+inAlpha    = int(sys.argv[3])
+inBeta     = int(sys.argv[4])
+
+outfile = 'expoutput/' + inTrainTxt[5:-9] + 'out'
+outfile += sys.argv[2] + '-' + sys.argv[3] + '-' + sys.argv[4] + '.csv'
+
+a = HMM(inTrainTxt, n = inN, alpha = inAlpha, beta = inBeta)
+a.classify(inTestTxt, outfile)

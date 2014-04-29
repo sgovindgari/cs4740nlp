@@ -6,16 +6,21 @@ rm -rf expoutput/
 echo 'mkdir -p expoutput/'
 mkdir -p expoutput/
 
-# test ngrams up to 6.
-# alpha = 1..4, beta = 1..5
-for ng in 2 3 4 5 6
+# for each train txt file, hmm.py will find the corresponding test file.
+for datafile in `ls data/*train.txt | sort`
 do
-	for alph in 1 2 3 4
+	echo "generating csvs for $datafile ..."
+	# test ngrams up to 6.
+	# alpha = 1..4, beta = 1..5 ????
+	for ng in 2 3 4
 	do
-		echo "generating for n = $ng , alpha = $alph for beta = 1..5"
-		for bet in 1 2 3 4 5
+		for alph in 1
 		do
-			python ./hmm.py $ng $alph $bet
+			echo "generating for n = $ng , alpha = $alph for beta = 1"
+			for bet in 1
+			do
+				python ./hmm.py $datafile $ng $alph $bet
+			done
 		done
 	done
 done
