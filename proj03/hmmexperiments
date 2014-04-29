@@ -21,4 +21,7 @@ do
 done
 
 # make a zip
+echo 'rm -f hmmexperiments.zip'
+rm -f hmmexperiments.zip
+echo 'zip hmmexperiments.zip expoutput/*'
 zip hmmexperiments.zip expoutput/*
