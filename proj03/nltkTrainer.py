@@ -3,6 +3,9 @@ from nltk import NaiveBayesClassifier
 from collections import defaultdict
 import parseReviews
  
+# Baseline 
+# This module uses ELEProbability distribution for each label with NaiveBayesClassifer
+
 train_samples = {
     'I hate you and you are a bad person': 'neg',
     'I love you and you are a good person': 'pos',
@@ -32,7 +35,8 @@ test_samples = [
   'Everything is fail today and I hate stuff',
 ]
  
- 
+#Feature extractor - returns a dictionary that will tell us if any of our words
+#in the input of the feature extractor are found in the word list
 def gen_bow(text):
     words = text.split()
     bow = {}
@@ -40,7 +44,7 @@ def gen_bow(text):
         bow[word.lower()] = True
     return bow
  
- 
+ #unigram model
 def get_labeled_features(samples):
     word_freqs = {}
     for text, label in samples.items():
@@ -51,7 +55,6 @@ def get_labeled_features(samples):
             word_freqs[token][label] += 1
     return word_freqs
  
- 
 def get_label_probdist(labeled_features):
     label_fd = FreqDist()
     for item,counts in labeled_features.items():
@@ -61,7 +64,7 @@ def get_label_probdist(labeled_features):
     label_probdist = ELEProbDist(label_fd)
     return label_probdist
  
- 
+#Getting frequencies of words 
 def get_feature_probdist(labeled_features, samples):
     feature_freqdist = defaultdict(FreqDist)
     feature_values = defaultdict(set)
@@ -133,4 +136,4 @@ test_data = get_test_data("data/test_data_no_true_labels.txt", "data/nltkTrainer
 for sample in test_samples:
     print "%s | %s" % (sample, classifier.classify(gen_bow(sample)))
  
-classifier.show_most_informative_features()
+classifier.show_most_informative_features(n=30)

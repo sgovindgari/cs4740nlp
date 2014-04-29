@@ -72,3 +72,11 @@ Grading
 
 1 list of sentences (dic reviews)
 2 plot features (but we don't know our features yet)
+
+
+List of experimetns to run
+1. Test with implemented models and our model using same feature set
+2. Test with different packages (nltk and mallet)
+3. Use different classifiers and report accuracies, f-measure 
+4. Use different models - HMM, MEMMS and CRFS
+5. Use different feature sets - think about more features - can we use sentiWord?
