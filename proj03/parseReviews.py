@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 from itertools import izip
 import utilities # custom cleaning functions
 from sentiwordnet import SentiWordNetCorpusReader, SentiSynset

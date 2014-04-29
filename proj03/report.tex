@@ -2,7 +2,7 @@
 %!TEX encoding = UTF-8 Unicode
 
 \documentclass{article}
-\usepackage[letterpaper, margin=0.75in, top=1in] {geometry}
+\usepackage[letterpaper, margin=1in] {geometry}
 \usepackage{microtype} % micro appearance
 \usepackage[all]{nowidow} % no lone lines
 \usepackage{changepage} % changes layout mid-page
@@ -20,7 +20,7 @@
 \usepackage{pgfplots}
 \usepackage{lipsum} % lipsum
 \usepackage{hyperref}
-\usepackage[compact]{titlesec}
+%\usepackage[compact]{titlesec}
 
 \pagestyle{fancy}
 
@@ -133,7 +133,8 @@ Using these counts we then generate the probability tables corresponding to the 
 
 To allow classification of test data we created two functions. The first is \texttt{classify} which takes in a source file and parses it into a list of reviews as was done in the model construction step. Then for each review (a list of sentence vectors) \texttt{classify} calls the function, viterbi, on that sequence. The function \texttt{viterbi} begins by initializing the necessary dynamic programming table, it then defines the base case (first column of the table). The base case is done by iterating over all states and finding the probability of transitioning from the start state to that state (\texttt{self.transition\_probabilities[('start',)][state]}) and then multiplying by the probability of emitting the first sentence vector from that state. Thus the code to do this is in our code is:
 \begin{verbatim}
-(math.log(self.transition_probabilities[tuple(prev)][state]) + math.log(self.output_probabilities[state][tuple(doc[0][1])])
+    (math.log(self.transition_probabilities[tuple(prev)][state])
+        + math.log(self.output_probabilities[state][tuple(doc[0][1])])
 \end{verbatim}
 
 We use log probabilities throughout to avoid underflow. Afterwards we iterate over the rest of the sentences in the review. For each sentence in the review we iterate over all states and for each of those states iterate over every row in the dp table. This thus looks like this:
@@ -146,7 +147,13 @@ We use log probabilities throughout to avoid underflow. Afterwards we iterate ov
                     ...
 \end{verbatim}
 
-In the innermost for loop we find the probability of transitioning from \texttt{prev} (in a bigram model this is simply a state, in a trigram it is 2 states) to \texttt{state}: this is \texttt{self.transition\_probabilities[prev][state]}. We also find the probability of emitting the sentence vector at doc[i]: \texttt{self.output\_probabilities[state][tuple(doc[i][1])]}. We then also pull the entry for \texttt{prev} in the previous row: \texttt{(table[i-1][prev][0]}. We then do log addition to find the probability for this prev with this state for this sentence. Now for each \texttt{state} we take the maximum of all these calculated probabilities and do: \texttt{table[i][tuple(prev)] = (prob,trace)} where \texttt{prev} is now the the old prev plus the state, but retaining only the last n-1 states (so in trigram, you would retain the last state in prev and the new state to create the new prev). prob is the probability calculated and trace is the old prev, so we can trace back through the table at the end. We do this for all sentences and then trace back from the maximum value in the last column of the table to find the sequence of tags for this review. We then return the sequence of tags. 
+In the innermost for loop we find the probability of transitioning from \texttt{prev} (in a bigram model this is simply a state, in a trigram it is 2 states) to \texttt{state}: this is \texttt{self.transition\_probabilities[prev][state]}.\par
+We also find the probability of emitting the sentence vector at doc[i]:\\
+\texttt{self.output\_probabilities[state][tuple(doc[i][1])]}.\par
+
+We then also pull the entry for \texttt{prev} in the previous row: \texttt{table[i-1][prev][0]}.\par
+
+We then do log addition to find the probability for this prev with this state for this sentence. Now for each \texttt{state} we take the maximum of all these calculated probabilities and do: \texttt{table[i][tuple(prev)] = (prob,trace)} where \texttt{prev} is now the the old prev plus the state, but retaining only the last n-1 states (so in trigram, you would retain the last state in prev and the new state to create the new prev). prob is the probability calculated and trace is the old prev, so we can trace back through the table at the end. We do this for all sentences and then trace back from the maximum value in the last column of the table to find the sequence of tags for this review. We then return the sequence of tags. 
 
 The \texttt{classify} algorithm does this for every review, taking the returned lists and creating a list of lists, one list (sequence of tags) for each review. 
 

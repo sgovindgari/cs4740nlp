@@ -1,7 +1,8 @@
-#TODO: Smoothing
-import itertools, pprint, operator, math
-from copy import copy
+#!/usr/bin/env python
 
+#TODO: Smoothing
+import sys, itertools, pprint, operator, math
+from copy import copy
 
 class HMM():
     def __init__(self, source, n, alpha = 1, beta = 1):
@@ -18,6 +19,9 @@ class HMM():
         with open(source) as f:
             content = f.read()
         docs = content.split('\n\n')
+        # rm last entry if empty
+        if docs[-1] == '':
+            docs = docs[:-1]
         doc_list = []
         for doc in docs:
             sentences = doc.split('\n')
@@ -168,9 +172,27 @@ class HMM():
             trace.append(list(lookup)[len(lookup)-1])
             lookup = entry[1]
         trace = list(reversed(trace))
-        print trace
         # print trace
         return trace        
 
-a = HMM('data/basic_features_train.txt', 4)
-a.classify('data/basic_features_test.txt', 'kaggle_hmm_test.csv')
+if len(sys.argv) != 5:
+    print "Provide 4 arguments for trainfile, n, alpha, and beta."
+    print "For example: ./hmm.py [trainfile] 4 1 1"
+    print "This script will attempt to find the corresponding testfile."
+    print "Copyleft ABMS 2014-04 :)"
+    print sys.argv
+    sys.exit(0)
+
+# LET'S GO!!!
+inTrainTxt = str(sys.argv[1])
+inTestTxt  = inTrainTxt[:-9] + 'test.txt' # assumed location
+
+inN        = int(sys.argv[2])
+inAlpha    = int(sys.argv[3])
+inBeta     = int(sys.argv[4])
+
+outfile = 'expoutput/' + inTrainTxt[5:-9] + 'out'
+outfile += sys.argv[2] + '-' + sys.argv[3] + '-' + sys.argv[4] + '.csv'
+
+a = HMM(inTrainTxt, n = inN, alpha = inAlpha, beta = inBeta)
+a.classify(inTestTxt, outfile)
