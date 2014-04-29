@@ -76,4 +76,4 @@ class Baseline():
 
 
 b = Baseline('data/training_data.txt', alpha = 0.1)
-b.classify('data/test_data_no_true_labels.txt')
+b.classify('data/test_data_no_true_labels.txt', 'data/baseline_kaggle_test')
