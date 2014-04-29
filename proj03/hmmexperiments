@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
 
+# hit the reset button.
 echo 'rm -rf expoutput/'
 rm -rf expoutput/
 echo 'mkdir -p expoutput/'
@@ -18,3 +19,6 @@ do
 		done
 	done
 done
+
+# make a zip
+zip hmmexperiments.zip expoutput/*
