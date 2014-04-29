@@ -69,11 +69,11 @@ class Baseline():
                 i = 0
                 for seq in predictions:
                     for tag in seq:
-                        i += 1
                         f.write(str(i) + ',' + str(tag) + '\n')
+                        i += 1
         return predictions
 
 
 
 b = Baseline('data/training_data.txt', alpha = 0.1)
-b.classify('data/test_data_no_true_labels.txt')
+b.classify('data/test_data_no_true_labels.txt', 'kaggle_baseline.csv')
