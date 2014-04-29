@@ -1,7 +1,8 @@
+#!/usr/bin/env python
+
 #TODO: Smoothing
 import itertools, pprint, operator, math
 from copy import copy
-
 
 class HMM():
     def __init__(self, source, n, alpha = 1, beta = 1):
@@ -172,5 +173,5 @@ class HMM():
         # print trace
         return trace        
 
-a = HMM('data/basic_features_train.txt', 4)
+a = HMM('data/basic_features_train.txt', n = 4, alpha = 1, beta = 1)
 a.classify('data/basic_features_test.txt', 'kaggle_hmm_test.csv')
