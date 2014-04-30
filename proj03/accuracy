@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+for datafile in `ls expoutputTRAIN/*`
+do
+	python accuracy.py $datafile
+done
