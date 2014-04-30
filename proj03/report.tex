@@ -63,31 +63,7 @@ lines.append((sentiment, sentence)) # collect as a tuple
 
 \section{Baseline}
 
-We had two baseline measures. The first basline measure simply uses a random guess among the three states. While in the other baseline we recorded how many times each word occurs in a positive, neutral or negative sentence. Using that we estimated the probability of a sentence's sentiment. The code for this can be found in our baseline class in \texttt{baseline.py} and \texttt{baseline\_random\_guess.py}
-
-\section{Feature Extraction}
-
-Because of the limited number of examples we have for training, we need to represent the sentences using dense features that have many overlaps and don't produce a sparse matrix. As a result, we only use number of negative, neutral, and positive words to populate the feature vector. There are two basic variants of this approach. One is a basic counting scheme that gathers sentiment data only from the training set. The other retrieves sentiment scores from SentiWordNet 3.0.
-
-\subsection{Basic Sentiment Labeling}
-
-For the basic scheme, we look through the pre-processed training data, and create a dictionary that labels each word as positive, neutral, or negative. The way we calculate the sentiment of a word is by counting how many times it appears in a positive, neutral, or negative sentence, and the sentiment that the word appears in most becomes sentiment label of that word. If there is a tie, even if the tie is between positive and negative labels, the word is labeled neutral.
-
-After going through the training data once to build this dictionary, we use it to count how many positive, neutral, and negative words a sentence has, and then normalize the count to get percentages. The three percentages become the feature vector representing this sentence. For test sets where sentences might contain words we have not previously seen in the training set, those words are labeled as neutral because that is the most common label. This representation is written out as \texttt{"basic\_features\_$[$test|train$]$.txt"}. 
-
-We also want to see what would happen if we discard the unseen words in the test set, and if that would cause less bias towards neutral and improve the score. We write this representation out as \texttt{"basic\_features\_discard\_unseen\_$[$test|train$]$.txt"}.
-
-\subsection{SentiWordNet Labeling}
-
-When just looking at the training data, we're limited by the words we've already seen. If a word we don't know appears in the test set, it doesn't help with representing the sentence. To maximize the contribution of words in a sentence, we decided to use sentiment labels for words from SentiWordNet 3.0. It is a sentiment tagger that is based off of WordNet 3.0. SentiWordNet has a positive, objective (equivalent to neutral in our case), and negative score for each synset from WordNet. The advantage of using SentiWordNet is that it labels many more words than our training data, but the disadvantage is that it is not specific to our corpus. Many words have different sentiments based on the context they're seen in, and SentiWordNet does not have that information. But we thought it would be interesting to compare the result of the two approaches.
-
-To find the sentiment of a word, we use \href{http://compprag.christopherpotts.net/wordnet.html}{Christopher Potts}' SentiWordNet-Python interface (\texttt{sentiwordnet.py}) to extract all the synsets of the word and the positive, objective, and negative scores associated with the synsets. Since doing word sense disambiguation takes a long time and is also not always correct, we simply accumulate the scores of all the synsets and take the sentiment with the highest score as the label for that word. We then do the same procedure as for the basic feature extraction and calculate the positive, neutral, and negative score of each sentence. These features are labeled with \texttt{"sentiWordNet\_features\_binary"}.
-
-\subsection{SentiWordNet Scoring}
-Since SentiWordNet gives us a score, and not just an integer value of positive, neutral, or negative, we can also use this information to enhance our feature vectors. Another variant to our SentiWordNet feature vector is that instead of each word contributing to either the positive, neutral, or negative count, we add the positive, neutral, and negative scores of each word provided by SentiWordNet to the overall score of the sentence, and then normalize afterwards. This gives a more accurate representation of how positive, neutral, and negative a sentence is. These features are labeled with \texttt{"sentiWordNet\_features\_score"}.
-
-\subsection{Bucketing}
-The sentiment scores of a sentence are all real number values. Since we need to match sentences to be able to productively use HMM and other methods, we need a way to group similar sentences. We are using bucketing to achieve this. For example, if the bucket size is 0.1, then if a sentence has positive score of [0.0, 0.1), we put it in bucket 1, if a sentence has positive score of [0.1, 0.2), we put it in bucket 2, so on and so forth. The features would become the bucket each score belongs to. Now we have three integer-valued features, and similar sentences would be grouped together when using HHM and other methods. The bucket size is a parameter we can tune. For the bucketed representation a \texttt{"bucket<bucketSize>"} label is added onto the text file names to identify them.
+We had two baseline measures. The first basline measure simply uses a random guess among the three states. While in the other baseline we recorded how many times each word occurs in a positive, neutral or negative sentence. Using that we estimated the probability of a sentence's sentiment. The code for this can be found in our baseline class in \texttt{baseline.py}.
 
 \subsection{Model Construction}
 
@@ -125,7 +101,34 @@ We then write our predictions to a kaggle file, if define, as follows:
                         i += 1
                         f.write(str(i) + ',' + str(tag) + '\n')
 \end{verbatim}
-%TODO: Update this to most recent kaggle writing code
+
+\subsection{Trivial Baseline}
+We also wrote a trivial baseline which simply guesses a random sentiment for each sentence, it is in \texttt{baseline\_random\_guess.py}
+
+\section{Feature Extraction}
+
+Because of the limited number of examples we have for training, we need to represent the sentences using dense features that have many overlaps and don't produce a sparse matrix. As a result, we only use number of negative, neutral, and positive words to populate the feature vector. There are two basic variants of this approach. One is a basic counting scheme that gathers sentiment data only from the training set. The other retrieves sentiment scores from SentiWordNet 3.0.
+
+\subsection{Basic Sentiment Labeling}
+
+For the basic scheme, we look through the pre-processed training data, and create a dictionary that labels each word as positive, neutral, or negative. The way we calculate the sentiment of a word is by counting how many times it appears in a positive, neutral, or negative sentence, and the sentiment that the word appears in most becomes sentiment label of that word. If there is a tie, even if the tie is between positive and negative labels, the word is labeled neutral.
+
+After going through the training data once to build this dictionary, we use it to count how many positive, neutral, and negative words a sentence has, and then normalize the count to get percentages. The three percentages become the feature vector representing this sentence. For test sets where sentences might contain words we have not previously seen in the training set, those words are labeled as neutral because that is the most common label. This representation is written out as \texttt{"basic\_features\_$[$test|train$]$.txt"}. 
+
+We also want to see what would happen if we discard the unseen words in the test set, and if that would cause less bias towards neutral and improve the score. We write this representation out as \texttt{"basic\_features\_discard\_unseen\_$[$test|train$]$.txt"}.
+
+\subsection{SentiWordNet Labeling}
+
+When just looking at the training data, we're limited by the words we've already seen. If a word we don't know appears in the test set, it doesn't help with representing the sentence. To maximize the contribution of words in a sentence, we decided to use sentiment labels for words from SentiWordNet 3.0. It is a sentiment tagger that is based off of WordNet 3.0. SentiWordNet has a positive, objective (equivalent to neutral in our case), and negative score for each synset from WordNet. The advantage of using SentiWordNet is that it labels many more words than our training data, but the disadvantage is that it is not specific to our corpus. Many words have different sentiments based on the context they're seen in, and SentiWordNet does not have that information. But we thought it would be interesting to compare the result of the two approaches.
+
+To find the sentiment of a word, we use \href{http://compprag.christopherpotts.net/wordnet.html}{Christopher Potts}' SentiWordNet-Python interface (\texttt{sentiwordnet.py}) to extract all the synsets of the word and the positive, objective, and negative scores associated with the synsets. Since doing word sense disambiguation takes a long time and is also not always correct, we simply accumulate the scores of all the synsets and take the sentiment with the highest score as the label for that word. We then do the same procedure as for the basic feature extraction and calculate the positive, neutral, and negative score of each sentence. These features are labeled with \texttt{"sentiWordNet\_features\_binary"}.
+
+\subsection{SentiWordNet Scoring}
+Since SentiWordNet gives us a score, and not just an integer value of positive, neutral, or negative, we can also use this information to enhance our feature vectors. Another variant to our SentiWordNet feature vector is that instead of each word contributing to either the positive, neutral, or negative count, we add the positive, neutral, and negative scores of each word provided by SentiWordNet to the overall score of the sentence, and then normalize afterwards. This gives a more accurate representation of how positive, neutral, and negative a sentence is. These features are labeled with \texttt{"sentiWordNet\_features\_score"}.
+
+\subsection{Bucketing}
+The sentiment scores of a sentence are all real number values. Since we need to match sentences to be able to productively use HMM and other methods, we need a way to group similar sentences. We are using bucketing to achieve this. For example, if the bucket size is 0.1, then if a sentence has positive score of [0.0, 0.1), we put it in bucket 1, if a sentence has positive score of [0.1, 0.2), we put it in bucket 2, so on and so forth. The features would become the bucket each score belongs to. Now we have three integer-valued features, and similar sentences would be grouped together when using HHM and other methods. The bucket size is a parameter we can tune. For the bucketed representation a \texttt{"bucket<bucketSize>"} label is added onto the text file names to identify them.
+
 \section{Hidden Markov Model}
 
 We chose to implement our own Hidden Markov Model (HMM) along with experimenting with existing systems. To implement our HMM we created an HMM class in python.
