@@ -346,6 +346,7 @@ $n$-gram & $\bm{\alpha}$ & $\bm{\beta}$ & \# correct & Precision\\\hline
 This data suggests that our HMM performs slightly better with a small amount of smoothing ($\alpha = 0.01$), that transition smoothing is not so effective, and that each $n$-gram model performs very similarly. Our best-performing model is a 4-gram with not so much smoothing on counts (precision of 0.80934). This data \emph{agrees} with our finding that our HMM performs better with bigrams than trigrams as well! (Precisions from test data on \texttt{basic\_features} is greater on bigrams than trigrams.)
 
 \subsection{Error analysis}
+Our system works well when there is a large training set and when the training corpus is of the same style as the input to be classified. This is evident from the fact that our accuracies on training set was nearly double the accuracies we got when we used the test set. However, there were times when the system did not work well and the following could be reasons why it did not perform as well: 
 \begin{enumerate}
 \item Most of our errors have resulted from the limited coverage that the training data gave. We also failed to take into account sarcasm, false positives and false negatives.
 \item Some errors were due to complex, long and unusual sentence structure, which our simple feature encoding did not capture well.
@@ -369,6 +370,7 @@ This data suggests that our HMM performs slightly better with a small amount of 
 \end{enumerate}
 The above sentences were wrongly predicted to be positive/negative as both the sentences are long and complex.
 \end{enumerate} 
+To improve the system we added smoothing, worked with different n-gram models and smoothed the HMM transitions. What helped the most was a higher n-gram model. We also improved the existing systems by extracting other feature sets by bucking and sentiWordNet. None of these helped improve our current model since we performed the best with basic features. Our system could be further improved by extracting other features like capitalization, taking into account the polarities of context words, using better models like CRFs and MEMMs.
 \section{Final Kaggle score}
 Our Kaggle team is \textbf{abms}.\par
 For our two submissions, we are officially counting two csvs generated from our HMM implementation with a 4-gram model, with smoothing on both n-gram counts and HMM transition counts. For $\beta = 1$, we received a score of \textbf{0.48039}. For $\beta = 2$, we received a score of \textbf{0.48203}.\par\medskip
