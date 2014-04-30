@@ -191,7 +191,7 @@ inN        = int(sys.argv[2])
 inAlpha    = float(sys.argv[3])
 inBeta     = float(sys.argv[4])
 
-outfile = 'expoutput2/' + inTrainTxt[5:-9] + 'out'
+outfile = 'expoutput3/' + inTrainTxt[5:-9] + 'out'
 outfile += sys.argv[2] + '-' + sys.argv[3] + '-' + sys.argv[4] + '.csv'
 
 a = HMM(inTrainTxt, n = inN, alpha = inAlpha, beta = inBeta)

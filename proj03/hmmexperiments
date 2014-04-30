@@ -1,24 +1,24 @@
 #!/usr/bin/env sh
 
 # hit the reset button.
-echo 'rm -rf expoutput2/'
-rm -rf expoutput2/
-echo 'mkdir -p expoutput2/'
-mkdir -p expoutput2/
+echo 'rm -rf expoutput3/'
+rm -rf expoutput3/
+echo 'mkdir -p expoutput3/'
+mkdir -p expoutput3/
 
 # for each train txt file, hmm.py will find the corresponding test file.
-for datafile in `ls data/basic*features*train.txt | sort`
+for datafile in `ls data/basic_features_train.txt | sort`
 do
 	echo "generating csvs for $datafile ..."
 	# test ngrams up to 6.
 	# alpha = 1..4, beta = 1..5 ????
 	for ng in 4
 	do
-		for alph in 0.01 0.05 0.1 0.5
+		for alph in 1
 		do
-			echo "generating for n = $ng , alpha = $alph for beta = 1"
-			for bet in 1
+			for bet in 2 2.2 2.5
 			do
+				echo "generating for n = $ng , alpha = $alph for beta = $bet"
 				#echo "hi. $datafile $ng $alph $bet"
 				python ./hmm.py $datafile $ng $alph $bet
 			done
@@ -27,7 +27,7 @@ do
 done
 
 # make a zip
-echo 'rm -f hmmexperiments2.zip'
-rm -f hmmexperiments2.zip
-echo 'zip hmmexperiments2.zip expoutput2/*'
-zip hmmexperiments2.zip expoutput2/*
+echo 'rm -f hmmexperiments5.zip'
+rm -f hmmexperiments5.zip
+echo 'zip hmmexperiments5.zip expoutput3/*'
+zip hmmexperiments4.zip expoutput3/*
