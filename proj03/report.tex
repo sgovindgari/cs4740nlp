@@ -47,15 +47,23 @@
 
 \section{Introduction}
 
-Our code is written in Python and Java.
+Our code is written in Python and Java. In this report we document how to classify sentiment at sentence level by implementing HMM and then experiment with different feature sets.
 
 \section{Preprocessing}
 \subsection{Configuration}
+We implemented HMM as our sequence tagging system and did not use any existing Python libraries that provided implementations of HMMs. For experimenting purposes, we have looked at NLTK packages and for extracting features we decided use Chris Potts' interface to SentiWordNet.
 \subsection{Data Processing}
+For pre-processing we have parsed \texttt{training\_data.txt} into memory using Python and NLTK. Our parser, \texttt{getReviewList}, returns a list of reviews whose sentences have been lemmatized and have removed stop words.
+
+\begin{verbatim}
+sentiment = strToSentiment(line[0]) # convert to 1,0,-1
+sentence = utilities.cleanString(line[1]) # lemmatize and stopwords
+lines.append((sentiment, sentence)) # collect as a tuple
+\end{verbatim}
 
 \section{Baseline}
 
-For our baseline we created a baseline class in \texttt{baseline.py}.
+We had two baseline measures. The first basline measure simply uses a random guess among the three states. While in the other baseline we recorded how many times each word occurs in a positive, neutral or negative sentence. Using that we estimated the probability of a sentence's sentiment. The code for this can be found in our baseline class in \texttt{baseline.py} and \texttt{baseline\_random\_guess.py}
 
 \section{Feature Extraction}
 
@@ -170,7 +178,7 @@ If we are writing our results to a kaggle-formatted file we do the following in 
 \end{verbatim}
 %TODO: Update this to most recent kaggle writing code
 
-\subsection*{Extension: n-gram HMM}
+\subsection{Extension: n-gram HMM}
 
 To support beyond a simple bigram HMM we implemented n-gram HMMs. The changes required for this were two-fold. First we had to change our model construction to keep track of more than one previous state (up to n-1 previous states instead) to construct our new transition counts, for instance each row of a transition matrix for a trigram HMM would be (1,1), (0,1), etc. for all combinations of states. 
 
@@ -182,4 +190,10 @@ We also had to change our viterbi algorithm to support n-grams. Much of how this
 \section{Error Analysis}
 
 \section{Individual Member Contribution}
+\begin{enumerate}
+\item Feature extraction - MJ sun
+\item Implementing HMM, baseline and extension - Benjamin Schulman
+\item Experimentation with implemented HMM - Andy Wang
+\item Experimentation with packages - Spandana Govindgari
+\end{enumerate}
 \end{document}
