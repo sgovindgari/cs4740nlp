@@ -4,7 +4,7 @@ from itertools import izip
 import utilities # custom cleaning functions
 from sentiwordnet import SentiWordNetCorpusReader, SentiSynset
 
-swn = SentiWordNetCorpusReader('SentiWordNet_3.0.0_20130122.txt')
+#swn = SentiWordNetCorpusReader('SentiWordNet_3.0.0_20130122.txt')
 
 trainingData = 'data/training_data.txt'
 testData     = 'data/test_data_no_true_labels.txt'
@@ -170,18 +170,18 @@ def sentArgmax(negScore, neuScore, posScore):
         sent = 0
     return sent
 
-trainReviews = getReviewList(trainingData, defaultToZero = False)
-testReviews = getReviewList(testData, defaultToZero = True)
-sentMap = wordSentimentMapBasic(trainReviews)
+#trainReviews = getReviewList(trainingData, defaultToZero = False)
+#testReviews = getReviewList(testData, defaultToZero = True)
+#sentMap = wordSentimentMapBasic(trainReviews)
 
 # #print reviews
-writeOutReviewFeatures(trainReviews, sentMap, "data/basic_features_discard_unseen_train.txt")
-writeOutReviewFeatures(testReviews, sentMap, "data/basic_features_discard_unseen_test.txt")
-for i in [0.01, 0.05, 0.1, 0.2]:
-    writeOutReviewFeatures(trainReviews, sentMap, "data/basic_features_discard_unseen_bucket" + str(i) + "_train.txt", bucket_size=i)
-    writeOutReviewFeatures(testReviews, sentMap, "data/basic_features_discard_unseen_bucket" + str(i) + "_test.txt", bucket_size=i)
-    writeOutSentiWordNetFeatures(trainReviews, "data/sentiWordNet_features_binary_bucket" + str(i) + "_train.txt", binary=True, bucket_size = i)
-    writeOutSentiWordNetFeatures(testReviews, "data/sentiWordNet_features_binary_bucket" + str(i) + "_test.txt", binary=True, bucket_size = i)
-    writeOutSentiWordNetFeatures(trainReviews, "data/sentiWordNet_features_score_bucket" + str(i) + "_train.txt", binary=False, bucket_size = i)
-    writeOutSentiWordNetFeatures(testReviews, "data/sentiWordNet_features_score_bucket" + str(i) + "_test.txt", binary=False, bucket_size = i)
+#writeOutReviewFeatures(trainReviews, sentMap, "data/basic_features_discard_unseen_train.txt")
+#writeOutReviewFeatures(testReviews, sentMap, "data/basic_features_discard_unseen_test.txt")
+#for i in [0.01, 0.05, 0.1, 0.2]:
+#    writeOutReviewFeatures(trainReviews, sentMap, "data/basic_features_discard_unseen_bucket" + str(i) + "_train.txt", bucket_size=i)
+#    writeOutReviewFeatures(testReviews, sentMap, "data/basic_features_discard_unseen_bucket" + str(i) + "_test.txt", bucket_size=i)
+#    writeOutSentiWordNetFeatures(trainReviews, "data/sentiWordNet_features_binary_bucket" + str(i) + "_train.txt", binary=True, bucket_size = i)
+#    writeOutSentiWordNetFeatures(testReviews, "data/sentiWordNet_features_binary_bucket" + str(i) + "_test.txt", binary=True, bucket_size = i)
+#    writeOutSentiWordNetFeatures(trainReviews, "data/sentiWordNet_features_score_bucket" + str(i) + "_train.txt", binary=False, bucket_size = i)
+#    writeOutSentiWordNetFeatures(testReviews, "data/sentiWordNet_features_score_bucket" + str(i) + "_test.txt", binary=False, bucket_size = i)
 
