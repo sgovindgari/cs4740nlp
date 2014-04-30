@@ -175,9 +175,9 @@ class HMM():
         # print trace
         return trace        
 
-if len(sys.argv) != 5:
+if len(sys.argv) != 6:
     print "Provide 4 arguments for trainfile, n, alpha, and beta."
-    print "For example: ./hmm.py [trainfile] 4 1 1"
+    print "For example: ./hmm.py [trainfile] 4 1 1 [train|test]"
     print "This script will attempt to find the corresponding testfile."
     print "Copyleft ABMS 2014-04 :)"
     print sys.argv
@@ -185,13 +185,17 @@ if len(sys.argv) != 5:
 
 # LET'S GO!!!
 inTrainTxt = str(sys.argv[1])
-inTestTxt  = inTrainTxt[:-9] + 'test.txt' # assumed location
+
+if str(sys.argv[5]) == 'train': # use the same training file.
+    inTestTxt = inTrainTxt
+else: # find the corresponding test file of the train.txt
+    inTestTxt  = inTrainTxt[:-9] + 'test.txt' # assumed location
 
 inN        = int(sys.argv[2])
 inAlpha    = float(sys.argv[3])
 inBeta     = float(sys.argv[4])
 
-outfile = 'expoutput3/' + inTrainTxt[5:-9] + 'out'
+outfile = 'expoutputTRAIN/' + inTrainTxt[5:-9] + 'out'
 outfile += sys.argv[2] + '-' + sys.argv[3] + '-' + sys.argv[4] + '.csv'
 
 a = HMM(inTrainTxt, n = inN, alpha = inAlpha, beta = inBeta)
