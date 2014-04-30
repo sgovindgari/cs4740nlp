@@ -46,5 +46,5 @@ proj02/report.pdf
 proj02/dictionary_processed.xml
 proj03/proposal.pdf
 proj03/report.pdf
-proj03/expoutput/*
+proj03/expoutput*
 proj03/*.zip

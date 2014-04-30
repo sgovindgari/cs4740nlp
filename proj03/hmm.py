@@ -188,10 +188,10 @@ inTrainTxt = str(sys.argv[1])
 inTestTxt  = inTrainTxt[:-9] + 'test.txt' # assumed location
 
 inN        = int(sys.argv[2])
-inAlpha    = int(sys.argv[3])
-inBeta     = int(sys.argv[4])
+inAlpha    = float(sys.argv[3])
+inBeta     = float(sys.argv[4])
 
-outfile = 'expoutput/' + inTrainTxt[5:-9] + 'out'
+outfile = 'expoutput2/' + inTrainTxt[5:-9] + 'out'
 outfile += sys.argv[2] + '-' + sys.argv[3] + '-' + sys.argv[4] + '.csv'
 
 a = HMM(inTrainTxt, n = inN, alpha = inAlpha, beta = inBeta)
