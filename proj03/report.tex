@@ -347,8 +347,8 @@ This data suggests that our HMM performs slightly better with a small amount of 
 
 \subsection{Error analysis}
 \begin{enumerate}
-\item Most of our errors could have resulted from the limited coverage that the training data gave. We also failed to take into account sarcasm, false positives and false negatives.
-\item Some errors were due to complex and unusual sentence structure, which our simple feature encoding did not capture well.
+\item Most of our errors have resulted from the limited coverage that the training data gave. We also failed to take into account sarcasm, false positives and false negatives.
+\item Some errors were due to complex, long and unusual sentence structure, which our simple feature encoding did not capture well.
 \item False positives:
   \begin{enumerate}[nolistsep,noitemsep]
     \item \textit{I am returning the unit to the store and looking for a \emph{better} replacement.}
@@ -360,8 +360,15 @@ This data suggests that our HMM performs slightly better with a small amount of 
   \item \textit{First I become exposed to his brilliance via I Got You, the break through song of Split Enz a quarter of a century ago.}
   \end{enumerate}
   The phrase ``break through'' was annotated here as negative which made the entire sentence to be tagged as negative. The primary reason here was due to the limited coverage of our training data. Many words in this sentence were unseen and proper nouns. We did not take into account capitalization as one of our feature which here could helped us identify sentiment.
-\end{enumerate}
 
+\item Long and complex sentence structures
+    \begin{enumerate}
+    \item \textit{[pos] However, I do not recommend this, because the softy in me found myself tearing up on a few occasions and     trying to fight back the tears as other people trying to get to work pretended not to notice.      
+    }
+    \item \textit{[neg] I can create play lists in Windows Media Player on my desktop and when I connect the Treo using the USB     cable my play lists are automatically synced to the storage card.}
+\end{enumerate}
+The above sentences were wrongly predicted to be positive/negative as both the sentences are long and complex.
+\end{enumerate} 
 \section{Final Kaggle score}
 Our Kaggle team is \textbf{abms}.\par
 For our two submissions, we are officially counting two csvs generated from our HMM implementation with a 4-gram model, with smoothing on both n-gram counts and HMM transition counts. For $\beta = 1$, we received a score of \textbf{0.48039}. For $\beta = 2$, we received a score of \textbf{0.48203}.\par\medskip
