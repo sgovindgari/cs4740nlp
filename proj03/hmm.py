@@ -106,8 +106,8 @@ class HMM():
                 i = 0
                 for seq in predictions:
                     for tag in seq:
-                        i += 1
                         f.write(str(i) + ',' + str(tag) + '\n')
+                        i += 1
         return predictions
 
     #doc is a list of observations to tag
@@ -196,3 +196,6 @@ outfile += sys.argv[2] + '-' + sys.argv[3] + '-' + sys.argv[4] + '.csv'
 
 a = HMM(inTrainTxt, n = inN, alpha = inAlpha, beta = inBeta)
 a.classify(inTestTxt, outfile)
+
+# a = HMM("./data/basic_features_train.txt", 5, 1, 1)
+# a.classify('./data/basic_features_test.txt', 'basic_features_test_out_5_1_1.csv')
