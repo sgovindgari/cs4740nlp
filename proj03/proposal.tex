@@ -2,7 +2,7 @@
 %!TEX encoding = UTF-8 Unicode
 
 \documentclass{article}
-\usepackage[letterpaper, top=1in, left=0.75in, right=0.75in, bottom=0.75in] {geometry}
+\usepackage[letterpaper, margin=1in] {geometry}
 \usepackage{microtype} % micro appearance
 \usepackage[all]{nowidow} % no lone lines
 \usepackage{changepage} % changes layout mid-page
@@ -17,14 +17,17 @@
 \usepackage{tikz} % graphics?
 \usepackage{bm} % bold math
 \usepackage{multicol} % multiple columns
+\usepackage{pgfplots}
 \usepackage{lipsum} % lipsum
+\usepackage{hyperref}
+%\usepackage[compact]{titlesec}
 
 \pagestyle{fancy}
 
 \newcommand {\classname} {CS 4740/5740 -- Intro to Natural Language Processing}
-\newcommand {\duedate} {Tue, 2014--04--15}
+\newcommand {\duedate} {Mon, 2014--04--28}
 \newcommand {\hwtype} {Project}
-\newcommand {\hwnum} {3 (proposal)}
+\newcommand {\hwnum} {3 (report)}
 \newcommand {\innermargin} {0.15in} % indentation amt of nested lst
 
 \let\tss\textsuperscript
@@ -40,39 +43,17 @@
   {Page \thepage}}
 
 \begin{document}
-\begin{center}\textbf{Project 3: Sequence tagging; Sentiment Classification -- Proposal}\end{center}
+\begin{center}\textbf{Project 3: Report on Sequence tagging; Sentiment classification}\end{center}
 
-\subsection*{Our sequence-tagging system}
+\section{Introduction}
 
-\textit{Describe your sequence-tagging system.}\par
+Our code is written in Python and Java. In this report we document how to classify sentiment at sentence level by implementing HMM and then experiment with different feature sets.
 
-\begin{itemize}
-\item Which model are you planning to implement?\par
-
-We will implement HMMs as our sequence tagging system. (We may also attempt the MEMMs model.) We are not planning on using existing Python libraries that provide implementations of HMMs because we think they are difficult to fine-tune for testing.
-
-We plan on having two baselines. One will use the following algorithm: from the training data we will record how many times each word occurs in a positive, neutral or negative sentence. Using that we can estimate the probability of a sentence's sentiment. For each word in the sentence we pull its probability for each sentiment and multiply it into the probability for each sentiment. Thus we perform the following equation to classify the sentence, where $S$ is the set of sentiments and the sentence has $n$ tokens:
-\[argmax_{s \in S}{\prod_{i=1}^n} P(s|w_i).\]
-
-Another trivial baseline we may use can simply be choosing positive / negative / neutral randomly given any sentence, possibly weighted by the frequency of positive / neg / neutral sequences we have in training.
-
-\item Explain the algorithmic key points of your model. (Hidden variables \& observed variables for our setting, model parameters)\par
-
-Our hidden variables are the sentiments (-1, 0, 1). Our observed variables are the feature vectors of sentences. Our HMM Model will take in a set of tags (sentiments), a transition probability matrix, an emission matrix, the start state, and what n-gram model to use (e.g., is the transition matrix a bigram/trigram/etc.). We will implement an HMM is a python class that stores eachs of its inputs and then uses Viterbi's algorithm to tag test documents. We may, if feeling ambitious, extend our HMM to take arbitrary training data and calculate the necessary data to create the model.
-
-\item Brainstorm which features you would incorporate to learn emission probabilities. Support your design decisions based on the real examples given in the dataset.\par
-
-Sentences are numerous! The chance of seeing an exact sentence is very small, so meaningful sentence representation is crucial for the HMM. One representation is to count the number of positive, negative, and neutral words in the sentence and have these 3 counts as a \emph{feature vector}. Whether a word is positive, negative, or neutral is calculated by \emph{counting the percentage of times that word appears} in a negative/positive/neutral sentence and pick the sentiment that the word appear most in. In the lexicon, we note that those sentences with the word ``good'' tend to be positive: \emph{``\ldots BUT it is a good one.''}
-
-An extension of this is to use sentiment lexicons to label the sentiment of each word instead of calculating the sentiment from the training data. One lexicon, SentiWordNet, assigns sentiments to each sense of of each word. To avoid the complexity of doing sense calculations, we can choose the most frequent sentiment associated with the word across all of its senses.
-
-An additional feature is the \emph{positivity score} for the sentence, provided by some lexicons. We can add the positivity score minus the negativity score of each word to obtain a general score.
-
-These metrics will be bucketed to limit the size of the feature set since we do not have a lot of data. Smoothing will probably also help with zeros in the feature space.
-\end{itemize}
-
-\subsection*{Progress so far}
-Currently, we have parsed \texttt{training\_data.txt} into memory using Python and NLTK. Our parser, \texttt{getReviewList}, returns a list of reviews whose sentences have been lemmatized and have English stopwords removed.
+\section{Preprocessing}
+\subsection{Configuration}
+We implemented HMM as our sequence tagging system and did not use any existing Python libraries that provided implementations of HMMs. For experimenting purposes, we have looked at NLTK packages and for extracting features we decided use Chris Potts' interface to SentiWordNet.
+\subsection{Data Processing}
+For pre-processing we have parsed \texttt{training\_data.txt} into memory using Python and NLTK. Our parser, \texttt{getReviewList}, returns a list of reviews whose sentences have been lemmatized and have removed stop words.
 
 \begin{verbatim}
 sentiment = strToSentiment(line[0]) # convert to 1,0,-1
@@ -80,4 +61,139 @@ sentence = utilities.cleanString(line[1]) # lemmatize and stopwords
 lines.append((sentiment, sentence)) # collect as a tuple
 \end{verbatim}
 
+\section{Baseline}
+
+We had two baseline measures. The first basline measure simply uses a random guess among the three states. While in the other baseline we recorded how many times each word occurs in a positive, neutral or negative sentence. Using that we estimated the probability of a sentence's sentiment. The code for this can be found in our baseline class in \texttt{baseline.py} and \texttt{baseline\_random\_guess.py}
+
+\section{Feature Extraction}
+
+Because of the limited number of examples we have for training, we need to represent the sentences using dense features that have many overlaps and don't produce a sparse matrix. As a result, we only use number of negative, neutral, and positive words to populate the feature vector. There are two basic variants of this approach. One is a basic counting scheme that gathers sentiment data only from the training set. The other retrieves sentiment scores from SentiWordNet 3.0.
+
+\subsection{Basic Sentiment Labeling}
+
+For the basic scheme, we look through the pre-processed training data, and create a dictionary that labels each word as positive, neutral, or negative. The way we calculate the sentiment of a word is by counting how many times it appears in a positive, neutral, or negative sentence, and the sentiment that the word appears in most becomes sentiment label of that word. If there is a tie, even if the tie is between positive and negative labels, the word is labeled neutral.
+
+After going through the training data once to build this dictionary, we use it to count how many positive, neutral, and negative words a sentence has, and then normalize the count to get percentages. The three percentages become the feature vector representing this sentence. For test sets where sentences might contain words we have not previously seen in the training set, those words are discarded because, without further information, they are equally likely to be positive, neutral, or negative, therefore contributing no additional information to the sentence.
+
+\subsection{SentiWordNet Labeling}
+
+When just looking at the training data, we're limited by the words we've already seen. If a word we don't know appears in the test set, it doesn't help with representing the sentence. To maximize the contribution of words in a sentence, we decided to use sentiment labels for words from SentiWordNet 3.0. It is a sentiment tagger that is based off of WordNet 3.0. SentiWordNet has a positive, objective (equivalent to neutral in our case), and negative score for each synset from WordNet. The advantage of using SentiWordNet is that it labels many more words than our training data, but the disadvantage is that it is not specific to our corpus. Many words have different sentiments based on the context they're seen in, and SentiWordNet does not have that information. But we thought it would be interesting to compare the result of the two approaches.
+
+To find the sentiment of a word, we use \href{http://compprag.christopherpotts.net/wordnet.html}{Christopher Potts}' SentiWordNet-Python interface (\texttt{sentiwordnet.py}) to extract all the synsets of the word and the positive, objective, and negative scores associated with the synsets. Since doing word sense disambiguation takes a long time and is also not always correct, we simply accumulate the scores of all the synsets and take the sentiment with the highest score as the label for that word. We then do the same procedure as for the basic feature extraction and calculate the positive, neutral, and negative score of each sentence.
+
+\subsection{SentiWordNet Scoring}
+Since SentiWordNet gives us a score, and not just an integer value of positive, neutral, or negative, we can also use this information to enhance our feature vectors. Another variant to our SentiWordNet feature vector is that instead of each word contributing to either the positive, neutral, or negative count, we add the positive, neutral, and negative scores of each word provided by SentiWordNet to the overall score of the sentence, and then normalize afterwards. This gives a more accurate representation of how positive, neutral, and negative a sentence is.
+
+\subsection{Bucketing}
+The sentiment scores of a sentence are all real number values. Since we need to match sentences to be able to productively use HMM and other methods, we need a way to group similar sentences. We are using bucketing to achieve this. For example, if the bucket size is 0.1, then if a sentence has positive score of [0.0, 0.1), we put it in bucket 1, if a sentence has positive score of [0.1, 0.2), we put it in bucket 2, so on and so forth. The features would become the bucket each score belongs to. Now we have three integer-valued features, and similar sentences would be grouped together when using HHM and other methods. The bucket size is a parameter we can tune.
+
+\subsection{Model Construction}
+
+This class' constructor takes a source file where each review is separated by a newline, each sentence is tokenized and each on a separate line. Each sentence begins with its sentiment. Each review in the source file has its title on a line before its sentences. It also takes an \texttt{alpha} which is the add-alpha smoothing to use.
+
+The constructor reads in the source file and then it maintains two counts as it goes over the file. It maintains \texttt{self.sentiment\_counts} which is a dictionary that holds the number of times each sentiment has appeared in the training set. It also maintains \texttt{self.word\_counts} which is a table (dictionary of dictionaries) with a row for each sentiment and a column for each token encountered. 
+
+The constructor than iterates over all the sentences in the training set recording the number of times each sentiment occurs using \texttt{self.sentiment\_counts}. For each word in a sentence with sentiment \texttt{s} we add 1 to the value stored in \texttt{self.word\_counts[s][word]}. 
+
+After going over all the training data the constructor then generates probabilities from the two tables. It generates entries for \texttt{self.sentiment\_probabilities} by simply using \texttt{self.sentiment\_counts} to calculate the probability of each sentiment occurring. Then for each column of the table, \texttt{self.word\_counts} we calculate the conditional probabilities $P(word|s)$ for all words and all sentiments and store them in \texttt{self.word\_probabilities}. After this our model has been constructed.
+
+\subsection{Classification}
+
+To classify a test set, one uses the \texttt{classify} function in the class. The function takes a \texttt{source} of the same form that the training data was. For each sentence in the test data we tag it with a sentiment using the following formula: $argmax_{s\in S}P(s)\mathlarger{\prod}_{w\in Sentence} P(w|s)$. In our code we use log probabilities to avoid underflow. Here is the code we use to tag each sentence:
+
+\begin{verbatim}
+                probs = dict()
+                for sentiment in self.sentiment_probabilities:
+                    probs[sentiment] = math.log(self.sentiment_probabilities[sentiment])
+                for word in entry[1]:
+                    if word in self.word_probabilities:
+                        for p in self.word_probabilities[word]:
+                            probs[p] += math.log(self.word_probabilities[word][p])
+                tags.append(max(probs.iteritems(), key=operator.itemgetter(1))[0]
+\end{verbatim}
+
+We then write our predictions to a kaggle file, if define, as follows:
+\begin{verbatim}
+        if kaggle != None:
+            with open(kaggle,'w') as f:
+                f.write('Id,answer\n')
+                i = 0
+                for seq in predictions:
+                    for tag in seq:
+                        i += 1
+                        f.write(str(i) + ',' + str(tag) + '\n')
+\end{verbatim}
+%TODO: Update this to most recent kaggle writing code
+\section{Hidden Markov Model}
+
+We chose to implement our own Hidden Markov Model (HMM) along with experimenting with existing systems. To implement our HMM we created an HMM class in python.
+
+\subsection{Model Construction}
+The constructor of the HMM takes a \texttt{source}, an \texttt{n}, a \texttt{beta} and an \texttt{alpha}. \texttt{source} is a string of the filename to use as training data. \texttt{n} is what n-gram the model will be (bigram, trigram, etc.), \texttt{alpha} is the add-k smoothing value to use for output counts and \texttt{beta} is the add-k smoothing value to use for transition counts. The constructor then parses the file to read create a list of reviews, \texttt{self.training\_data}. Each review in the resulting list is another list of tuples of the form \texttt{(sentiment,feature vector)}. Using this resulting data we generate a set of states, transition counts and output counts.
+
+To generate the counts we use two dictionaries of dictionaries. The first is \texttt{self.output\_counts} which in each "row" has a state and each column is the sentence vector, thus \texttt{self.output\_counts[state][vector]} stores the number of times that vector appeared for that state. \texttt{transition\_counts} mean while, where each "row" is the previously seen \texttt{n-1} states and the column is the state being transitioned to. Thus \texttt{self.transition\_counts[previous][state]} stores the number of times state follows the \texttt{(n-1)-tuple} of previous states. As we go we also generate a set of all states: \texttt{self.states}.
+
+We iterate over \texttt{self.training\_data} to generate the counts. For each review we iterate over the sentence tuples and for each sentence we add one to \texttt{self.output\_counts[state][vector]} for that sentence's vector and state. We also add one to the entry in  \texttt{self.transition\_counts[previous][state]} where \texttt{previous} is a tuple of the \texttt{(n-1)} previous states and \texttt{state} is the state for the sentence. We begin with the tuple \texttt{(start,)} as previous for the first sentence of each review. In order to account for potentially unseen vectors we create an entry in each state row for unknown with a count of 1. We chose not to use techniques such as replacing the first occurrence of each vector with an "unknown" one as we did in the first project due to the sparseness and small size of the training data. 
+
+Using these counts we then generate the probability tables corresponding to the count tables by computing the conditional probability for each row by iterating over each row of each table.
+ 
+\subsection{Classification and Viterbi}
+
+To allow classification of test data we created two functions. The first is \texttt{classify} which takes in a source file and parses it into a list of reviews as was done in the model construction step. Then for each review (a list of sentence vectors) \texttt{classify} calls the function, viterbi, on that sequence. The function \texttt{viterbi} begins by initializing the necessary dynamic programming table, it then defines the base case (first column of the table). The base case is done by iterating over all states and finding the probability of transitioning from the start state to that state (\texttt{self.transition\_probabilities[('start',)][state]}) and then multiplying by the probability of emitting the first sentence vector from that state. Thus the code to do this is in our code is:
+\begin{verbatim}
+    (math.log(self.transition_probabilities[tuple(prev)][state])
+        + math.log(self.output_probabilities[state][tuple(doc[0][1])])
+\end{verbatim}
+
+We use log probabilities throughout to avoid underflow. Afterwards we iterate over the rest of the sentences in the review. For each sentence in the review we iterate over all states and for each of those states iterate over every row in the dp table. This thus looks like this:
+\begin{verbatim}
+        for i in range(1,len(doc)):
+            ...
+            for state in self.states:
+                ...
+                for prev in table[0]:
+                    ...
+\end{verbatim}
+
+In the innermost for loop we find the probability of transitioning from \texttt{prev} (in a bigram model this is simply a state, in a trigram it is 2 states) to \texttt{state}: this is \texttt{self.transition\_probabilities[prev][state]}.\par
+We also find the probability of emitting the sentence vector at doc[i]:\\
+\texttt{self.output\_probabilities[state][tuple(doc[i][1])]}.\par
+
+We then also pull the entry for \texttt{prev} in the previous row: \texttt{table[i-1][prev][0]}.\par
+
+We then do log addition to find the probability for this prev with this state for this sentence. Now for each \texttt{state} we take the maximum of all these calculated probabilities and do: \texttt{table[i][tuple(prev)] = (prob,trace)} where \texttt{prev} is now the the old prev plus the state, but retaining only the last n-1 states (so in trigram, you would retain the last state in prev and the new state to create the new prev). prob is the probability calculated and trace is the old prev, so we can trace back through the table at the end. We do this for all sentences and then trace back from the maximum value in the last column of the table to find the sequence of tags for this review. We then return the sequence of tags. 
+
+The \texttt{classify} algorithm does this for every review, taking the returned lists and creating a list of lists, one list (sequence of tags) for each review. 
+
+If we are writing our results to a kaggle-formatted file we do the following in our \texttt{classify} function: 
+\begin{verbatim}
+        if kaggle != None:
+            with open(kaggle,'w') as f:
+                f.write('Id,answer\n')
+                i = 0
+                for seq in predictions:
+                    for tag in seq:
+                        i += 1
+                        f.write(str(i) + ',' + str(tag) + '\n')
+\end{verbatim}
+%TODO: Update this to most recent kaggle writing code
+
+\subsection{Extension: n-gram HMM}
+
+To support beyond a simple bigram HMM we implemented n-gram HMMs. The changes required for this were two-fold. First we had to change our model construction to keep track of more than one previous state (up to n-1 previous states instead) to construct our new transition counts, for instance each row of a transition matrix for a trigram HMM would be (1,1), (0,1), etc. for all combinations of states. 
+
+We also had to change our viterbi algorithm to support n-grams. Much of how this works is detailed in the previous section, but instead of simply having the table have a row for every state we need to keep track of more than 1 previous state. Instead we keep track of n-1 previous states, for instance for a trigram we would have a row for ('start',1), (0,1), etc. Thus we don't actuall fill in every entry in a column for every column, we only fill in one per state, for instance (1,0), (1,1) and (0,2) would be filled because for each state we only take one maximum probability over all rows of the table and add that probability as one entry in the next column of the table. 
+
+
+\section{Experimentation}
+\section{Discussion}
+\section{Error Analysis}
+
+\section{Individual Member Contribution}
+\begin{enumerate}
+\item Feature extraction - MJ sun
+\item Implementing HMM, baseline and extension - Benjamin Schulman
+\item Experimentation with implemented HMM - Andy Wang
+\item Experimentation with packages - Spandana Govindgari
+\end{enumerate}
 \end{document}
