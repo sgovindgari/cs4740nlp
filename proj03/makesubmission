@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+
+rm -rf submission/
+rm -f submission.zip
+
+mkdir -p submission/
+
+maketex report.tex
+cp -f report.pdf submission/
+cp -f *.py submission/
+
+cp hmmexperiments submission/
+
+cp -R data/ submission/
+
+zip submission.zip submission/* submission/data/*
+
+du -s submission.zip
+
+md5sum submission.zip

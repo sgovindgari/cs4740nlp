@@ -47,19 +47,19 @@
 
 
 \section{Introduction}
-Our code is written in Python and Java. In this report we document how to classify sentiment at sentence level by implementing HMM and then experiment with different feature sets.\par
-We have at least two extensions: one where we experimenting with different $n$-grams; the other where we experiment with different smoothing methods, including smoothing add-$k$ smoothing $n$-gram counts, and add-$k$ smoothing for HMM transition counts. Another extension is ``bucketing'' in order to match sentences more effectively in HMM.\par
+Our code is written in Python. In this report we document how to classify sentiment at sentence level by implementing HMM and then experiment with different feature sets.\par
+We have at least two extensions: one where we experiment with different $n$-grams; the other where we experiment with different smoothing methods, including smoothing add-$k$ smoothing $n$-gram counts, and add-$k$ smoothing for HMM transition counts. In one of our approaches, we use SentiWordNet to help with feature extraction. Another extension is ``bucketing'' feature sets in order to match sentences more effectively in HMM. (page 3)\par
 We \emph{implemented our own HMM}, so it was the only model we used (not MEMMs or CRFs).
 
 
 \section{Preprocessing}
 
 \subsection{Configuration}
-We implemented HMM as our sequence tagging system and did not use any existing Python libraries that provided implementations of HMMs. For experimenting purposes, we have looked at NLTK packages and for extracting features we decided use Chris Potts' interface to SentiWordNet.
+We implemented HMM as our sequence tagging system and did not use any existing Python libraries that provided implementations of HMMs. For experimenting purposes, we have looked at NLTK packages and for extracting features we decided to use Chris Potts' interface to SentiWordNet.
 
 
 \subsection{Data processing}
-For pre-processing we have parsed \texttt{training\_data.txt} into memory using Python and NLTK. Our parser, \texttt{getReviewList}, returns a list of reviews whose sentences have been lemmatized and have removed stop words.
+For pre-processing we have parsed \texttt{training\_data.txt} into memory using Python and NLTK. Our parser, \texttt{getReviewList}, returns a list of reviews whose sentences have been lemmatized and have removed stopwords.
 
 \begin{verbatim}
 sentiment = strToSentiment(line[0]) # convert to 1,0,-1
@@ -69,15 +69,15 @@ lines.append((sentiment, sentence)) # collect as a tuple
 
 
 \section{Baseline}
-We had two baseline measures. The first basline measure simply uses a random guess among the three states. While in the other baseline we recorded how many times each word occurs in a positive, neutral or negative sentence. Using that we estimated the probability of a sentence's sentiment. The code for this can be found in our baseline class in \texttt{baseline.py}.
+We had two baseline measures. The first basline measure simply uses a random guess among the three states. While in the other, we recorded how many times each word occurs in a positive, neutral or negative sentence. Using that we estimated the probability of a sentence's sentiment. The code for this can be found in our baseline class in \texttt{baseline.py}.
 
 
-\subsection{Model construction (with extension)}
-This class' constructor takes a source file where each review is separated by a newline, each sentence is tokenized and each on a separate line. Each sentence begins with its sentiment. Each review in the source file has its title on a line before its sentences. It also takes an \texttt{alpha} which is the add-alpha smoothing to use.
+\subsection{Model construction}
+This class' constructor takes a source file where each review is separated by a newline, each sentence is tokenized and each on a separate line. Each sentence begins with its sentiment. Each review in the source file has its title on a line before its sentences. It also takes an $\alpha$ (\texttt{alpha}) which is the add-alpha smoothing to use.
 
-The constructor reads in the source file and then it maintains two counts as it goes over the file. It maintains \texttt{self.sentiment\_counts} which is a dictionary that holds the number of times each sentiment has appeared in the training set. It also maintains \texttt{self.word\_counts} which is a table (dictionary of dictionaries) with a row for each sentiment and a column for each token encountered. 
+The constructor reads in the source file and then it maintains two counts as it goes over the file. It maintains \texttt{self.sentiment\_counts} which is a dictionary that holds the number of times each sentiment has appeared in the training set. It also maintains \texttt{self.word\_counts} which is a table (dictionary of dictionaries) with a row for each sentiment and a column for each token encountered.
 
-The constructor than iterates over all the sentences in the training set recording the number of times each sentiment occurs using \texttt{self.sentiment\_counts}. For each word in a sentence with sentiment \texttt{s} we add 1 to the value stored in \texttt{self.word\_counts[s][word]}. 
+The constructor then iterates over all the sentences in the training set recording the number of times each sentiment occurs using \texttt{self.sentiment\_counts}. For each word in a sentence with sentiment \texttt{s} we add 1 to the value stored in \texttt{self.word\_counts[s][word]}.
 
 After going over all the training data the constructor then generates probabilities from the two tables. It generates entries for \texttt{self.sentiment\_probabilities} by simply using \texttt{self.sentiment\_counts} to calculate the probability of each sentiment occurring. Then for each column of the table, \texttt{self.word\_counts} we calculate the conditional probabilities $P(word|s)$ for all words and all sentiments and store them in \texttt{self.word\_probabilities}. After this our model has been constructed.
 
@@ -86,14 +86,14 @@ After going over all the training data the constructor then generates probabilit
 To classify a test set, one uses the \texttt{classify} function in the class. The function takes a \texttt{source} of the same form that the training data was. For each sentence in the test data we tag it with a sentiment using the following formula: $argmax_{s\in S}P(s)\mathlarger{\prod}_{w\in Sentence} P(w|s)$. In our code we use log probabilities to avoid underflow. Here is the code we use to tag each sentence:
 
 \begin{verbatim}
-                probs = dict()
-                for sentiment in self.sentiment_probabilities:
-                    probs[sentiment] = math.log(self.sentiment_probabilities[sentiment])
-                for word in entry[1]:
-                    if word in self.word_probabilities:
-                        for p in self.word_probabilities[word]:
-                            probs[p] += math.log(self.word_probabilities[word][p])
-                tags.append(max(probs.iteritems(), key=operator.itemgetter(1))[0]
+          probs = dict()
+          for sentiment in self.sentiment_probabilities:
+              probs[sentiment] = math.log(self.sentiment_probabilities[sentiment])
+          for word in entry[1]:
+              if word in self.word_probabilities:
+                  for p in self.word_probabilities[word]:
+                      probs[p] += math.log(self.word_probabilities[word][p])
+          tags.append(max(probs.iteritems(), key=operator.itemgetter(1))[0]
 \end{verbatim}
 
 We then write our predictions to a kaggle file, if define, as follows:
@@ -138,23 +138,23 @@ The sentiment scores of a sentence are all real number values. Since we need to 
 \section{Hidden Markov model}
 We chose to implement our own Hidden Markov Model (HMM) along with experimenting with existing systems. To implement our HMM we created an HMM class in python.
 
-\subsection{Model construction}
+\subsection{Model construction (with smoothing extensions!)}
 The constructor of the HMM takes a \texttt{source}, an \texttt{n}, a \texttt{beta} and an \texttt{alpha}. \texttt{source} is a string of the filename to use as training data. \texttt{n} is what n-gram the model will be (bigram, trigram, etc.), \texttt{alpha} is the add-k smoothing value to use for output counts and \texttt{beta} is the add-k smoothing value to use for transition counts. The constructor then parses the file to read create a list of reviews, \texttt{self.training\_data}. Each review in the resulting list is another list of tuples of the form \texttt{(sentiment,feature vector)}. Using this resulting data we generate a set of states, transition counts and output counts.
 
-To generate the counts we use two dictionaries of dictionaries. The first is \texttt{self.output\_counts} which in each "row" has a state and each column is the sentence vector, thus \texttt{self.output\_counts[state][vector]} stores the number of times that vector appeared for that state. \texttt{transition\_counts} mean while, where each "row" is the previously seen \texttt{n-1} states and the column is the state being transitioned to. Thus \texttt{self.transition\_counts[previous][state]} stores the number of times state follows the \texttt{(n-1)-tuple} of previous states. As we go we also generate a set of all states: \texttt{self.states}.
+To generate the counts we use two dictionaries of dictionaries. The first is \texttt{self.output\_counts} which in each ``row'' has a state and each column is the sentence vector, thus \texttt{self.output\_counts[state][vector]} stores the number of times that vector appeared for that state. \texttt{transition\_counts} mean while, where each ``row'' is the previously seen \texttt{n-1} states and the column is the state being transitioned to. Thus \texttt{self.transition\_counts[previous][state]} stores the number of times state follows the \texttt{(n-1)-tuple} of previous states. As we go we also generate a set of all states: \texttt{self.states}.
 
-We iterate over \texttt{self.training\_data} to generate the counts. For each review we iterate over the sentence tuples and for each sentence we add one to \texttt{self.output\_counts[state][vector]} for that sentence's vector and state. We also add one to the entry in  \texttt{self.transition\_counts[previous][state]} where \texttt{previous} is a tuple of the \texttt{(n-1)} previous states and \texttt{state} is the state for the sentence. We begin with the tuple \texttt{(start,)} as previous for the first sentence of each review. In order to account for potentially unseen vectors we create an entry in each state row for unknown with a count of 1. We chose not to use techniques such as replacing the first occurrence of each vector with an "unknown" one as we did in the first project due to the sparseness and small size of the training data. 
+We iterate over \texttt{self.training\_data} to generate the counts. For each review we iterate over the sentence tuples and for each sentence we add one to \texttt{self.output\_counts[state][vector]} for that sentence's vector and state. We also add one to the entry in  \texttt{self.transition\_counts[previous][state]} where \texttt{previous} is a tuple of the \texttt{(n-1)} previous states and \texttt{state} is the state for the sentence. We begin with the tuple \texttt{(start,)} as previous for the first sentence of each review. In order to account for potentially unseen vectors we create an entry in each state row for unknown with a count of 1. We chose not to use techniques such as replacing the first occurrence of each vector with an ``unknown'' one as we did in the first project due to the sparseness and small size of the training data. 
 
 Using these counts we then generate the probability tables corresponding to the count tables by computing the conditional probability for each row by iterating over each row of each table.
  
 \subsection{Classification and Viterbi}
-To allow classification of test data we created two functions. The first is \texttt{classify} which takes in a source file and parses it into a list of reviews as was done in the model construction step. Then for each review (a list of sentence vectors) \texttt{classify} calls the function, viterbi, on that sequence. The function \texttt{viterbi} begins by initializing the necessary dynamic programming table, it then defines the base case (first column of the table). The base case is done by iterating over all states and finding the probability of transitioning from the start state to that state (\texttt{self.transition\_probabilities[('start',)][state]}) and then multiplying by the probability of emitting the first sentence vector from that state. Thus the code to do this is in our code is:
+To allow classification of test data we created two functions. The first is \texttt{classify} which takes in a source file and parses it into a list of reviews as was done in the model construction step. Then for each review (a list of sentence vectors) \texttt{classify} calls the function, viterbi, on that sequence. The function \texttt{viterbi} begins by initializing the necessary dynamic programming table, it then defines the base case (first column of the table). The base case is done by iterating over all states and finding the probability of transitioning from the start state to that state (\texttt{self.transition\_probabilities[('start',)][state]}) and then multiplying by the probability of emitting the first sentence vector from that state:
 \begin{verbatim}
     (math.log(self.transition_probabilities[tuple(prev)][state])
         + math.log(self.output_probabilities[state][tuple(doc[0][1])])
 \end{verbatim}
 
-We use log probabilities throughout to avoid underflow. Afterwards we iterate over the rest of the sentences in the review. For each sentence in the review we iterate over all states and for each of those states iterate over every row in the dp table. This thus looks like this:
+We use log probabilities throughout to avoid underflow. Afterwards we iterate over the rest of the sentences in the review. For each sentence in the review we iterate over all states and for each of those states iterate over every row in the dp table:
 \begin{verbatim}
         for i in range(1,len(doc)):
             ...
@@ -210,8 +210,8 @@ For each train/test pair (as in \texttt{basic\_features\_train.txt} and \texttt{
 Our baseline results on our test data (explained in previous sections):\par\medskip
 \begin{tabular}{|c|c|}\hline
                         & Precision\\\hline
-Baseline                & \textbf{0.40196}\\
-Baseline (random guess) & 0.32516\\\hline
+Baseline (random guess) & 0.32516\\
+Baseline                & \textbf{0.40196}\\\hline
 \end{tabular}\par\medskip
 
 It is expected that our random-guess baseline succeeds about a third of the time; there are three choices among pos/neu/neg. The reason our first baseline performs better than the random-guess baseline is that we take into account the frequency of words in positive / neutral / negative phrases, so that if we see a particular word that appears more frequently in one of the sentiments, we choose it and are more likely to succeed.\par\bigskip
@@ -305,15 +305,15 @@ We can conclude that $\alpha = 1$ yielded some of our most precise results: our 
 
 {\small\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}\hline
 $\bm{\beta}$ & 0.01 & 0.1 & 0.7 & 1 & 1.2 & 1.8 & 2 & 2.5 & 3 & 5\\\hline
-precision & .4673 & .4673 & .4673 & \textbf{.4804} & .4788 & .4788
+Precision & .4673 & .4673 & .4673 & \textbf{.4804} & .4788 & .4788
 & \textbf{.4820} & \textbf{.4820} & .4084 & .4576\\\hline
 \end{tabular}}\par\bigskip
 
 In summary, here are some of our \emph{best} results on \emph{test} data:\par\bigskip
 \begin{tabular}{|c|c|}\hline
 Model                      & Precision\\\hline
-Baseline                   & 0.40196\\
 Baseline (random guess)    & 0.32516\\
+Baseline                   & 0.40196\\
 Na\"{i}ve-Bayes classifier & 0.42320\\
 HMM bigram, basic features, smoothing & 0.47059\\
 HMM 3-gram, basic features, smoothing & 0.46732\\
@@ -342,6 +342,11 @@ $n$-gram & $\bm{\alpha}$ & $\bm{\beta}$ & \# correct & Precision\\\hline
 \end{tabular}}\par\medskip
 
 This data suggests that our HMM performs slightly better with a small amount of smoothing ($\alpha = 0.01$), that transition smoothing is not so effective, and that each $n$-gram model performs very similarly. Our best-performing model is a 4-gram with not so much smoothing on counts (precision of 0.80934).
+
+\subsection{Conclusions on experimentation}
+
+We had hypothesized that using a combination of SentiWordNet, feature ``bucketing'', and higher-order $n$-grams would increase our precision, since we have better ways of dealing with unknown words. With trigrams and 4-grams, we have more context ahead of words to make better predictions. We also expected that smoothing on $n$-gram counts and HMM transition counts would also help with predictions. However, based on these results, we make the following conclusions:
+
 \begin{itemize}[noitemsep]
   \item Decreasing smoothing of $n$-gram counts (parameter $\alpha$) improves precision. (This is easy to understand, as a large $k$ for add-$k$ smoothing can generally shift too much weight to less probable values.)
   \item Smoothing HMM transition counts (parameter $\beta$) has very little effect, but if anything, helps the precision. We are not absolutely sure, but as transition counts are very low, smoothing will not matter that much.
@@ -365,7 +370,7 @@ Our system works well when there is a large training set and when the training c
   \begin{enumerate}[nolistsep,noitemsep]
   \item \textit{First I become exposed to his brilliance via I Got You, the break through song of Split Enz a quarter of a century ago.}
   \end{enumerate}
-  The phrase ``break through'' was annotated here as negative which made the entire sentence to be tagged as negative. The primary reason here was due to the limited coverage of our training data. Many words in this sentence were unseen and proper nouns. We did not take into account capitalization as one of our feature which here could helped us identify sentiment.
+  The phrase ``break through'' was annotated here as negative which made the entire sentence to be tagged as negative. The primary reason here was due to the limited coverage of our training data. Many words in this sentence were unseen and proper nouns. We did not take into account capitalization as one of our feature which here could have helped us identify sentiment.
 
 \item Long and complex sentence structures
     \begin{enumerate}
@@ -374,12 +379,16 @@ Our system works well when there is a large training set and when the training c
     \item \textit{[neg] I can create play lists in Windows Media Player on my desktop and when I connect the Treo using the USB     cable my play lists are automatically synced to the storage card.}
 \end{enumerate}
 The above sentences were wrongly predicted to be positive/negative as both the sentences are long and complex.
-\end{enumerate} 
-To improve the system we added smoothing, worked with different n-gram models and smoothed the HMM transitions. What helped the most was a higher n-gram model. We also improved the existing systems by extracting other feature sets by bucking and sentiWordNet. None of these helped improve our current model since we performed the best with basic features. Our system could be further improved by extracting other features like capitalization, taking into account the polarities of context words, using better models like CRFs and MEMMs.
+\end{enumerate}
+
+To improve the system we added smoothing, worked with different n-gram models and smoothed the HMM transitions. What helped the most was a higher n-gram model. We also improved the existing systems by extracting other feature sets by bucketing and sentiWordNet. None of these helped improve our current model since we performed the best with basic features. Our system could be further improved by extracting other features like capitalization, taking into account the polarities of context words, using better models like CRFs and MEMMs.\par
+
+\newpage
 \section{Final Kaggle score}
 Our Kaggle team is \textbf{abms}.\par
-For our two submissions, we are officially counting two csvs generated from our HMM implementation with a 4-gram model, with smoothing on both n-gram counts and HMM transition counts. For $\beta = 1$, we received a score of \textbf{0.48039}. For $\beta = 2$, we received a score of \textbf{0.48203}.\par\medskip
+For our two submissions, we are officially counting two csvs generated from our HMM implementation with a 4-gram model, with smoothing on both n-gram counts and HMM transition counts. For $\beta = 1$, we received a score of \textbf{0.48039}. For $\beta = 2$, we received a score of \textbf{0.48203}.\par\bigskip
 
+Here is a screenshot:\par\medskip
 \noindent
 \includegraphics[width=\textwidth]{kagglesubs.png}\par\bigskip
 
